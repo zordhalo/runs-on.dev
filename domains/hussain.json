@@ -4,5 +4,12 @@
     "github": "theonlyhussain"
   },
   "claimedAt": "2026-09-01T13:59:33.550Z",
-  "records": {}
+  "records": {
+    "CNAME": [
+      "e7a81f500a55fdf8.vercel-dns-017.com."
+    ],
+    "TXT": [
+      "vc-domain-verify=hussain.runs-on.dev,696f1780aaddd44898ab"
+    ]
+  }
 }
