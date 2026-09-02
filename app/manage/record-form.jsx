@@ -36,7 +36,9 @@ export default function RecordForm({ name, record }) {
 
     if (res.ok) {
       setCommit(body.commit ?? null);
-      setStatus('saved');
+      // A save that changed nothing is not a commit and does not touch DNS,
+      // so it must not claim to have done either.
+      setStatus(body.unchanged ? 'unchanged' : 'saved');
       return;
     }
     setErrors(body.details ?? [MESSAGES[body.error] ?? 'Could not save just now.']);
@@ -108,8 +110,14 @@ export default function RecordForm({ name, record }) {
           className="border px-5 py-2.5 font-(family-name:--font-mono) text-sm transition-opacity hover:opacity-90 disabled:opacity-50"
           style={{ borderColor: 'var(--color-signal)', background: 'var(--color-signal)', color: 'var(--color-paper)' }}
         >
-          {status === 'saving' ? 'Saving…' : 'Save record'}
+          {status === 'saving' ? 'Saving\u2026' : 'Save record'}
         </button>
+
+        {status === 'unchanged' && (
+          <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
+            {'// no changes to save'}
+          </p>
+        )}
 
         {status === 'saved' && (
           <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
@@ -139,6 +147,7 @@ const MESSAGES = {
   not_found: 'That record no longer exists.',
   stale: 'This record changed somewhere else while you were editing. Reload and try again.',
   busy: 'The registry is busy. Try again in a few seconds.',
+  rate_limited: 'That is a lot of saves in a short window. Give it a few minutes.',
   invalid_name: 'That name is not valid.',
   server_error: 'Could not save just now.',
 };

@@ -274,7 +274,9 @@ function Claimed({ name, commit }) {
         </a>
         <a
           className="font-(family-name:--font-mono) text-sm text-(--color-signal) underline"
-          href={`/sites/${name}`}
+          href={`https://${name}.runs-on.dev`}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           your page →
         </a>

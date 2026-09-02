@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validateEdit, sameLogin } from '../lib/edit.js';
+import { validateEdit, sameLogin, isUnchanged } from '../lib/edit.js';
 
 const base = {
   name: 'lucas',
@@ -80,4 +80,31 @@ test('sameLogin ignores case and rejects non-strings', () => {
   assert.equal(sameLogin('Zyaxxy', 'zyaxxy'), true);
   assert.equal(sameLogin(undefined, 'zyaxxy'), false);
   assert.equal(sameLogin('zyaxxy', null), false);
+});
+
+test('isUnchanged ignores key order but not value order', () => {
+  const a = { name: 'lucas', records: { A: ['1.2.3.4', '5.6.7.8'], TXT: ['hi'] } };
+  const reordered = { records: { TXT: ['hi'], A: ['1.2.3.4', '5.6.7.8'] }, name: 'lucas' };
+  assert.equal(isUnchanged(a, reordered), true);
+
+  // Reordering A entries is a real edit: the order is what the owner wrote.
+  const swapped = { name: 'lucas', records: { A: ['5.6.7.8', '1.2.3.4'], TXT: ['hi'] } };
+  assert.equal(isUnchanged(a, swapped), false);
+});
+
+test('isUnchanged sees an actual record change', () => {
+  const base = { name: 'lucas', records: {} };
+  assert.equal(isUnchanged(base, { name: 'lucas', records: { CNAME: 'x.example.com' } }), false);
+  assert.equal(isUnchanged(base, { name: 'lucas', records: {} }), true);
+});
+
+test('isUnchanged notices an added or removed subdomains key', () => {
+  const base = { name: 'lucas', records: {} };
+  assert.equal(isUnchanged(base, { ...base, subdomains: { _atproto: { TXT: ['x'] } } }), false);
+});
+
+test('isUnchanged handles nested MX objects', () => {
+  const mx = { name: 'l', records: { MX: [{ priority: 10, value: 'mx.example.com' }] } };
+  const same = { name: 'l', records: { MX: [{ value: 'mx.example.com', priority: 10 }] } };
+  assert.equal(isUnchanged(mx, same), true);
 });

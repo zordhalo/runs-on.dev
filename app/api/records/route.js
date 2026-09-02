@@ -1,9 +1,17 @@
 import { sessionFromRequest } from '../../../lib/session.js';
-import { validateEdit } from '../../../lib/edit.js';
+import { validateEdit, isUnchanged } from '../../../lib/edit.js';
+import { createRateLimiter } from '../../../lib/throttle.js';
 import { getContentsMeta, putRecordUpdate } from '../../../lib/registry.js';
 import { validateName } from '../../../lib/name.js';
 
 const TOKEN = () => process.env.REGISTRY_TOKEN;
+
+// Generous enough that editing a record, looking at it, and editing again
+// never trips it; tight enough that a leaned-on button cannot spend the
+// registry's shared GitHub quota or fire a DNS sync per commit indefinitely.
+const WRITE_WINDOW_MS = 10 * 60 * 1000;
+const WRITE_MAX = 12;
+const takeWrite = createRateLimiter({ windowMs: WRITE_WINDOW_MS, max: WRITE_MAX });
 
 const BUSY_RESPONSE = () =>
   Response.json({ error: 'busy', retryInMs: 4000 }, { status: 503, headers: { 'Retry-After': '4' } });
@@ -25,6 +33,18 @@ export async function POST(request) {
   const name = typeof body.name === 'string' ? body.name.trim().toLowerCase() : '';
   if (!validateName(name).ok) {
     return Response.json({ error: 'invalid_name' }, { status: 400 });
+  }
+
+  // Ahead of the registry read, not just the write: both spend REGISTRY_TOKEN
+  // quota, which is the same pool /api/claim draws on. Rationing only the
+  // write would still let a loop starve claiming through reads alone.
+  const budget = takeWrite(session.login.toLowerCase());
+  if (!budget.ok) {
+    const seconds = Math.ceil(budget.retryAfterMs / 1000);
+    return Response.json(
+      { error: 'rate_limited', retryInMs: budget.retryAfterMs },
+      { status: 429, headers: { 'Retry-After': String(seconds) } },
+    );
   }
 
   let meta;
@@ -49,6 +69,18 @@ export async function POST(request) {
     const empty = subs === null || (typeof subs === 'object' && Object.keys(subs).length === 0);
     if (empty) delete head.subdomains;
     else head.subdomains = subs;
+  }
+
+  // Nothing to do. Answering before the ownership check would leak whether a
+  // record exists in the shape someone guessed, so this sits after the read
+  // but the ownership check below still runs first for a non-owner: a no-op
+  // submitted against someone else's record is refused, not reported as fine.
+  if (isUnchanged(meta.data, head)) {
+    const owns = validateEdit({ base: meta.data, head, editor: session.login });
+    if (!owns.ok) {
+      return Response.json({ error: 'not_owner', details: owns.errors }, { status: 403 });
+    }
+    return Response.json({ updated: name, unchanged: true, commit: null });
   }
 
   const decision = validateEdit({ base: meta.data, head, editor: session.login });
