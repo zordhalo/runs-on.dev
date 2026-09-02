@@ -1,6 +1,9 @@
 import { appendFile, readFile, readdir } from 'node:fs/promises';
-import { classifyClaim, planIssueClosures, STUCK_LABEL } from '../lib/health.js';
+import { classifyClaim, planIssueClosures, STUCK_LABEL, findDrift, normalizeAnswer, expectationKey } from '../lib/health.js';
+import { planDnsChanges, planZoneVerificationRecords } from '../lib/dns.js';
+import { Resolver } from 'node:dns/promises';
 
+const DOMAIN = 'runs-on.dev';
 const TIMEOUT_MS = 10_000;
 const CONCURRENCY = 8;
 
@@ -100,11 +103,73 @@ if (process.env.GITHUB_STEP_SUMMARY) {
 // issues API had a bad minute would be a poor trade.
 await closeRecoveredIssues(rows);
 
-if (stuck.length > 0) {
-  console.error(`health: ${stuck.length} name(s) stuck on the profile card`);
+// `stuck` and `down` are reported, never failed on. Both describe something
+// a third party has not done -- an owner who has not re-run their provider's
+// verification, a host having a bad afternoon -- and a scheduled job that
+// goes red for weeks over someone else's dashboard is a job everyone learns
+// to ignore, including on the day it means something. The open dns-stuck
+// issues track those, one per owner, and close themselves.
+//
+// Drift is different. It means the registry declares a record that DNS does
+// not serve, which can only be sync-dns having failed silently. That is ours,
+// it is actionable, and nothing else looks for it.
+const drift = await findDnsDrift(claims);
+
+if (drift.length > 0) {
+  console.error(`health: ${drift.length} declared record(s) missing from DNS`);
+  for (const record of drift) console.error(`  ${record.type} ${record.host} -> ${record.want}`);
   process.exit(1);
 }
-console.log('health: every pointed name serves something other than the card');
+console.log(`health: every declared record is live in DNS (${stuck.length} name(s) awaiting provider verification)`);
+
+async function findDnsDrift(allClaims) {
+  const expected = [
+    ...allClaims.flatMap((claim) =>
+      planDnsChanges(claim).map((change) => ({ ...change, host: `${change.name}.${DOMAIN}` }))),
+    ...planZoneVerificationRecords(allClaims).map((change) => ({ ...change, host: `${change.name}.${DOMAIN}` })),
+  ];
+
+  // A public resolver rather than the runner's: the runner's may cache an
+  // answer from before a sync, which would read as drift that is not there.
+  const resolver = new Resolver({ timeout: 5000, tries: 2 });
+  resolver.setServers(['1.1.1.1', '8.8.8.8']);
+
+  const resolved = new Map();
+  const hosts = [...new Set(expected.map((e) => expectationKey(e.type, e.host)))];
+  for (const key of hosts) {
+    const [type, host] = key.split(' ');
+    resolved.set(key, await lookup(resolver, type, host));
+  }
+
+  const missing = findDrift(expected, resolved);
+  if (missing.length === 0) return [];
+
+  // Re-check only what looked missing, once, before calling it drift. A
+  // record written minutes before this run may simply not have propagated,
+  // and a daily job that cries wolf over propagation is the noise this
+  // change exists to remove.
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  const recheck = new Map();
+  for (const record of missing) recheck.set(record.key, await lookup(resolver, record.type, record.host));
+  return findDrift(missing, recheck);
+}
+
+async function lookup(resolver, type, host) {
+  try {
+    if (type === 'CNAME') return (await resolver.resolveCname(host)).map((v) => normalizeAnswer('CNAME', v));
+    if (type === 'A') return await resolver.resolve4(host);
+    if (type === 'TXT') return (await resolver.resolveTxt(host)).map((chunks) => chunks.join(''));
+    if (type === 'MX') {
+      return (await resolver.resolveMx(host))
+        .map((mx) => normalizeAnswer('MX', `${mx.priority} ${mx.exchange}`));
+    }
+  } catch {
+    // NXDOMAIN, NODATA, or a resolver hiccup all mean "this host does not
+    // serve what we expect right now", which the caller re-checks before
+    // reporting.
+  }
+  return [];
+}
 
 async function closeRecoveredIssues(statusRows) {
   const token = process.env.GITHUB_TOKEN;
