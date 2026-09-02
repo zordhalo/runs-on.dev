@@ -252,7 +252,7 @@ export default function RecordForm({ name, record }) {
 }
 
 const SUB_PLACEHOLDER = {
-  TXT: 'vc-domain-verify=you.runs-on.dev,abc123',
+  TXT: 'vc-domain-verify=you.runs-on.dev,PASTE-YOUR-TOKEN',
   CNAME: 'target.example.com',
   A: '76.76.21.21',
   MX: '10 mx.example.com',

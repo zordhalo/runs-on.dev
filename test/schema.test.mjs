@@ -272,3 +272,52 @@ test('the JSON Schema mirror and lib/schema.js agree on unknown owner keys', () 
 test('a well-formed owner is still accepted', () => {
   assert.equal(validateRecord({ ...valid, owner: { github: 'zordhalo' } }).ok, true);
 });
+
+// A vc-domain-verify TXT gets mirrored to the apex, where it load-bears
+// verification for the name. A truncated one is otherwise invisible:
+// schema-valid, published to DNS, and silently never verifying.
+test('rejects a truncated Vercel verification token', () => {
+  const out = validateRecord({
+    name: 'krishna', owner: { github: 'k' }, claimedAt: '2026-01-01T00:00:00Z',
+    records: {},
+    subdomains: { _vercel: { TXT: ['vc-domain-verify=krishna.runs-on.dev,70f2fede6bc7dc6f0...'] } },
+  });
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.some((e) => e.includes('truncated Vercel verification token')));
+});
+
+test('rejects a placeholder token pasted from the docs', () => {
+  const out = validateRecord({
+    name: 'you', owner: { github: 'y' }, claimedAt: '2026-01-01T00:00:00Z',
+    records: {},
+    subdomains: { _vercel: { TXT: ['vc-domain-verify=you.runs-on.dev,PASTE-YOUR-TOKEN'] } },
+  });
+  assert.equal(out.ok, false);
+});
+
+test('accepts a real verification token', () => {
+  const out = validateRecord({
+    name: 'hussain', owner: { github: 'h' }, claimedAt: '2026-01-01T00:00:00Z',
+    records: {},
+    subdomains: { _vercel: { TXT: ['vc-domain-verify=hussain.runs-on.dev,696f1780aaddd44898ab'] } },
+  });
+  assert.deepEqual(out, { ok: true, errors: [] });
+});
+
+test('the guard only applies to vc-domain-verify values', () => {
+  // Every other TXT string stays unconstrained beyond the length limit.
+  const out = validateRecord({
+    name: 'lucas', owner: { github: 'x' }, claimedAt: '2026-01-01T00:00:00Z',
+    records: { TXT: ['anything at all, with commas, dots... and UPPERCASE'] },
+  });
+  assert.deepEqual(out, { ok: true, errors: [] });
+});
+
+test('the guard applies at the root too, not only under subdomains', () => {
+  const out = validateRecord({
+    name: 'lucas', owner: { github: 'x' }, claimedAt: '2026-01-01T00:00:00Z',
+    records: { TXT: ['vc-domain-verify=lucas.runs-on.dev,nothex...'] },
+  });
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.some((e) => e.includes('truncated Vercel verification token')));
+});

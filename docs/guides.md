@@ -54,7 +54,7 @@ If Vercel also shows a TXT record starting `vc-domain-verify=`, it goes at
 ```json
 {
   "records": { "CNAME": "cname.vercel-dns.com" },
-  "subdomains": { "_vercel": { "TXT": ["vc-domain-verify=you.runs-on.dev,abc123"] } }
+  "subdomains": { "_vercel": { "TXT": ["vc-domain-verify=you.runs-on.dev,PASTE-YOUR-TOKEN"] } }
 }
 ```
 

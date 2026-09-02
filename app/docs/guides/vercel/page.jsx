@@ -52,7 +52,7 @@ export default function VercelGuide() {
   "records": { "CNAME": "cname.vercel-dns.com" },
   "subdomains": {
     "_vercel": {
-      "TXT": ["vc-domain-verify=you.runs-on.dev,abc123"]
+      "TXT": ["vc-domain-verify=you.runs-on.dev,PASTE-YOUR-TOKEN"]
     }
   }
 }`}</Record>
