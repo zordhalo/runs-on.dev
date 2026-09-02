@@ -2,8 +2,17 @@ import { sessionFromRequest } from '../../../lib/session.js';
 import { evaluateClaim } from '../../../lib/claim.js';
 import { putRecord } from '../../../lib/registry.js';
 import { getOwnerIndex, putOwnerIndex } from '../../../lib/owners.js';
+import { createRateLimiter } from '../../../lib/throttle.js';
 
 const TOKEN = () => process.env.REGISTRY_TOKEN;
+
+// Same rationale as /api/records: claiming spends the same shared
+// REGISTRY_TOKEN quota (an owner-index read plus a record write per
+// attempt), so a looped or leaned-on button must be capped per account here
+// too, not just on the edit endpoint.
+const CLAIM_WINDOW_MS = 10 * 60 * 1000;
+const CLAIM_MAX = 12;
+const takeClaim = createRateLimiter({ windowMs: CLAIM_WINDOW_MS, max: CLAIM_MAX });
 
 const BUSY_RESPONSE = () =>
   Response.json({ error: 'busy', retryInMs: 4000 }, { status: 503, headers: { 'Retry-After': '4' } });
@@ -16,6 +25,14 @@ export async function POST(request) {
 
   let ownerIndex = null;
   if (session?.login) {
+    const budget = takeClaim(session.login.toLowerCase());
+    if (!budget.ok) {
+      const seconds = Math.ceil(budget.retryAfterMs / 1000);
+      return Response.json(
+        { error: 'rate_limited', retryInMs: budget.retryAfterMs },
+        { status: 429, headers: { 'Retry-After': String(seconds) } },
+      );
+    }
     try {
       ownerIndex = await getOwnerIndex(session.login, { token: TOKEN() });
     } catch {
