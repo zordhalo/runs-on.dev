@@ -4,5 +4,14 @@
     "github": "KrishnaKV2004"
   },
   "claimedAt": "2026-09-02T03:50:37.502Z",
-  "records": {}
+  "records": {
+    "CNAME": "f25ddb6665aea6cc.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=krishna.runs-on.dev,70f2fede6bc7dc6f06c8"
+      ]
+    }
+  }
 }
