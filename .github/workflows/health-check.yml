@@ -12,6 +12,9 @@ on:
 
 permissions:
   contents: read
+  # The run closes the nudge issues whose names have recovered, so the person
+  # who was told their name was broken is told when it is fixed.
+  issues: write
 
 # The probe reads public HTTP and nothing else, so a scheduled run overlapping
 # a manual one is harmless; cancel the older one rather than queue it.
@@ -28,3 +31,5 @@ jobs:
         with:
           node-version: '22'
       - run: node scripts/health-check.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,5 +1,5 @@
 import { appendFile, readFile, readdir } from 'node:fs/promises';
-import { classifyClaim } from '../lib/health.js';
+import { classifyClaim, planIssueClosures, STUCK_LABEL } from '../lib/health.js';
 
 const TIMEOUT_MS = 10_000;
 const CONCURRENCY = 8;
@@ -91,8 +91,67 @@ if (process.env.GITHUB_STEP_SUMMARY) {
   await appendFile(process.env.GITHUB_STEP_SUMMARY, report, 'utf8');
 }
 
+// Close the nudge issues whose names have come back. Without this the probe
+// knows a name recovered and the person who was told it was broken is never
+// told otherwise, so the tracker fills with issues nobody owns closing.
+//
+// Everything here is best effort and deliberately cannot fail the run: the
+// probe result above is the point of this script, and losing it because the
+// issues API had a bad minute would be a poor trade.
+await closeRecoveredIssues(rows);
+
 if (stuck.length > 0) {
   console.error(`health: ${stuck.length} name(s) stuck on the profile card`);
   process.exit(1);
 }
 console.log('health: every pointed name serves something other than the card');
+
+async function closeRecoveredIssues(statusRows) {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  // Absent locally, which is why running this by hand probes and reports but
+  // never writes.
+  if (!token || !repo) return;
+
+  const api = (path, init = {}) =>
+    fetch(`https://api.github.com/repos/${repo}${path}`, {
+      ...init,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json',
+      },
+    });
+
+  let issues;
+  try {
+    const res = await api(`/issues?state=open&labels=${STUCK_LABEL}&per_page=100`);
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    // The issues endpoint returns pull requests too; they are not nudges.
+    issues = (await res.json()).filter((issue) => !issue.pull_request);
+  } catch (err) {
+    console.error(`health: could not list ${STUCK_LABEL} issues: ${err.message}`);
+    return;
+  }
+
+  for (const { number, name } of planIssueClosures(statusRows, issues)) {
+    try {
+      await api(`/issues/${number}/comments`, {
+        method: 'POST',
+        body: JSON.stringify({
+          body: `\`${name}.runs-on.dev\` is serving your site now, so this is resolved. `
+            + 'Closed automatically by the daily health check — reopen if it regresses.',
+        }),
+      });
+      const res = await api(`/issues/${number}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ state: 'closed', state_reason: 'completed' }),
+      });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      console.log(`closed #${number} (${name} recovered)`);
+    } catch (err) {
+      console.error(`health: could not close #${number}: ${err.message}`);
+    }
+  }
+}
