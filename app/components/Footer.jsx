@@ -15,6 +15,13 @@ export default async function Footer() {
           .
         </p>
         <p className="mt-2 font-(family-name:--font-mono) text-xs text-(--color-muted)">
+          Already have a name?{' '}
+          <a className="text-(--color-signal) underline" href="/manage">
+            Point it somewhere
+          </a>
+          .
+        </p>
+        <p className="mt-2 font-(family-name:--font-mono) text-xs text-(--color-muted)">
           Every name here is a file in a public repo.{' '}
           <a
             className="text-(--color-signal) underline"

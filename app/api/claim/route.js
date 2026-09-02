@@ -1,4 +1,4 @@
-import { readSession } from '../../../lib/session.js';
+import { sessionFromRequest } from '../../../lib/session.js';
 import { evaluateClaim } from '../../../lib/claim.js';
 import { putRecord } from '../../../lib/registry.js';
 import { getOwnerIndex, putOwnerIndex } from '../../../lib/owners.js';
@@ -12,9 +12,7 @@ export async function POST(request) {
   const body = await request.json().catch(() => ({}));
   const name = typeof body.name === 'string' ? body.name.trim().toLowerCase() : '';
 
-  const cookie = request.headers.get('cookie') ?? '';
-  const raw = cookie.match(/(?:^|;\s*)session=([^;]+)/)?.[1];
-  const session = raw ? readSession(raw, process.env.SESSION_SECRET) : null;
+  const session = sessionFromRequest(request, process.env.SESSION_SECRET);
 
   let ownerIndex = null;
   if (session?.login) {

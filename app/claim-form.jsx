@@ -253,6 +253,12 @@ function Claimed({ name, commit }) {
         </a>
         <a
           className="font-(family-name:--font-mono) text-sm text-(--color-signal) underline"
+          href="/manage"
+        >
+          point it somewhere →
+        </a>
+        <a
+          className="font-(family-name:--font-mono) text-sm text-(--color-signal) underline"
           href={`/sites/${name}`}
         >
           your page →

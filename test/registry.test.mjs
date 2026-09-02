@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { getRecord, putRecord } from '../lib/registry.js';
+import { getRecord, putRecord, putRecordUpdate } from '../lib/registry.js';
 
 const record = {
   name: 'lucas',
@@ -99,4 +99,49 @@ test('putRecord reports ratelimited when the existence check is rate limited', a
 test('putRecord reports error when the existence check fails otherwise', async () => {
   const fetchImpl = stubFetch([{ status: 500 }]);
   assert.deepEqual(await putRecord(record, { token: 't', fetchImpl }), { ok: false, reason: 'error' });
+});
+
+test('putRecordUpdate sends the sha so a moved record is not clobbered', async () => {
+  const fetchImpl = stubFetch([{ status: 200, body: { commit: { sha: 'abc123' } } }]);
+  const out = await putRecordUpdate(record, { token: 't', sha: 'base-sha', editor: 'zordhalo', fetchImpl });
+  assert.deepEqual(out, { ok: true, commit: 'abc123' });
+
+  const [write] = fetchImpl.calls;
+  assert.equal(write.init.method, 'PUT');
+  const body = JSON.parse(write.init.body);
+  assert.equal(body.sha, 'base-sha');
+  assert.equal(body.message, 'records: lucas by @zordhalo');
+});
+
+test('putRecordUpdate reports stale when the sha no longer matches', async () => {
+  const fetchImpl = stubFetch([{ status: 409 }]);
+  assert.deepEqual(
+    await putRecordUpdate(record, { token: 't', sha: 'old', fetchImpl }),
+    { ok: false, reason: 'stale' },
+  );
+});
+
+test('putRecordUpdate treats a 422 as stale too', async () => {
+  const fetchImpl = stubFetch([{ status: 422 }]);
+  assert.equal((await putRecordUpdate(record, { token: 't', sha: 'old', fetchImpl })).reason, 'stale');
+});
+
+test('putRecordUpdate refuses to write without a sha', async () => {
+  // No stubbed response: reaching the network here would throw, which is the
+  // point -- a missing sha must be caught before it can become a blind write.
+  const fetchImpl = stubFetch([]);
+  assert.deepEqual(await putRecordUpdate(record, { token: 't', fetchImpl }), { ok: false, reason: 'error' });
+  assert.equal(fetchImpl.calls.length, 0);
+});
+
+test('putRecordUpdate rejects a record failing schema validation before any network call', async () => {
+  const fetchImpl = stubFetch([]);
+  const bad = { ...record, records: { CNAME: 'not a hostname' } };
+  assert.deepEqual(await putRecordUpdate(bad, { token: 't', sha: 's', fetchImpl }), { ok: false, reason: 'error' });
+  assert.equal(fetchImpl.calls.length, 0);
+});
+
+test('putRecordUpdate reports ratelimited on a 429', async () => {
+  const fetchImpl = stubFetch([{ status: 429 }]);
+  assert.equal((await putRecordUpdate(record, { token: 't', sha: 's', fetchImpl })).reason, 'ratelimited');
 });
