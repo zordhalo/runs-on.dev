@@ -43,10 +43,24 @@ few seconds. Full walkthrough: [`/docs/guides/url-redirect`](https://runs-on.dev
 ```
 
 Add `you.runs-on.dev` as a custom domain on the Vercel project (Project →
-Settings → Domains); Vercel shows this exact CNAME target. Fork the
-registry, set the record, open a pull request. Once the CNAME syncs, the
-Domains tab shows the domain verified and issues its own certificate.
-Full walkthrough: [`/docs/guides/vercel`](https://runs-on.dev/docs/guides/vercel).
+Settings → Domains), then set the record to whatever target the Domains tab
+shows you. Most projects get `cname.vercel-dns.com`; some accounts get a
+project-specific `<hash>.vercel-dns-017.com` instead. Leave off any trailing
+dot. Once the CNAME syncs, the Domains tab issues its own certificate.
+
+If Vercel also shows a TXT record starting `vc-domain-verify=`, it goes at
+`_vercel`, one label below your name, not beside the CNAME:
+
+```json
+{
+  "records": { "CNAME": "cname.vercel-dns.com" },
+  "subdomains": { "_vercel": { "TXT": ["vc-domain-verify=you.runs-on.dev,abc123"] } }
+}
+```
+
+`CNAME` cannot coexist with `TXT` at the same name, so putting it in
+`records` is rejected. Full walkthrough:
+[`/docs/guides/vercel`](https://runs-on.dev/docs/guides/vercel).
 
 ## Netlify
 
