@@ -10,7 +10,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=krishna.runs-on.dev,70f2fede6bc7dc6f0..."
+        "vc-domain-verify=krishna.runs-on.dev,70f2fede6bc7dc6f06c8"
       ]
     }
   }
