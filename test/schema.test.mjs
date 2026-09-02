@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { validateRecord } from '../lib/schema.js';
 
 const valid = {
@@ -197,4 +198,77 @@ test('accepts a subdomain MX alongside A', () => {
     },
   });
   assert.equal(out.ok, true);
+});
+
+// --- schema/record.schema.json stays in step with lib/schema.js ---
+//
+// The JSON Schema file is published to contributors: the pull request
+// template asks them to tick "My records validate against
+// schema/record.schema.json", and README.md, docs/records.md and the
+// resources page all link to it. Nothing loads it at runtime, though --
+// CI validates through scripts/validate-pr.mjs -> lib/schema.js -- so
+// the two drifted apart with nothing to notice. A record could satisfy
+// the published schema and still be rejected by the check that actually
+// runs, which makes the checkbox a lie.
+//
+// This walks the constraints the mirror declares and asserts lib/schema.js
+// reaches the same verdict on each case. It is not a JSON Schema
+// implementation (the repo has no validator dependency and does not need
+// one) -- it covers the keywords the mirror actually uses for the fields
+// that drifted.
+
+const mirror = JSON.parse(
+  await readFile(new URL('../schema/record.schema.json', import.meta.url), 'utf8'),
+);
+
+function mirrorAcceptsName(name) {
+  const s = mirror.properties.name;
+  if (typeof name !== 'string') return false;
+  if (name.length < s.minLength || name.length > s.maxLength) return false;
+  if (!new RegExp(s.pattern).test(name)) return false;
+  return !new RegExp(s.not.pattern).test(name);
+}
+
+test('the JSON Schema mirror and lib/schema.js agree on names', () => {
+  // Each of these was accepted by the mirror and rejected by validateName
+  // before the mirror grew minLength/maxLength/not.
+  const names = [
+    ['lucas', true],
+    ['my-name', true],
+    ['ab', true],
+    ['a', false], // minLength: validateName requires 2
+    ['1', false],
+    ['xn--abc', false], // punycode prefix
+    ['ab--cd', false], // `--` in the 3rd and 4th position
+    ['zz--hi', false],
+    ['a'.repeat(32), true],
+    ['a'.repeat(33), false], // maxLength
+    ['-lead', false],
+    ['trail-', false],
+    ['UPPER', false],
+  ];
+
+  for (const [name, expected] of names) {
+    assert.equal(
+      mirrorAcceptsName(name),
+      expected,
+      `schema/record.schema.json disagrees on ${JSON.stringify(name)}`,
+    );
+    assert.equal(
+      validateRecord({ ...valid, name }).ok,
+      expected,
+      `lib/schema.js disagrees on ${JSON.stringify(name)}`,
+    );
+  }
+});
+
+test('the JSON Schema mirror and lib/schema.js agree on unknown owner keys', () => {
+  assert.equal(mirror.properties.owner.additionalProperties, false);
+  const out = validateRecord({ ...valid, owner: { github: 'zordhalo', email: 'a@b.com' } });
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.includes('unknown key: owner.email'));
+});
+
+test('a well-formed owner is still accepted', () => {
+  assert.equal(validateRecord({ ...valid, owner: { github: 'zordhalo' } }).ok, true);
 });

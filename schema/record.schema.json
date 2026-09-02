@@ -5,7 +5,13 @@
   "additionalProperties": false,
   "required": ["name", "owner", "claimedAt", "records"],
   "properties": {
-    "name": { "type": "string", "pattern": "^[a-z0-9]([a-z0-9-]{0,30}[a-z0-9])?$" },
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32,
+      "pattern": "^[a-z0-9]([a-z0-9-]{0,30}[a-z0-9])?$",
+      "not": { "pattern": "^..--" }
+    },
     "owner": {
       "type": "object",
       "additionalProperties": false,
