@@ -1,0 +1,30 @@
+name: health-check
+
+# A name whose provider verification never completed keeps its 200 and its
+# certificate while the wildcard answers with the registry's own profile card.
+# Nothing errors anywhere, so the only way this surfaces is by asking what each
+# pointed name actually serves. Issue #26 went unnoticed for exactly that
+# reason, across seventeen names.
+on:
+  schedule:
+    - cron: '23 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# The probe reads public HTTP and nothing else, so a scheduled run overlapping
+# a manual one is harmless; cancel the older one rather than queue it.
+concurrency:
+  group: health-check
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/health-check.mjs
