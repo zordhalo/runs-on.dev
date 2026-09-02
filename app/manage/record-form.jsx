@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import { commitUrl, shortSha } from '../../lib/repo.js';
-import { modeOf, mxToLines, buildRecords } from '../../lib/record-fields.js';
+import {
+  modeOf, mxToLines, buildRecords,
+  SUBDOMAIN_TYPES, buildSubdomains, subdomainsToRows,
+} from '../../lib/record-fields.js';
+
+const MAX_SUBDOMAINS = 10;
 
 const MODE_LABELS = [
   { id: 'card', label: 'profile card', hint: 'No DNS records. The name serves your GitHub card.' },
@@ -21,6 +26,23 @@ export default function RecordForm({ name, record }) {
   const [status, setStatus] = useState(null);
   const [errors, setErrors] = useState([]);
   const [commit, setCommit] = useState(null);
+  const [subRows, setSubRows] = useState(() => subdomainsToRows(record.subdomains));
+
+  function setRow(i, patch) {
+    setSubRows((rows) => rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
+    setStatus(null);
+    setErrors([]);
+  }
+
+  function addRow() {
+    setSubRows((rows) => [...rows, { label: '', type: 'TXT', value: '' }]);
+    setStatus(null);
+  }
+
+  function removeRow(i) {
+    setSubRows((rows) => rows.filter((_, j) => j !== i));
+    setStatus(null);
+  }
 
   async function save(event) {
     event.preventDefault();
@@ -30,7 +52,11 @@ export default function RecordForm({ name, record }) {
     const res = await fetch('/api/records', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, records: buildRecords(mode, { cname, url, a, txt, mx }) }),
+      body: JSON.stringify({
+        name,
+        records: buildRecords(mode, { cname, url, a, txt, mx }),
+        subdomains: buildSubdomains(subRows),
+      }),
     });
     const body = await res.json().catch(() => ({}));
 
@@ -103,6 +129,90 @@ export default function RecordForm({ name, record }) {
         )}
       </div>
 
+      <fieldset className="mt-8 border-t border-(--color-rule) pt-5">
+        <legend className="sr-only">Subdomains</legend>
+        <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
+          subdomains
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-(--color-muted)">
+          One label deep, for records a provider asks you to put somewhere other than the
+          name itself, like <span className="font-(family-name:--font-mono)">_atproto</span>{' '}
+          for a Bluesky handle or{' '}
+          <span className="font-(family-name:--font-mono)">_vercel</span> for domain
+          verification. These are separate names, so a record here does not conflict with a
+          CNAME above.
+        </p>
+
+        {subRows.length > 0 && (
+          <div className="mt-4 space-y-3">
+            {subRows.map((row, i) => (
+              <div key={i} className="border border-(--color-rule) p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <input
+                    value={row.label}
+                    onChange={(e) => setRow(i, { label: e.target.value })}
+                    placeholder="_vercel"
+                    aria-label="Subdomain label"
+                    spellCheck={false}
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    className="w-32 border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)"
+                  />
+                  <span className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
+                    .{name}.runs-on.dev
+                  </span>
+                  <select
+                    value={row.type}
+                    onChange={(e) => setRow(i, { type: e.target.value })}
+                    aria-label="Record type"
+                    className="border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)"
+                  >
+                    {SUBDOMAIN_TYPES.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => removeRow(i)}
+                    className="ml-auto font-(family-name:--font-mono) text-xs text-(--color-muted) underline hover:text-(--color-ink)"
+                  >
+                    remove
+                  </button>
+                </div>
+                <textarea
+                  value={row.value}
+                  onChange={(e) => setRow(i, { value: e.target.value })}
+                  placeholder={SUB_PLACEHOLDER[row.type]}
+                  rows={2}
+                  aria-label="Record value"
+                  spellCheck={false}
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  className="mt-2 w-full resize-y border border-(--color-rule) bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)"
+                />
+                <span className="mt-1 block text-xs text-(--color-muted)">
+                  {SUB_HINT[row.type]}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {subRows.length < MAX_SUBDOMAINS ? (
+          <button
+            type="button"
+            onClick={addRow}
+            className="mt-3 border border-(--color-rule) px-3 py-1.5 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-80"
+          >
+            + add a subdomain record
+          </button>
+        ) : (
+          <p className="mt-3 font-(family-name:--font-mono) text-xs text-(--color-muted)">
+            {`// ${MAX_SUBDOMAINS} is the limit`}
+          </p>
+        )}
+      </fieldset>
+
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <button
           type="submit"
@@ -140,6 +250,20 @@ export default function RecordForm({ name, record }) {
     </form>
   );
 }
+
+const SUB_PLACEHOLDER = {
+  TXT: 'vc-domain-verify=you.runs-on.dev,abc123',
+  CNAME: 'target.example.com',
+  A: '76.76.21.21',
+  MX: '10 mx.example.com',
+};
+
+const SUB_HINT = {
+  TXT: 'One string per line, up to 255 characters.',
+  CNAME: 'A single hostname. Cannot share this label with another type.',
+  A: 'One IPv4 address per line.',
+  MX: "One 'priority hostname' per line, up to 5.",
+};
 
 const MESSAGES = {
   signin_required: 'Sign in again to save this record.',

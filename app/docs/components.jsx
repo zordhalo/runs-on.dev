@@ -94,8 +94,7 @@ export function ApplyNote() {
       : sign in, pick the record type, paste the value, save. It writes the same
       commit to the registry and DNS follows within seconds. The steps below do
       it by pull request instead, which is what you want if you would rather
-      review the change first, or if you are setting a{' '}
-      <C>subdomains</C> entry, which the form does not edit yet.
+      review the change first. Either way handles <C>subdomains</C> entries.
     </p>
   );
 }

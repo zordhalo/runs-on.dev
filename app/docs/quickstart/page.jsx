@@ -68,9 +68,9 @@ export default function Quickstart() {
         <Record path="domains/you.json">{`"records": { "URL": "https://github.com/you" }`}</Record>
         <p className="text-sm leading-relaxed sm:text-base">
           The form only offers record types in the combinations DNS permits, so it cannot build a
-          record the schema would reject. You can still do all of this by pull request instead, and
-          for a <C>subdomains</C> entry you have to: fork the registry, edit the file, open a pull
-          request, and CI validates the same rules the form does.
+          record the schema would reject, and it edits <C>subdomains</C> entries too. You can
+          still do all of this by pull request instead: fork the registry, edit the file, open a
+          pull request, and CI validates the same rules the form does.
         </p>
         <Quote>
           Want it pointed at your own site instead? Same idea, a different record. See{' '}

@@ -63,9 +63,9 @@ export default function VercelGuide() {
           different name, so the two coexist happily.
         </Warning>
         <p className="text-sm leading-relaxed sm:text-base">
-          A <C>subdomains</C> entry is the one thing{' '}
-          <a className="text-(--color-signal) underline" href="/manage">the record form</a> cannot
-          set yet, so this case needs a pull request.
+          <a className="text-(--color-signal) underline" href="/manage">The record form</a> sets
+          this without a pull request: add a subdomain row, label it <C>_vercel</C>, pick{' '}
+          <C>TXT</C>, and paste the value.
         </p>
       </Section>
 

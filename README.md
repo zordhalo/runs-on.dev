@@ -88,8 +88,8 @@ repository, exactly as a merged pull request would, and DNS follows within
 seconds. The form offers the record types in the combinations DNS actually
 permits, so it cannot build a record the schema would reject.
 
-**By pull request.** Still supported, and still the only way to set a
-`subdomains` entry, which the form does not edit yet:
+**By pull request.** Still supported, and the right choice when you want the
+change reviewed before it lands:
 
 1. Fork this repo.
 2. Edit `domains/<name>.json`, adding a record under `records` (and

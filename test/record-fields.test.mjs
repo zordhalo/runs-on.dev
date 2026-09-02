@@ -1,6 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { modeOf, linesToList, parseMx, mxToLines, buildRecords } from '../lib/record-fields.js';
+import {
+  modeOf, linesToList, parseMx, mxToLines, buildRecords,
+  buildSubdomains, subdomainsToRows,
+} from '../lib/record-fields.js';
 import { validateRecord } from '../lib/schema.js';
 
 test('modeOf reads the shape back out of a stored record', () => {
@@ -62,4 +65,66 @@ test('an empty field in a stand-alone mode clears the record rather than writing
   assert.deepEqual(buildRecords('cname', { cname: '   ' }), {});
   assert.deepEqual(buildRecords('url', { url: '' }), {});
   assert.deepEqual(buildRecords('advanced', { a: '', txt: '', mx: '' }), {});
+});
+
+test('buildSubdomains turns rows into the nested record shape', () => {
+  const rows = [{ label: '_atproto', type: 'TXT', value: 'did=did:plc:abc123' }];
+  assert.deepEqual(buildSubdomains(rows), { _atproto: { TXT: ['did=did:plc:abc123'] } });
+});
+
+test('rows sharing a label merge into one entry', () => {
+  const rows = [
+    { label: 'mail', type: 'A', value: '1.2.3.4' },
+    { label: 'mail', type: 'TXT', value: 'v=spf1 -all' },
+  ];
+  assert.deepEqual(buildSubdomains(rows), {
+    mail: { A: ['1.2.3.4'], TXT: ['v=spf1 -all'] },
+  });
+});
+
+test('a merged label still has to satisfy coexistence', () => {
+  // CNAME beside TXT under one label is rejected by the schema, exactly as it
+  // would be in a hand-written file. The form does not get a private exemption.
+  const subdomains = buildSubdomains([
+    { label: 'www', type: 'CNAME', value: 'example.com' },
+    { label: 'www', type: 'TXT', value: 'hello' },
+  ]);
+  const out = validateRecord({
+    name: 'lucas', owner: { github: 'z' }, claimedAt: '2026-01-01T00:00:00Z',
+    records: {}, subdomains,
+  });
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.some((e) => e.includes('CNAME cannot coexist')));
+});
+
+test('half-filled and unlabelled rows are skipped, not written as empty', () => {
+  assert.deepEqual(buildSubdomains([
+    { label: '', type: 'TXT', value: 'orphan' },
+    { label: '_vercel', type: 'TXT', value: '   ' },
+    { label: '_atproto', type: 'TXT', value: 'did=x' },
+  ]), { _atproto: { TXT: ['did=x'] } });
+});
+
+test('labels are lowercased, since DNS labels are not case sensitive', () => {
+  assert.deepEqual(buildSubdomains([{ label: '_Vercel', type: 'TXT', value: 'x' }]),
+    { _vercel: { TXT: ['x'] } });
+});
+
+test('subdomain rows round-trip', () => {
+  const subdomains = {
+    _vercel: { TXT: ['vc-domain-verify=you.runs-on.dev,abc123'] },
+    mail: { MX: [{ priority: 10, value: 'mx.example.com' }] },
+  };
+  assert.deepEqual(buildSubdomains(subdomainsToRows(subdomains)), subdomains);
+});
+
+test('the Vercel verification record the guide documents builds correctly', () => {
+  const out = validateRecord({
+    name: 'you', owner: { github: 'you' }, claimedAt: '2026-01-01T00:00:00.000Z',
+    records: buildRecords('cname', { cname: 'cname.vercel-dns.com' }),
+    subdomains: buildSubdomains([
+      { label: '_vercel', type: 'TXT', value: 'vc-domain-verify=you.runs-on.dev,abc123' },
+    ]),
+  });
+  assert.deepEqual(out, { ok: true, errors: [] });
 });

@@ -3,8 +3,8 @@
 Every guide below ends in a record that has to reach `domains/<name>.json`.
 Two ways to get it there: paste it into [runs-on.dev/manage](https://runs-on.dev/manage),
 which commits it for you, or open a pull request as the steps describe. The
-form does not edit `subdomains` yet, so the Bluesky and Discord guides need
-the pull request path.
+form handles `subdomains` too, so the Bluesky, Discord, and Vercel
+verification records can be set there as well.
 
 One record type or another gets a name pointed at nine hosting providers,
 a redirect, email forwarding, a Bluesky handle, and Discord verification.
