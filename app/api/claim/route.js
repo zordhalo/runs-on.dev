@@ -38,7 +38,13 @@ export async function POST(request) {
     ownedCount: ownerIndex?.names?.length ?? 0,
   });
   if (!decision.ok) {
-    return Response.json({ error: decision.code }, { status: decision.status });
+    // Hand back the names this account already holds. Only limit_reached
+    // needs them, but they cost nothing to include and they are the caller's
+    // own records, not anyone else's. Without them the form can only say "you
+    // already have a name" without saying which -- a dead end at exactly the
+    // moment a returning owner is trying to reach their record.
+    const owned = ownerIndex?.names?.length ? ownerIndex.names : undefined;
+    return Response.json({ error: decision.code, owned }, { status: decision.status });
   }
 
   const result = await putRecord(decision.record, { token: TOKEN() });

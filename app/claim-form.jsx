@@ -15,6 +15,7 @@ export default function ClaimForm({ signedIn }) {
   const [name, setName] = useState('');
   const [status, setStatus] = useState(null);
   const [commit, setCommit] = useState(null);
+  const [ownedName, setOwnedName] = useState(null);
   const [inputWidth, setInputWidth] = useState(null);
   const [animKey, setAnimKey] = useState(0);
   const nameRef = useRef('');
@@ -84,6 +85,9 @@ export default function ClaimForm({ signedIn }) {
 
     const body = await res.json();
     if (res.ok) setCommit(body.commit ?? null);
+    // A limit_reached rejection carries the name this account already holds,
+    // so the message below can point at it instead of dead-ending.
+    if (Array.isArray(body.owned) && body.owned.length) setOwnedName(body.owned[0]);
     setStatus(res.ok ? 'claimed' : body.error);
   }
 
@@ -184,13 +188,24 @@ export default function ClaimForm({ signedIn }) {
         <Field name={'"records":'} value="{}" />
         <p className="record-field">{'}'}</p>
         {status && (
-          <p className="record-field mt-2 text-(--color-muted)">// {message(status, displayName)}</p>
+          <p className="record-field mt-2 text-(--color-muted)">// {message(status, displayName, ownedName)}</p>
         )}
       </div>
 
       <div className="mt-5">
         {status === 'claimed' ? (
           <Claimed name={displayName} commit={commit} />
+        ) : status === 'limit_reached' ? (
+          // Being told "you already have a name" is only useful if it comes
+          // with a way to reach that name. This is where a returning owner
+          // ends up, so it has to lead somewhere.
+          <a
+            href="/manage"
+            className="inline-block border px-5 py-2.5 font-(family-name:--font-mono) text-sm transition-opacity hover:opacity-90"
+            style={{ borderColor: 'var(--color-signal)', background: 'var(--color-signal)', color: 'var(--color-paper)' }}
+          >
+            {ownedName ? `Point ${ownedName}.runs-on.dev somewhere →` : 'Point your name somewhere →'}
+          </a>
         ) : signedIn ? (
           <button
             onClick={() => claim()}
@@ -278,7 +293,7 @@ function Field({ name, value, valueClass = 'text-(--color-ink)' }) {
   );
 }
 
-function message(status, name) {
+function message(status, name, ownedName) {
   const map = {
     available: `${name}.runs-on.dev is available.`,
     taken: 'Already claimed.',
@@ -298,7 +313,9 @@ function message(status, name) {
     signin_required: 'Sign in with GitHub first.',
     ineligible_age: 'Your GitHub account must be at least 30 days old.',
     ineligible_repos: 'Your GitHub account needs at least one public repository.',
-    limit_reached: 'You already have a name. One per account for now.',
+    limit_reached: ownedName
+      ? `You already own ${ownedName}.runs-on.dev. One per account for now.`
+      : 'You already have a name. One per account for now.',
   };
   return map[status] ?? 'Something went wrong.';
 }

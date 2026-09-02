@@ -1,8 +1,11 @@
 import { cookies } from 'next/headers';
 import ClaimForm from './claim-form.jsx';
+import OwnedName from './owned-name.jsx';
 import JsonLd from './components/JsonLd.jsx';
 import { Section, Quote } from './components/Section.jsx';
 import { readSession } from '../lib/session.js';
+import { getOwnerIndex } from '../lib/owners.js';
+import { getRecord } from '../lib/registry.js';
 
 export const metadata = {
   title: 'runs-on.dev — free subdomains',
@@ -30,9 +33,26 @@ const websiteJsonLd = {
   ],
 };
 
+// Only for a signed-in visitor: this page is the highest-traffic route on the
+// site and these reads come out of REGISTRY_TOKEN's quota, the same one
+// claiming depends on. It already renders dynamically because it reads
+// cookies, so nothing is being given up on caching. Fails soft -- a lookup
+// that cannot run falls back to the claim form, which is what every visitor
+// saw before.
+async function ownedName(session) {
+  if (!session?.login) return null;
+  const token = process.env.REGISTRY_TOKEN;
+  const index = await getOwnerIndex(session.login, { token }).catch(() => null);
+  const name = index?.names?.[0];
+  if (!name) return null;
+  const record = await getRecord(name, { token }).catch(() => null);
+  return { name, record };
+}
+
 export default async function Home() {
   const raw = (await cookies()).get('session')?.value;
   const session = raw ? readSession(raw, process.env.SESSION_SECRET) : null;
+  const owned = await ownedName(session);
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-14 sm:py-20">
@@ -45,7 +65,11 @@ export default async function Home() {
       </p>
 
       <div className="mt-3">
-        <ClaimForm signedIn={Boolean(session)} />
+        {owned ? (
+          <OwnedName name={owned.name} record={owned.record} />
+        ) : (
+          <ClaimForm signedIn={Boolean(session)} />
+        )}
       </div>
 
       <Section title="What this is">
