@@ -1,4 +1,4 @@
-import { validateChangeset } from '../lib/pr.js';
+import { validateChangeset, parseRecordFile, RecordParseError } from '../lib/pr.js';
 
 const REPO = process.env.GITHUB_REPOSITORY;
 const PR = process.env.PR_NUMBER;
@@ -29,7 +29,7 @@ async function readAt(path, ref) {
   const res = await api(`/repos/${REPO}/contents/${path}?ref=${ref}`);
   if (!res.ok) return null;
   const body = await res.json();
-  return JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
+  return parseRecordFile(path, Buffer.from(body.content, 'base64').toString('utf8'));
 }
 
 // Eligibility is read from the PR author's public GitHub profile, the same two
@@ -65,7 +65,7 @@ async function countOwnedNames(login) {
       const r = await api(`/repos/${REPO}/contents/domains/${entry.name}?ref=${BASE_SHA}`);
       if (!r.ok) throw new Error(`GET domains/${entry.name} -> ${r.status}`);
       const body = await r.json();
-      return JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
+      return parseRecordFile(path, Buffer.from(body.content, 'base64').toString('utf8'));
     }));
     for (const rec of parsed) {
       if (String(rec?.owner?.github ?? '').toLowerCase() === target) owned += 1;
@@ -89,18 +89,30 @@ if (!filesRes.ok) {
 }
 const files = await filesRes.json();
 
-const result = await validateChangeset({
-  files: files.map((f) => ({
-    filename: f.filename,
-    status: f.status,
-    previous_filename: f.previous_filename,
-  })),
-  prAuthor: user.login,
-  readFile: (p) => readAt(p, HEAD_SHA),
-  readBase: (p) => readAt(p, BASE_SHA),
-  getUser,
-  countOwnedNames,
-});
+// A RecordParseError is a finding about the pull request, not a crash, so it
+// is reported through the same channel as every other finding below. Anything
+// else escaping validateChangeset is genuinely unexpected and still fails
+// loudly with its stack, which is what a maintainer needs to debug it.
+let result;
+try {
+  result = await validateChangeset({
+    files: files.map((f) => ({
+      filename: f.filename,
+      status: f.status,
+      previous_filename: f.previous_filename,
+    })),
+    prAuthor: user.login,
+    readFile: (p) => readAt(p, HEAD_SHA),
+    readBase: (p) => readAt(p, BASE_SHA),
+    getUser,
+    countOwnedNames,
+  });
+} catch (err) {
+  if (!(err instanceof RecordParseError)) throw err;
+  console.error('Registry validation failed:');
+  console.error(`  - ${err.message}`);
+  process.exit(1);
+}
 
 if (!result.ok) {
   console.error('Registry validation failed:');

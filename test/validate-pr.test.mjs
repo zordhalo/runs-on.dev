@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validateChangeset } from '../lib/pr.js';
+import { validateChangeset, parseRecordFile, RecordParseError } from '../lib/pr.js';
 
 const owned = {
   name: 'lucas',
@@ -266,4 +266,31 @@ test('rejects a rename even when only previous_filename is set', async () => {
     readBase: async () => null,
   });
   assert.equal(out.ok, false);
+});
+
+// Hand-edited record files are the documented way to change a record, so a
+// malformed one is a routine contributor mistake. It must arrive as a finding
+// the contributor can read, not as a crash that replaces the findings.
+test('parseRecordFile returns the record for valid JSON', () => {
+  assert.deepEqual(parseRecordFile('domains/lucas.json', '{"name":"lucas"}'), { name: 'lucas' });
+});
+
+test('parseRecordFile names the file and the parse problem', () => {
+  const bad = '{\n  "records": {}\n}\n}\n';
+  assert.throws(
+    () => parseRecordFile('domains/rudrakeshwani.json', bad),
+    (err) => {
+      assert.ok(err instanceof RecordParseError);
+      assert.match(err.message, /domains\/rudrakeshwani\.json is not valid JSON/);
+      return true;
+    },
+  );
+});
+
+test('a RecordParseError is distinguishable from any other failure', () => {
+  // The script rethrows anything that is not one of these, so an unexpected
+  // fault still fails loudly with its stack instead of being reported as a
+  // contributor mistake.
+  assert.equal(new RecordParseError('p', new Error('x')) instanceof RecordParseError, true);
+  assert.equal(new TypeError('boom') instanceof RecordParseError, false);
 });
