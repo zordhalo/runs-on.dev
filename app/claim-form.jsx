@@ -315,6 +315,10 @@ function message(status, name, ownedName) {
     signin_required: 'Sign in with GitHub first.',
     ineligible_age: 'Your GitHub account must be at least 30 days old.',
     ineligible_repos: 'Your GitHub account needs at least one public repository.',
+    // The claim endpoint is now rationed per account, so this is reachable.
+    // Without it a 429 renders as "Something went wrong", which tells someone
+    // who only has to wait that something is broken.
+    rate_limited: 'Too many attempts in a short window. Give it a few minutes.',
     limit_reached: ownedName
       ? `You already own ${ownedName}.runs-on.dev. One per account for now.`
       : 'You already have a name. One per account for now.',
