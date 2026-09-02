@@ -26,13 +26,14 @@ rejected). Must match the filename: `domains/you.json` must contain
 ### `owner`
 
 Exactly one key, `github`, the GitHub login that owns the record. Set once
-at claim time and immutable by pull request afterward; `lib/pr.js` rejects
-any PR that changes it.
+at claim time and immutable afterward. `lib/edit.js` rejects any change to
+it, and both write paths that can edit a record — the site and a pull
+request — go through it.
 
 ### `claimedAt`
 
-An ISO 8601 timestamp, set once when the name is claimed. Also immutable by
-pull request.
+An ISO 8601 timestamp, set once when the name is claimed. Also immutable,
+by either path.
 
 ### `records`
 

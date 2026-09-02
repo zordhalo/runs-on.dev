@@ -79,3 +79,23 @@ export function DocList({ items }) {
     </ul>
   );
 }
+
+// Every provider guide ends in the same place: a record that has to reach
+// domains/<name>.json. There are two ways to get it there and the guides
+// walk through the pull request one, so this names the shorter path once,
+// in one component, rather than in thirteen hand-written step lists.
+export function ApplyNote() {
+  return (
+    <p className="border-l-2 border-(--color-signal) bg-(--color-card) p-4 text-sm leading-relaxed">
+      Two ways to apply this. The quickest is{' '}
+      <a className="text-(--color-signal) underline" href="/manage">
+        runs-on.dev/manage
+      </a>
+      : sign in, pick the record type, paste the value, save. It writes the same
+      commit to the registry and DNS follows within seconds. The steps below do
+      it by pull request instead, which is what you want if you would rather
+      review the change first, or if you are setting a{' '}
+      <C>subdomains</C> entry, which the form does not edit yet.
+    </p>
+  );
+}

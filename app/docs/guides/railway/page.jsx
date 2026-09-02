@@ -1,5 +1,5 @@
 import { Section } from '../../../components/Section.jsx';
-import { Eyebrow, DocTitle, Lede, C, Record, Warning } from '../../components.jsx';
+import { ApplyNote, C, DocTitle, Eyebrow, Lede, Record, Warning } from '../../components.jsx';
 
 export const metadata = {
   title: 'Railway',
@@ -25,6 +25,8 @@ export default function RailwayGuide() {
       </Section>
 
       <Section title="Steps">
+        <ApplyNote />
+
         <ol className="list-decimal space-y-2 pl-6 text-sm leading-relaxed sm:text-base">
           <li>
             In the Railway dashboard: your service → Settings → Networking → Custom Domain → enter{' '}

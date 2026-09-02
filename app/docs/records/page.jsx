@@ -51,7 +51,7 @@ export default function Records() {
           <p className="mt-3 text-sm leading-relaxed sm:text-base">
             <strong className="text-(--color-ink)">owner</strong> — exactly one key,{' '}
             <C>github</C>, the GitHub login that owns the record. Set once at claim time and immutable
-            afterward; a pull request that changes it is rejected.
+            afterward; any change to it is rejected, from the site and by pull request alike.
           </p>
           <p className="mt-3 text-sm leading-relaxed sm:text-base">
             <strong className="text-(--color-ink)">claimedAt</strong> — an ISO 8601 timestamp, set
@@ -158,7 +158,7 @@ export default function Records() {
 
       <Section title="How a record reaches DNS">
         <p className="text-sm leading-relaxed sm:text-base">
-          Merging a pull request that changes <C>domains/&lt;name&gt;.json</C> triggers a workflow
+          Any commit that changes <C>domains/&lt;name&gt;.json</C> on <C>main</C> triggers a workflow
           that runs <C>scripts/sync-dns.mjs</C>. It computes the desired DNS records from your file
           via <C>planDnsChanges</C>, deletes whatever was synced for that name before, and creates
           the new set through Vercel&apos;s domains API. Removing your record instead of editing it

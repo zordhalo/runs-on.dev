@@ -79,7 +79,17 @@ per-account limit, and why they exist.
 
 By default a claimed name serves a small profile card built from your
 GitHub account. To point it at your own site, forward email, or a plain
-redirect instead, edit its record and open a pull request:
+redirect instead, there are two ways to change its record.
+
+**From the site.** Sign in and open
+[runs-on.dev/manage](https://runs-on.dev/manage). Pick a record type, fill
+it in, and save. That writes a commit to `domains/<name>.json` in this
+repository, exactly as a merged pull request would, and DNS follows within
+seconds. The form offers the record types in the combinations DNS actually
+permits, so it cannot build a record the schema would reject.
+
+**By pull request.** Still supported, and still the only way to set a
+`subdomains` entry, which the form does not edit yet:
 
 1. Fork this repo.
 2. Edit `domains/<name>.json`, adding a record under `records` (and
@@ -87,6 +97,10 @@ redirect instead, edit its record and open a pull request:
 3. Open a pull request. CI validates the change against
    [`schema/record.schema.json`](./schema/record.schema.json); once it's
    green and merged, a workflow pushes the record to DNS automatically.
+
+Both paths enforce the same rules, from the same code in
+[`lib/edit.js`](./lib/edit.js): only the owner may change a record, and
+`owner`, `claimedAt`, and `name` are immutable once set.
 
 | Type | Shape | Coexistence |
 | --- | --- | --- |

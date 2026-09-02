@@ -1,5 +1,5 @@
 import { Section } from '../../../components/Section.jsx';
-import { Eyebrow, DocTitle, Lede, C, Record } from '../../components.jsx';
+import { ApplyNote, C, DocTitle, Eyebrow, Lede, Record } from '../../components.jsx';
 
 export const metadata = {
   title: 'Replit',
@@ -34,6 +34,8 @@ export default function ReplitGuide() {
       </Section>
 
       <Section title="Steps">
+        <ApplyNote />
+
         <ol className="list-decimal space-y-2 pl-6 text-sm leading-relaxed sm:text-base">
           <li>
             In Replit: your deployment → Publishing → Domains → Manual Setup → <C>you.runs-on.dev</C>.

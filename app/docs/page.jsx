@@ -15,7 +15,7 @@ export default function Docs() {
       <DocTitle>Documentation</DocTitle>
       <Lede>
         A claimed name serves a profile card until you point it somewhere else. Pointing it
-        anywhere, including nowhere, is one JSON file and a pull request.
+        anywhere, including nowhere, is one JSON file, changed from the site or by pull request.
       </Lede>
 
       <Section title="Start here">

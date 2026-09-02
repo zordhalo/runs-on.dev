@@ -121,3 +121,13 @@ Delete `domains/<name>.json` in a pull request. `lib/pr.js` requires the PR
 author's GitHub login to match the record's `owner.github` for a removal to
 pass CI. Once merged, `scripts/sync-dns.mjs` clears any DNS records that
 had been synced for that name.
+
+## Changing a record after claiming
+
+Claiming leaves `records` empty, which means the name serves a profile
+card. Pointing it somewhere is a separate operation with its own rules,
+enforced by `lib/edit.js` for both the site (`POST /api/records`, what
+`/manage` posts to) and a pull request (`lib/pr.js`): only the recorded
+owner may change a record, and `owner`, `claimedAt`, and `name` never
+change once set. See [records.md](./records.md) for the field reference and
+[architecture.md](./architecture.md) for how the write paths differ.

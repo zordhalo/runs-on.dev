@@ -1,5 +1,5 @@
 import { Section } from '../../../components/Section.jsx';
-import { Eyebrow, DocTitle, Lede, C, Record } from '../../components.jsx';
+import { ApplyNote, C, DocTitle, Eyebrow, Lede, Record } from '../../components.jsx';
 
 export const metadata = {
   title: 'Email forwarding',
@@ -31,6 +31,8 @@ export default function EmailForwardingGuide() {
       </Section>
 
       <Section title="Steps">
+        <ApplyNote />
+
         <ol className="list-decimal space-y-2 pl-6 text-sm leading-relaxed sm:text-base">
           <li>
             At <a className="text-(--color-signal) underline" href="https://improvmx.com">improvmx.com</a>,

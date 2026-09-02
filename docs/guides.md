@@ -1,5 +1,11 @@
 # Provider guides
 
+Every guide below ends in a record that has to reach `domains/<name>.json`.
+Two ways to get it there: paste it into [runs-on.dev/manage](https://runs-on.dev/manage),
+which commits it for you, or open a pull request as the steps describe. The
+form does not edit `subdomains` yet, so the Bluesky and Discord guides need
+the pull request path.
+
 One record type or another gets a name pointed at nine hosting providers,
 a redirect, email forwarding, a Bluesky handle, and Discord verification.
 Every JSON block below is a drop-in value for the `records` (or

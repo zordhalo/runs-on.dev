@@ -54,27 +54,26 @@ export default function Quickstart() {
         </p>
       </Section>
 
-      <Section title="4. Point it somewhere (the fastest way)">
+      <Section title="4. Point it somewhere">
         <p className="text-sm leading-relaxed sm:text-base">
-          The profile card is fine to leave as is. If you want the name to go somewhere else, the
-          fastest path needs no hosting at all: a <C>URL</C> record, which the app itself redirects.
+          The profile card is fine to leave as is. To send the name somewhere else, sign in and open{' '}
+          <a className="text-(--color-signal) underline" href="/manage">runs-on.dev/manage</a>, pick a
+          record type, fill it in, and save. That commits to <C>domains/&lt;name&gt;.json</C> the same
+          way a merged pull request would, and DNS follows within seconds.
         </p>
-        <ol className="list-decimal space-y-2 pl-6 text-sm leading-relaxed sm:text-base">
-          <li>Fork <a className="text-(--color-signal) underline" href="https://github.com/zordhalo/runs-on.dev">the registry</a>.</li>
-          <li>
-            Edit <C>domains/you.json</C>, replacing <C>&quot;records&quot;: {'{}'}</C> with:
-          </li>
-        </ol>
+        <p className="text-sm leading-relaxed sm:text-base">
+          The shortest thing to point at needs no hosting at all: a <C>URL</C> record, which the app
+          itself redirects, with no DNS to wait on.
+        </p>
         <Record path="domains/you.json">{`"records": { "URL": "https://github.com/you" }`}</Record>
-        <ol start="3" className="list-decimal space-y-2 pl-6 text-sm leading-relaxed sm:text-base">
-          <li>
-            Open a pull request. CI validates it against the schema; once merged, it takes effect
-            within the page&apos;s 30-second cache window. No DNS to wait on, because a <C>URL</C>{' '}
-            record has none.
-          </li>
-        </ol>
+        <p className="text-sm leading-relaxed sm:text-base">
+          The form only offers record types in the combinations DNS permits, so it cannot build a
+          record the schema would reject. You can still do all of this by pull request instead, and
+          for a <C>subdomains</C> entry you have to: fork the registry, edit the file, open a pull
+          request, and CI validates the same rules the form does.
+        </p>
         <Quote>
-          Want it pointed at your own site instead? Same two steps, a different record. See{' '}
+          Want it pointed at your own site instead? Same idea, a different record. See{' '}
           <a className="text-(--color-signal) underline" href="/docs/guides">the guides</a> for your host, or{' '}
           <a className="text-(--color-signal) underline" href="/docs/records">the full record reference</a>{' '}
           for every field and rule.

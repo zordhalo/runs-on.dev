@@ -1,5 +1,5 @@
 import { Section } from '../../../components/Section.jsx';
-import { Eyebrow, DocTitle, Lede, C, Record } from '../../components.jsx';
+import { ApplyNote, C, DocTitle, Eyebrow, Lede, Record } from '../../components.jsx';
 
 export const metadata = {
   title: 'URL redirect',
@@ -33,6 +33,8 @@ export default function UrlRedirectGuide() {
       </Section>
 
       <Section title="Steps">
+        <ApplyNote />
+
         <ol className="list-decimal space-y-2 pl-6 text-sm leading-relaxed sm:text-base">
           <li>Fork <a className="text-(--color-signal) underline" href="https://github.com/zordhalo/runs-on.dev">the registry</a>.</li>
           <li>
