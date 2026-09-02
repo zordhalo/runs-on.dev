@@ -4,7 +4,9 @@
     "github": "RiteshRanjanRR09"
   },
   "claimedAt": "2026-09-02T18:33:14.504Z",
-  "records": {
-    "CNAME": "57e73c72e945c569.vercel-dns-017.com"
-  }
+  "records": {"CNAME": "57e73c72e945c569.vercel-dns-017.com"},
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=nexus.runs-on.dev,9c44879cbb082a321d49"]
+    }
 }
