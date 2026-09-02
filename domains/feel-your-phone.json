@@ -5,13 +5,15 @@
   },
   "claimedAt": "2026-09-02T06:58:27.199Z",
   "records": {
-    "CNAME": "aaef7d8449fd79f7.vercel-dns-017.com"
+    "CNAME": "://vercel-dns-017.com"
   },
   "subdomains": {
     "_vercel": {
-      "TXT": [
-        "vc-domain-verify=feel-your-phone.runs-on.dev,96313ed220742374e8fa"
-      ]
+      "records": {
+        "TXT": [
+          "vc-domain-verify=feel-your-phone.runs-on.dev,96313ed220742374e8fa"
+        ]
+      }
     }
   }
 }
