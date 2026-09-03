@@ -6,5 +6,9 @@
   "claimedAt": "2026-09-02T20:36:27.717Z",
   "records": {
     "CNAME": "portfolio-website-alpha-three-62.vercel.app"
+    "TXT": {
+      "_vercel": "vc-domain-verify=runs-on.dev,640ef2c145fbe093583b"
+    }
   }
 }
+
