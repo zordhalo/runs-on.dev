@@ -4,5 +4,12 @@
     "github": "Prashaxt"
   },
   "claimedAt": "2026-09-03T09:29:35.850Z",
-  "records": {"CNAME": "cname.vercel-dns.com"}
+  "records": {
+    "CNAME": "0c90c08a13f58e2d.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=backtrack.runs-on.dev,17d00bf58224ea3412dc"]
+    }
+  }
 }
