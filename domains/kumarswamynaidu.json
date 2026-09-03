@@ -1,8 +1,13 @@
 {
   "name": "kumarswamynaidu",
   "owner": {
-    "github": "kumarswamynaidu09"
+    "github": "your-github-username"
   },
-  "claimedAt": "2026-09-03T10:15:20.788Z",
-  "records": {}
+  "claimedAt": "...",
+  "records": {
+    "CNAME": "9e94cd3bf4236164.vercel-dns-017.com.",
+    "TXT": [
+      "vc-domain-verify=kumarswamynaidu.runs-on.dev,cc22357eeb0b584883f5"
+    ]
+  }
 }
