@@ -62,10 +62,11 @@ async function countOwnedNames(login) {
   for (let i = 0; i < records.length; i += BATCH) {
     const slice = records.slice(i, i + BATCH);
     const parsed = await Promise.all(slice.map(async (entry) => {
-      const r = await api(`/repos/${REPO}/contents/domains/${entry.name}?ref=${BASE_SHA}`);
-      if (!r.ok) throw new Error(`GET domains/${entry.name} -> ${r.status}`);
+      const filePath = `domains/${entry.name}`;
+      const r = await api(`/repos/${REPO}/contents/${filePath}?ref=${BASE_SHA}`);
+      if (!r.ok) throw new Error(`GET ${filePath} -> ${r.status}`);
       const body = await r.json();
-      return parseRecordFile(path, Buffer.from(body.content, 'base64').toString('utf8'));
+      return parseRecordFile(filePath, Buffer.from(body.content, 'base64').toString('utf8'));
     }));
     for (const rec of parsed) {
       if (String(rec?.owner?.github ?? '').toLowerCase() === target) owned += 1;
