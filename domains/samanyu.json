@@ -4,5 +4,7 @@
     "github": "Samanyu-dev"
   },
   "claimedAt": "2026-09-01T12:43:25.957Z",
-  "records": {}
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  }
 }
