@@ -4,7 +4,9 @@
     "github": "kumarswamynaidu09"
   },
   "claimedAt": "2026-09-03T10:15:20.788Z",
-  "records": {},
+  "records": {
+    "CNAME": "9e94cd3bf4236164.vercel-dns-017.com"
+  },
   "subdomains": {
     "_vercel": {
       "TXT": [
