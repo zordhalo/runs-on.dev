@@ -1,0 +1,25 @@
+{
+  "name": "neuron-network",
+  "owner": {
+    "github": "DTiming24"
+  },
+  "claimedAt": "2026-09-04T05:17:29.136Z",
+  "records": {},
+  "subdomains": {
+    "matrix": {
+      "A": [
+        "37.34.0.45"
+      ]
+    },
+    "sso": {
+      "A": [
+        "37.34.0.45"
+      ]
+    },
+    "mas": {
+      "A": [
+        "37.34.0.45"
+      ]
+    }
+  }
+}

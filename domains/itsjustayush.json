@@ -1,0 +1,33 @@
+{
+  "name": "itsjustayush",
+  "owner": {
+    "github": "itsjustayush"
+  },
+  "claimedAt": "2026-09-04T06:25:35.837Z",
+  "records": {},
+  "profile": {
+    "name": "itsjustayush",
+    "bio": "I am a student, frontend developer, and UI/UX designer passionate about crafting sleek, high-contrast web interfaces and digital experiences.",
+    "links": [
+      {
+        "label": "itsjustayush",
+        "url": "https://itsjustayush.vercel.app/"
+      },
+      {
+        "label": "ayu.vibee",
+        "url": "https://ayuvibee.vercel.app/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/ayushb_09"
+      }
+    ]
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=itsjustayush.runs-on.dev,9d1a35c8ddc9096981b2"
+      ]
+    }
+  }
+}

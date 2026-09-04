@@ -30,7 +30,7 @@
   <a href="https://github.com/zordhalo/runs-on.dev/stargazers"><img alt="stars" src="https://img.shields.io/github/stars/zordhalo/runs-on.dev?label=stars&color=1b4dff"></a>
   <a href="https://github.com/zordhalo/runs-on.dev/tree/main/domains"><img alt="names claimed" src="https://img.shields.io/github/directory-file-count/zordhalo/runs-on.dev/domains?type=file&extension=json&label=names%20claimed&color=1b4dff"></a>
   <a href="https://github.com/zordhalo/runs-on.dev/actions/workflows/test.yml"><img alt="tests" src="https://github.com/zordhalo/runs-on.dev/actions/workflows/test.yml/badge.svg"></a>
-  <a href="./LICENSE"><img alt="license: MIT" src="https://img.shields.io/badge/license-MIT-informational"></a>
+  <a href="./LICENSE"><img alt="license: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-informational"></a>
 </p>
 
 ---
@@ -255,8 +255,16 @@ npm test
 
 ## License
 
-The code in this repository is [MIT licensed](./LICENSE). The bundled
-profanity blocklist (`data/reserved-words.json`) is seeded from
+The code in this repository is [AGPL-3.0 licensed](./LICENSE). It is a network
+service, so section 13 applies: run a modified copy and let other people use it
+over a network, and you owe those users your source. Using the registry, or
+claiming a name, carries no such obligation — this binds people who fork and
+host the software, not people who point a subdomain at their site.
+
+Up to commit `3492bf7` the code was MIT, and that grant still stands for the
+code as it was then; see [NOTICE](./NOTICE).
+
+The bundled profanity blocklist (`data/reserved-words.json`) is seeded from
 [LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words)
 (English list) and keeps its own
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license; see

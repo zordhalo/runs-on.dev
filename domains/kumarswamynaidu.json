@@ -4,7 +4,12 @@
     "github": "kumarswamynaidu09"
   },
   "claimedAt": "2026-09-03T10:15:20.788Z",
-  "records": {
-    "CNAME": "9e94cd3bf4236164.vercel-dns-017.com"
+  "records": {},
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=kumarswamynaidu.runs-on.dev,cc22357eeb0b584883f5"
+      ]
+    }
   }
 }
