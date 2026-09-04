@@ -1,0 +1,12 @@
+{
+  "owner": {
+    "username": "bekasmurat42-cloud",
+    "email": "bekasmurat42@gmail.com"
+  },
+  "record": {
+    "NS": [
+      "://cloudflare.com",
+      "://cloudflare.com"
+    ]
+  }
+}
