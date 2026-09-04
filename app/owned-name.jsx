@@ -65,6 +65,22 @@ export default function OwnedName({ name, record }) {
         >
           the record →
         </a>
+        <a
+          className="font-(family-name:--font-mono) text-sm text-(--color-signal) underline"
+          href={`/banner/${name}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          your banner →
+        </a>
+        <a
+          className="font-(family-name:--font-mono) text-sm text-(--color-signal) underline"
+          href={`/banner/${name}?theme=dark`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          dark, for GitHub →
+        </a>
       </div>
     </div>
   );

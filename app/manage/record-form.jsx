@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { commitUrl, shortSha } from '../../lib/repo.js';
 import {
   modeOf, mxToLines, buildRecords,
   SUBDOMAIN_TYPES, buildSubdomains, subdomainsToRows,
+  buildProfile, profileToRows,
 } from '../../lib/record-fields.js';
 
 const MAX_SUBDOMAINS = 10;
+const MAX_LINKS = 8;
 
 const MODE_LABELS = [
   { id: 'card', label: 'profile card', hint: 'No DNS records. The name serves your GitHub card.' },
@@ -27,6 +29,9 @@ export default function RecordForm({ name, record }) {
   const [errors, setErrors] = useState([]);
   const [commit, setCommit] = useState(null);
   const [subRows, setSubRows] = useState(() => subdomainsToRows(record.subdomains));
+  const [displayName, setDisplayName] = useState(record.profile?.name ?? '');
+  const [bio, setBio] = useState(record.profile?.bio ?? '');
+  const [linkRows, setLinkRows] = useState(() => profileToRows(record.profile));
 
   function setRow(i, patch) {
     setSubRows((rows) => rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
@@ -44,6 +49,16 @@ export default function RecordForm({ name, record }) {
     setStatus(null);
   }
 
+  function setLinkRow(i, patch) {
+    setLinkRows((rows) => rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
+    setStatus(null);
+  }
+
+  function removeLink(i) {
+    setLinkRows((rows) => rows.filter((_, j) => j !== i));
+    setStatus(null);
+  }
+
   async function save(event) {
     event.preventDefault();
     setStatus('saving');
@@ -56,6 +71,10 @@ export default function RecordForm({ name, record }) {
         name,
         records: buildRecords(mode, { cname, url, a, txt, mx }),
         subdomains: buildSubdomains(subRows),
+        // null is the explicit "no profile" — it removes the block from the
+        // record, where omitting the key would leave an older form's profile
+        // silently in place.
+        profile: buildProfile({ name: displayName, bio, linkRows }) ?? null,
       }),
     });
     const body = await res.json().catch(() => ({}));
@@ -213,6 +232,81 @@ export default function RecordForm({ name, record }) {
         )}
       </fieldset>
 
+      <fieldset className="mt-8 border-t border-(--color-rule) pt-5">
+        <legend className="sr-only">Profile card</legend>
+        <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
+          profile
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-(--color-muted)">
+          What the profile card shows at{' '}
+          <span className="font-(family-name:--font-mono)">{name}.runs-on.dev</span>. Every
+          field falls back to your GitHub profile when empty; links are yours to add.
+        </p>
+
+        <div className="mt-4 space-y-4">
+          <Input
+            label="display name"
+            value={displayName}
+            onChange={(v) => { setDisplayName(v); setStatus(null); }}
+            placeholder="GitHub profile name"
+          />
+          <Area
+            label="bio"
+            value={bio}
+            onChange={(v) => { setBio(v); setStatus(null); }}
+            placeholder="GitHub profile bio"
+            hint="Up to 200 characters."
+          />
+
+          {linkRows.length > 0 && (
+            <div className="space-y-2">
+              {linkRows.map((row, i) => (
+                <div key={i} className="flex flex-wrap items-center gap-2">
+                  <input
+                    value={row.label}
+                    onChange={(e) => setLinkRow(i, { label: e.target.value })}
+                    placeholder="My portfolio"
+                    aria-label="Link label"
+                    className="w-36 border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)"
+                  />
+                  <input
+                    value={row.url}
+                    onChange={(e) => setLinkRow(i, { url: e.target.value })}
+                    placeholder="https://…"
+                    aria-label="Link URL"
+                    spellCheck={false}
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    className="min-w-0 flex-1 border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeLink(i)}
+                    className="font-(family-name:--font-mono) text-xs text-(--color-muted) underline hover:text-(--color-ink)"
+                  >
+                    remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {linkRows.length < MAX_LINKS ? (
+            <button
+              type="button"
+              onClick={() => { setLinkRows((rows) => [...rows, { label: '', url: '' }]); setStatus(null); }}
+              className="border border-(--color-rule) px-3 py-1.5 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-80"
+            >
+              + add a link
+            </button>
+          ) : (
+            <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
+              {`// ${MAX_LINKS} is the limit`}
+            </p>
+          )}
+        </div>
+      </fieldset>
+
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <button
           type="submit"
@@ -247,8 +341,135 @@ export default function RecordForm({ name, record }) {
           {errors.map((e) => <li key={e}>{e}</li>)}
         </ul>
       )}
+
+      {status === 'saved' && (
+        <VerifyPanel
+          name={name}
+          cname={mode === 'cname' ? cname.trim() : null}
+          url={mode === 'url' ? url.trim() : null}
+          hasDns={mode !== 'card' && mode !== 'url' || subRows.length > 0}
+          vercelTxt={subRows
+            .filter((r) => r.label.trim().toLowerCase() === '_vercel' && r.type === 'TXT')
+            .flatMap((r) => r.value.split('\n').map((v) => v.trim()).filter(Boolean))}
+        />
+      )}
     </form>
   );
+}
+
+// The "did it work?" half of saving. DNS answers and the wildcard are public,
+// so this reads /api/dns-check (no session, no secrets) and compares live
+// resolution against what was just committed, until everything checks out or
+// a few minutes pass. The Vercel line exists because a freshly published
+// CNAME + TXT still serves the profile card until Vercel is asked to
+// re-check — the exact trap that every early Vercel-pointed name fell into
+// while looking perfectly configured.
+function VerifyPanel({ name, cname, url, hasDns, vercelTxt }) {
+  const [check, setCheck] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+    const tick = async () => {
+      try {
+        const res = await fetch(`/api/dns-check?name=${encodeURIComponent(name)}`);
+        if (res.ok && alive) setCheck(await res.json());
+      } catch {
+        // Next tick retries; a transient network failure is not a verdict.
+      }
+    };
+    tick();
+    const done = check && cnameOk(check, cname) && pageOk(check, { cname, url, hasDns, vercelTxt });
+    const timer = done ? null : setInterval(tick, 8000);
+    return () => {
+      alive = false;
+      if (timer) clearInterval(timer);
+    };
+  }, [name, cname, url, hasDns, vercelTxt, check]);
+
+  if (!check) {
+    return (
+      <div className="mt-6 border border-(--color-rule) p-4 font-(family-name:--font-mono) text-xs text-(--color-muted)">
+        {'// did it work? — checking DNS…'}
+      </div>
+    );
+  }
+
+  const rows = [];
+  if (cname) {
+    const resolved = check.cname ?? [];
+    rows.push({
+      ok: resolved.includes(cname) || resolved.some((r) => r.toLowerCase() === cname.toLowerCase()),
+      text: resolved.length
+        ? `CNAME → ${resolved[0]}`
+        : `CNAME not visible yet (updates within seconds, caches up to 10 min)`,
+    });
+  }
+  if (vercelTxt.length > 0) {
+    const zone = check.txt?.zoneVercel ?? [];
+    const published = vercelTxt.some((v) => zone.includes(v));
+    rows.push({
+      ok: published,
+      text: published
+        ? '_vercel TXT published at the zone'
+        : '_vercel TXT not at the zone yet — the mirror publishes it on the sync',
+    });
+  }
+
+  const page = pageState(check, { cname, url, hasDns });
+  rows.push({ ok: page.ok, text: page.text });
+
+  return (
+    <div className="mt-6 border border-(--color-rule) p-4">
+      <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
+        {'// did it work?'}
+      </p>
+      <ul className="mt-2 space-y-1 font-(family-name:--font-mono) text-xs sm:text-[13px]">
+        {rows.map((row, i) => (
+          <li key={i} className={row.ok ? 'text-(--color-ink)' : 'text-(--color-muted)'}>
+            {row.ok ? '✓' : '…'} {row.text}
+          </li>
+        ))}
+      </ul>
+      {page.hint && (
+        <p className="mt-2 border-t border-(--color-rule) pt-2 text-xs leading-relaxed text-(--color-muted)">
+          {page.hint}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function cnameOk(check, cname) {
+  if (!cname) return true;
+  const resolved = check.cname ?? [];
+  return resolved.some((r) => r.toLowerCase() === cname.toLowerCase());
+}
+
+function pageOk(check, expected) {
+  return pageState(check, expected).ok;
+}
+
+function pageState(check, { cname, url, hasDns }) {
+  const status = check.serving?.status;
+  const isVercel = typeof cname === 'string' && cname.includes('vercel-dns');
+
+  if (status === 'ok') return { ok: true, text: `serving your site — ${check.serving.title ?? ''}` };
+  if (status === 'redirect' && url) {
+    return { ok: true, text: `redirecting to ${check.serving.finalUrl ?? url}` };
+  }
+  if (status === 'card' && !hasDns && !cname) {
+    return { ok: true, text: 'serving the profile card (no DNS records — as picked)' };
+  }
+  if (status === 'card' || status === 'stuck') {
+    return {
+      ok: false,
+      text: 'still serving the profile card',
+      hint: isVercel
+        ? 'DNS is live but Vercel has not re-checked ownership yet: your Vercel project → Settings → Domains → hit Refresh next to the domain.'
+        : 'DNS may still be propagating; if it persists, your provider may be waiting on a verification record.',
+    };
+  }
+  return { ok: false, text: 'no answer yet — DNS may still be propagating' };
 }
 
 const SUB_PLACEHOLDER = {

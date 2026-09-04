@@ -4,5 +4,14 @@
     "github": "resad505"
   },
   "claimedAt": "2026-09-03T05:24:02.703Z",
-  "records": {}
+  "records": {
+    "CNAME": "5e16cea6fc42f69d.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=resad505.runs-on.dev,582276fe6690b6cd578e"
+      ]
+    }
+  }
 }

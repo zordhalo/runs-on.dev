@@ -10,6 +10,23 @@ name: deploy
 on:
   push:
     branches: [main]
+    # Registry data pushes (claims, record edits, the owners index, docs)
+    # change nothing the site serves, but each one used to build and upload
+    # the full app anyway. The day the registry got busy that burned through
+    # Vercel's free-tier upload quota ("api-upload-paid, more than 40000")
+    # and every deploy after it failed while claims kept landing. Data
+    # commits no longer deploy at all; the schedule below and
+    # workflow_dispatch remain the paths for forcing one.
+    #
+    # /stats is the one page that reads domains/ at build time rather than
+    # through the runtime API, so it depends on a deploy to stay fresh. The
+    # daily schedule covers it: the numbers are never more than a day stale,
+    # which costs one deploy instead of one per claim.
+    paths-ignore: ['domains/**', 'owners/**', 'data/**', 'docs/**', '*.md']
+  schedule:
+    # Daily at 04:00 UTC, off the top of the hour so it doesn't co-fire with
+    # the health check. Rebuilds /stats from the current state of domains/.
+    - cron: '0 4 * * *'
   workflow_dispatch:
 
 permissions:

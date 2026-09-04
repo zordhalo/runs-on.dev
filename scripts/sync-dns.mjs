@@ -3,6 +3,7 @@ import {
   planDnsChanges,
   planZoneVerificationRecords,
   reconcileZoneVerification,
+  reconcileDnsRecords,
   listPath,
   createPath,
   removePath,
@@ -64,17 +65,78 @@ async function existingFor(name) {
   }
 }
 
-async function deleteStale(name) {
-  for (const stale of await existingFor(name)) {
-    const res = await vercel(removePath(DOMAIN, stale.id), { method: 'DELETE' });
-    // A rejected delete must stop the sync here: continuing on to create the new
-    // records would leave the stale ones live alongside them, with a green
-    // workflow log claiming everything is in sync.
-    if (!res.ok) {
-      console.error(`sync-dns: failed to delete ${stale.type} ${stale.name}: ${res.status} ${res.statusText}`);
+async function deleteRecord(stale) {
+  const res = await vercel(removePath(DOMAIN, stale.id), { method: 'DELETE' });
+  if (!res.ok) {
+    console.error(`sync-dns: failed to delete ${stale.type} ${stale.name}: ${res.status} ${res.statusText}`);
+    process.exit(1);
+  }
+  console.log(`deleted ${stale.type} ${stale.name}`);
+}
+
+async function createRecord(change) {
+  const body = { type: change.type, name: change.name, value: change.value, ttl: 3600 };
+  // Vercel's records API takes MX priority as a separate field, not folded
+  // into `value`.
+  if (change.type === 'MX') body.mxPriority = change.priority;
+  const res = await vercel(createPath(DOMAIN), {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    console.error(`failed to create ${change.type} ${change.name}: ${res.status}`);
+    return false;
+  }
+  console.log(`created ${change.type} ${change.name} -> ${change.value}`);
+  return true;
+}
+
+// Best-effort rollback when a create fails mid-sync. The records being
+// restored here are the ones that were just deleted as stale — restoring
+// them returns the name to its pre-sync state rather than leaving it with
+// a half-applied change. Each restore is attempted independently because
+// the API may still be in the transient state that caused the original
+// failure, and a second failure here means the name needs manual attention
+// regardless.
+async function rollback(deleted) {
+  if (deleted.length === 0) return;
+  console.error(`sync-dns: create failed — rolling back ${deleted.length} deleted record(s)`);
+  for (const stale of deleted) {
+    const change = { type: stale.type, name: stale.name, value: stale.value, priority: stale.mxPriority };
+    const ok = await createRecord(change).catch(() => false);
+    if (!ok) console.error(`sync-dns: ROLLBACK FAILED for ${stale.type} ${stale.name} — manual intervention needed`);
+  }
+}
+
+// Diff-based reconciliation (issue #54). Only records that genuinely
+// changed are deleted and recreated — everything else survives untouched,
+// so a mid-sync API failure can't take out records that weren't being
+// changed. If a create does fail, the just-deleted stale records are
+// restored as a best-effort rollback to the pre-sync state.
+async function reconcile(name, desired) {
+  const existing = await existingFor(name);
+  const { unchanged, remove, create } = reconcileDnsRecords(existing, desired);
+
+  if (unchanged.length > 0) {
+    console.log(`${name}: ${unchanged.length} record(s) unchanged, not touched`);
+  }
+
+  const deleted = [];
+  for (const stale of remove) {
+    await deleteRecord(stale);
+    deleted.push(stale);
+  }
+
+  for (const change of create) {
+    const ok = await createRecord(change);
+    if (!ok) {
+      await rollback(deleted);
       process.exit(1);
     }
-    console.log(`deleted ${stale.type} ${stale.name}`);
+  }
+
+  if (remove.length === 0 && create.length === 0 && unchanged.length > 0) {
+    console.log(`${name}: already in sync`);
   }
 }
 
@@ -92,30 +154,13 @@ for (const file of changed) {
     // The record file is gone (owner released the name, or a maintainer removed
     // it). Without this, readFile throws and the workflow crashes here, leaving
     // the ex-owner's DNS live indefinitely.
-    await deleteStale(name);
+    for (const stale of await existingFor(name)) await deleteRecord(stale);
     console.log(`${name}: record removed, DNS cleared`);
     continue;
   }
 
   const desired = planDnsChanges(record);
-
-  await deleteStale(name);
-
-  for (const change of desired) {
-    const body = { type: change.type, name: change.name, value: change.value, ttl: 3600 };
-    // Vercel's records API takes MX priority as a separate field, not folded
-    // into `value`.
-    if (change.type === 'MX') body.mxPriority = change.priority;
-    const res = await vercel(createPath(DOMAIN), {
-      method: 'POST',
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      console.error(`failed to create ${change.type} ${change.name}: ${res.status}`);
-      process.exit(1);
-    }
-    console.log(`created ${change.type} ${change.name} -> ${change.value}`);
-  }
+  await reconcile(name, desired);
 
   if (desired.length === 0) console.log(`${name}: no records, wildcard serves the profile card`);
 }
@@ -149,24 +194,12 @@ const { create: toMirror, remove: toUnmirror } = reconcileZoneVerification(
 );
 
 for (const stale of toUnmirror) {
-  const res = await vercel(removePath(DOMAIN, stale.id), { method: 'DELETE' });
-  if (!res.ok) {
-    console.error(`sync-dns: failed to delete ${stale.type} ${stale.name}: ${res.status} ${res.statusText}`);
-    process.exit(1);
-  }
-  console.log(`deleted ${stale.type} ${stale.name}`);
+  await deleteRecord(stale);
 }
 
 for (const change of toMirror) {
-  const res = await vercel(createPath(DOMAIN), {
-    method: 'POST',
-    body: JSON.stringify({ type: change.type, name: change.name, value: change.value, ttl: 3600 }),
-  });
-  if (!res.ok) {
-    console.error(`failed to create ${change.type} ${change.name}: ${res.status}`);
-    process.exit(1);
-  }
-  console.log(`created ${change.type} ${change.name} -> ${change.value}`);
+  const ok = await createRecord(change);
+  if (!ok) process.exit(1);
 }
 
 if (toMirror.length === 0 && toUnmirror.length === 0) {
