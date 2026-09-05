@@ -4,5 +4,12 @@
     "github": "1PoPTRoN"
   },
   "claimedAt": "2026-09-05T19:06:28.818Z",
-  "records": {}
+  "records": {
+    "CNAME": "210dec701995d409.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=arpitraj.runs-on.dev,f6f99aa6e21ac92e15bf"]
+    }
+  }
 }
