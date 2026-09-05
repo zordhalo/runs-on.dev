@@ -1,6 +1,7 @@
 import { Bricolage_Grotesque, Public_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import Footer from './components/Footer.jsx';
+import EdgePicker from './edge-picker.jsx';
 
 const display = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -55,6 +56,7 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <Footer />
+        <EdgePicker />
       </body>
     </html>
   );
