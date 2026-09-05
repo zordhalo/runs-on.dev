@@ -5,8 +5,13 @@
   },
   "claimedAt": "2026-09-03T11:46:44.777Z",
   "records": {
-    "TXT": [
-      "vc-domain-verify=aminedahou.runs-on.dev,b84f07a5bc9406c5b958"
-    ]
+    "CNAME": "edda94c99c4cc459.vercel-dns-017.com."
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=aminedahou.runs-on.dev,b84f07a5bc9406c5b958"
+      ]
+    }
   }
 }
