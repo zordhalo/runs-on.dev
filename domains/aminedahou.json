@@ -5,6 +5,7 @@
   },
   "claimedAt": "2026-09-03T11:46:44.777Z",
   "records": {
-    "URL": "https://contact-manager-react-eight.vercel.app"
+    "CNAME": "edda94c99c4cc459.vercel-dns-017.com.",
+    "TXT": "vc-domain-verify=aminedahou.runs-on.dev,b84f07a5bc9406c5b958"
   }
 }
