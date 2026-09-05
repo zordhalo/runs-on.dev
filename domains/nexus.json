@@ -15,6 +15,11 @@
     },
     "recruitment": {
       "CNAME": "1f0f89ca65ce0a71.vercel-dns-017.com"
+    },
+    "_vercel.recruitment": {
+      "TXT": [
+        "vc-domain-verify=recruitment.nexus.runs-on.dev,d8d01cfd675744079257"
+      ]
     }
   }
 }
