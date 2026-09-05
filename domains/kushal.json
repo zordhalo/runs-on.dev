@@ -3,8 +3,8 @@
   "owner": {
     "github": "kushalshah0"
   },
-  "claimedAt": "2026-09-04T03:59:17.579Z",
+  "claimedAt": "2026-09-05T17:49:00.000Z",
   "records": {
-    "CNAME": "vm.kushal.qzz.io"
+    "A": ["129.146.67.185"]
   }
 }
