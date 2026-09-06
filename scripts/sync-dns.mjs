@@ -8,6 +8,7 @@ import {
   createPath,
   removePath,
   ZONE_VERIFICATION_LABEL,
+  formatApiError,
 } from '../lib/dns.js';
 
 const DOMAIN = 'runs-on.dev';
@@ -68,7 +69,8 @@ async function existingFor(name) {
 async function deleteRecord(stale) {
   const res = await vercel(removePath(DOMAIN, stale.id), { method: 'DELETE' });
   if (!res.ok) {
-    console.error(`sync-dns: failed to delete ${stale.type} ${stale.name}: ${res.status} ${res.statusText}`);
+    const detail = await res.text().catch(() => '');
+    console.error(`sync-dns: failed to delete ${stale.type} ${stale.name}: ${formatApiError(res.status, detail)}`);
     process.exit(1);
   }
   console.log(`deleted ${stale.type} ${stale.name}`);
@@ -84,7 +86,8 @@ async function createRecord(change) {
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    console.error(`failed to create ${change.type} ${change.name}: ${res.status}`);
+    const detail = await res.text().catch(() => '');
+    console.error(`failed to create ${change.type} ${change.name}: ${formatApiError(res.status, detail)}`);
     return false;
   }
   console.log(`created ${change.type} ${change.name} -> ${change.value}`);

@@ -8,6 +8,7 @@ import {
   listPath,
   createPath,
   removePath,
+  formatApiError,
 } from '../lib/dns.js';
 
 const base = { name: 'lucas', owner: { github: 'zordhalo' }, claimedAt: '2026-08-30T00:00:00Z' };
@@ -273,4 +274,26 @@ test('every real _vercel claim still mirrors', () => {
     subdomains: { _vercel: { TXT: [`vc-domain-verify=${name}.runs-on.dev,tok`] } },
   }));
   assert.equal(planZoneVerificationRecords(claims).length, 4);
+});
+
+// A bare status code is what #104 and its duplicate both got stuck on: the
+// API's own reason for the 400 was fetched by the script and never logged,
+// so neither report could say why the create failed.
+test('an API error body with a message is folded into the log line', () => {
+  const body = JSON.stringify({ error: { code: 'conflicting_record', message: 'Value already exists' } });
+  assert.equal(formatApiError(400, body), '400 Value already exists');
+});
+
+test('an API error body with only a code falls back to the code', () => {
+  const body = JSON.stringify({ error: { code: 'conflicting_record' } });
+  assert.equal(formatApiError(400, body), '400 conflicting_record');
+});
+
+test('a non-JSON error body is still logged, not swallowed', () => {
+  assert.equal(formatApiError(502, 'upstream timeout'), '502 upstream timeout');
+});
+
+test('an empty error body falls back to the bare status', () => {
+  assert.equal(formatApiError(500, ''), '500');
+  assert.equal(formatApiError(500, '   '), '500');
 });
