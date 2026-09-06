@@ -87,6 +87,45 @@ export async function POST(request) {
     return Response.json({ error: 'vercel_token_invalid' }, { status: 401 });
   }
 
+  // After successful verification, remove the _vercel TXT from the claim.
+  // The zone mirror only mirrors values present in claim files, so removing
+  // it here stops the sync from re-publishing the TXT on every run. The
+  // zone TXT gets cleaned up on the next sync as "no longer wanted". This
+  // keeps the zone bounded instead of accumulating every claim's token
+  // forever (issues #104, #105: Vercel caps records per hostname at ~50).
+  if (result.verified) {
+    try {
+      const uncachedFetch = (url, init) => fetch(url, init, { cache: 'no-store' });
+      const meta = await getContentsMeta(`domains/${name}.json`, {
+        token: registryToken,
+        fetchImpl: uncachedFetch,
+      }).catch(() => null);
+
+      if (meta?.data?.subdomains?._vercel) {
+        const head = { ...meta.data };
+        const subs = { ...head.subdomains };
+        delete subs._vercel;
+        if (Object.keys(subs).length > 0) {
+          head.subdomains = subs;
+        } else {
+          delete head.subdomains;
+        }
+
+        const { putRecordUpdate } = await import('../../../../lib/registry.js');
+        await putRecordUpdate(head, {
+          token: registryToken,
+          sha: meta.sha,
+          editor: session.login,
+          fetchImpl: uncachedFetch,
+        }).catch(() => null);
+      }
+    } catch {
+      // Cleanup is best-effort: verification already succeeded, and the
+      // zone TXT TTL in lib/dns.js catches any missed cleanup on the
+      // next sync. Don't fail the response over a non-essential step.
+    }
+  }
+
   return Response.json({
     verified: result.verified ?? false,
     name,
