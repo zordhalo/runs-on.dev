@@ -209,3 +209,46 @@ test('modeOf reports cname for a record that has one, so the form opens there', 
   assert.equal(modeOf({ CNAME: 'example.vercel.app' }), 'cname');
   assert.equal(modeOf({}), 'card');
 });
+
+// Providers hand out hostnames in shapes the schema's HOSTNAME pattern
+// rejects. Rejecting them produced "CNAME must be a hostname" about a value
+// that plainly was one -- reported by an owner who had pasted Vercel's target
+// with its trailing dot and had no way to see what was wrong.
+test('a trailing dot is stripped from a CNAME', () => {
+  assert.deepEqual(
+    buildRecords('cname', { cname: 'e6bcca57117d3d7e.vercel-dns-017.com.' }),
+    { CNAME: 'e6bcca57117d3d7e.vercel-dns-017.com' },
+  );
+});
+
+test('a CNAME is lowercased, because DNS is case-insensitive', () => {
+  assert.deepEqual(
+    buildRecords('cname', { cname: '  CNAME.Vercel-DNS.com.  ' }),
+    { CNAME: 'cname.vercel-dns.com' },
+  );
+});
+
+test('normalized CNAMEs pass the schema that used to reject them', () => {
+  const rec = {
+    name: 'aman', owner: { github: 'x' }, claimedAt: '2026-09-07T00:00:00Z',
+    records: buildRecords('cname', { cname: 'E6BCCA.vercel-dns-017.com.' }),
+  };
+  assert.deepEqual(validateRecord(rec), { ok: true, errors: [] });
+});
+
+test('a subdomain CNAME row is normalized the same way', () => {
+  assert.deepEqual(
+    buildSubdomains([{ label: 'www', type: 'CNAME', value: 'Target.Example.COM.' }]),
+    { www: { CNAME: 'target.example.com' } },
+  );
+});
+
+test('an MX host is normalized but its priority is untouched', () => {
+  assert.deepEqual(parseMx('10 MX.Example.com.'), [{ priority: 10, value: 'mx.example.com' }]);
+});
+
+// Verification tokens are opaque and case-sensitive; normalizing one breaks it.
+test('TXT values are never lowercased or stripped', () => {
+  const v = 'vc-domain-verify=amanworks.runs-on.dev,81E73fdea1b7f9058ffa';
+  assert.deepEqual(buildSubdomains([{ label: '_vercel', type: 'TXT', value: v }]), { _vercel: { TXT: [v] } });
+});
