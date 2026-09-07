@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validateChangeset, parseRecordFile, RecordParseError, countOwnedNames } from '../lib/pr.js';
+import {
+  validateChangeset,
+  parseRecordFile,
+  RecordParseError,
+  countOwnedNames,
+  readRecordAt,
+} from '../lib/pr.js';
 
 const owned = {
   name: 'lucas',
@@ -361,4 +367,30 @@ test('a record with a missing or null owner counts as not owned', async () => {
     readRecord: async () => ({}),
   };
   assert.equal(await countOwnedNames('anyone', sparse), 0);
+});
+
+// The path readRecordAt builds is relative to the repo, because the injected
+// api already carries the /repos/{owner}/{repo} prefix. A doubled prefix here
+// 404s, and since a failed read returns null every record PR is rejected as
+// "could not read the changed file" — so the shape is worth pinning.
+test('readRecordAt requests a repo-relative contents path', async () => {
+  const seen = [];
+  const rec = await readRecordAt('domains/lucas.json', 'abc123', {
+    api: async (path) => {
+      seen.push(path);
+      return {
+        ok: true,
+        json: async () => ({ content: Buffer.from(JSON.stringify(owned)).toString('base64') }),
+      };
+    },
+  });
+  assert.deepEqual(seen, ['/contents/domains/lucas.json?ref=abc123']);
+  assert.equal(rec.name, 'lucas');
+});
+
+test('readRecordAt returns null when the file is absent', async () => {
+  const rec = await readRecordAt('domains/nope.json', 'abc123', {
+    api: async () => ({ ok: false, status: 404 }),
+  });
+  assert.equal(rec, null);
 });
