@@ -2,8 +2,9 @@ import { sessionFromRequest } from '../../../../lib/session.js';
 import { createRateLimiter } from '../../../../lib/throttle.js';
 
 // Lists the user's Vercel projects so the manage page can show a dropdown
-// instead of making them type the project name. Uses the session's Vercel
-// token (OAuth in production, env token in the POC).
+// instead of making them type the project name. Uses the Vercel token from
+// the user's session (set by the OAuth callback), so the list is always
+// their own account's projects.
 
 const PROJECTS_WINDOW_MS = 60 * 1000;
 const PROJECTS_MAX = 5;
@@ -24,7 +25,9 @@ export async function GET(request) {
     );
   }
 
-  const vercelToken = session.vercelToken ?? process.env.VERCEL_TOKEN;
+  // Session token only, same as the other Vercel routes: no operator-token
+  // fallback, so this can never list the registry's own projects.
+  const vercelToken = session.vercelToken;
   if (!vercelToken) {
     return Response.json({ error: 'vercel_not_connected' }, { status: 400 });
   }
