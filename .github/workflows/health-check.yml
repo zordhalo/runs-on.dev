@@ -12,24 +12,46 @@ on:
 
 permissions:
   contents: read
-  # The run closes the nudge issues whose names have recovered, so the person
-  # who was told their name was broken is told when it is fixed.
+  # The run opens a nudge issue for each newly stuck name and closes the ones
+  # whose names have recovered, so the person who can fix it is told, and told
+  # again when it is fixed.
   issues: write
 
-# The probe reads public HTTP and nothing else, so a scheduled run overlapping
-# a manual one is harmless; cancel the older one rather than queue it.
+# This used to cancel the older run, which was right while the job only read
+# public HTTP. It no longer is: the repair job writes DNS, and cancelling a run
+# mid-sync is precisely the failure this repair exists to clean up after.
+# Queue instead.
 concurrency:
   group: health-check
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    outputs:
+      drifted: ${{ steps.probe.outputs.drifted }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node scripts/health-check.mjs
+      - id: probe
+        run: node scripts/health-check.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # A declared record missing from DNS can only be sync-dns having failed
+  # silently -- a run that lost its slot in the concurrency queue, most
+  # likely, since a queued run is evicted when a third arrives and each run
+  # only ever syncs its own push's names. Nothing else would pick those up.
+  #
+  # Repairing on detection closes that loop, using the same per-name path a
+  # maintainer would use by hand. If the repair fails, THIS job goes red,
+  # which is the alarm that actually warrants a person.
+  repair:
+    needs: check
+    if: needs.check.outputs.drifted != ''
+    uses: ./.github/workflows/sync-dns.yml
+    with:
+      names: ${{ needs.check.outputs.drifted }}
+    secrets: inherit

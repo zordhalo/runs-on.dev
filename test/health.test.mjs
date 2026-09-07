@@ -1,6 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { classifyClaim, issueName, planIssueClosures, normalizeAnswer, findDrift } from '../lib/health.js';
+import {
+  classifyClaim, issueName, planIssueClosures, planIssueOpens, diagnoseStuck,
+  normalizeAnswer, findDrift,
+} from '../lib/health.js';
 
 const base = { name: 'lucas', owner: { github: 'zordhalo' }, claimedAt: '2026-08-30T00:00:00Z' };
 
@@ -149,4 +152,58 @@ test('only one surrounding pair is stripped, inner quotes survive', () => {
 test('a verification token is unaffected by TXT normalization', () => {
   const t = 'vc-domain-verify=selim.runs-on.dev,ABC123def';
   assert.equal(normalizeAnswer('TXT', t), t);
+});
+
+// --- opening nudge issues (the half that never existed) ---
+
+const rows = (o) => Object.entries(o).map(([name, status]) => ({ name, status }));
+
+test('opens an issue only for stuck names', () => {
+  const out = planIssueOpens(rows({ a: 'stuck', b: 'ok', c: 'down', d: 'card', e: 'redirect' }), []);
+  assert.deepEqual(out.map((x) => x.name), ['a']);
+});
+
+// A robot filing an issue about someone's transient outage is noise; `down`
+// is as easily a host having a bad afternoon as a misconfiguration.
+test('down is never reported, however many there are', () => {
+  assert.deepEqual(planIssueOpens(rows({ a: 'down', b: 'down' }), []), []);
+});
+
+test('a name that already has an issue is not given another', () => {
+  const issues = [{ number: 7, title: 'a.runs-on.dev is not serving your site yet' }];
+  assert.deepEqual(planIssueOpens(rows({ a: 'stuck', b: 'stuck' }), issues).map((x) => x.name), ['b']);
+});
+
+// Deduping reads closed issues too: an owner who closed theirs without fixing
+// the name should not be handed a fresh one every morning.
+test('a closed issue still counts as spoken for', () => {
+  const issues = [{ number: 7, title: 'a.runs-on.dev is not serving your site yet', state: 'closed' }];
+  assert.deepEqual(planIssueOpens(rows({ a: 'stuck' }), issues), []);
+});
+
+test('the cap bounds how many a single run files', () => {
+  const many = rows(Object.fromEntries('abcdefgh'.split('').map((n) => [n, 'stuck'])));
+  assert.equal(planIssueOpens(many, []).length, 5);
+  assert.equal(planIssueOpens(many, [], { cap: 2 }).length, 2);
+});
+
+// --- diagnosis drives what the issue actually says ---
+
+test('a CNAME at a vercel.app deployment URL is named as such', () => {
+  assert.equal(diagnoseStuck({ records: { CNAME: 'portfolio-chi.vercel.app' } }), 'vercel-app-url');
+});
+
+test('a vercel target with no challenge is distinguished from one awaiting verification', () => {
+  const cname = { CNAME: 'abc.vercel-dns-017.com' };
+  assert.equal(diagnoseStuck({ records: cname }), 'vercel-no-challenge');
+  assert.equal(
+    diagnoseStuck({ records: cname, subdomains: { _vercel: { TXT: ['vc-domain-verify=a.runs-on.dev,t'] } } }),
+    'vercel-awaiting-verification',
+  );
+});
+
+test('platform default hosts are recognised, and anything else falls back', () => {
+  assert.equal(diagnoseStuck({ records: { CNAME: 'me.github.io' } }), 'platform-default-host');
+  assert.equal(diagnoseStuck({ records: { CNAME: 'x.pages.dev' } }), 'platform-default-host');
+  assert.equal(diagnoseStuck({ records: { A: ['1.2.3.4'] } }), 'unknown');
 });

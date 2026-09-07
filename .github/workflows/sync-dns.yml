@@ -16,6 +16,17 @@ on:
         description: 'Names to re-sync, space or comma separated (e.g. "laurentmaxhuni dexi")'
         required: true
         type: string
+  # Same contract, called rather than clicked: health-check repairs the drift
+  # it detects by calling this with the names it found. A workflow_call runs
+  # inside the caller's run, which sidesteps the fact that GITHUB_TOKEN cannot
+  # trigger a workflow_dispatch -- GitHub blocks that to prevent recursion, so
+  # the API route a script would take is not available to us.
+  workflow_call:
+    inputs:
+      names:
+        description: 'Names to re-sync, space or comma separated'
+        required: true
+        type: string
 
 permissions:
   contents: read

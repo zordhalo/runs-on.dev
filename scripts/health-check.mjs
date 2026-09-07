@@ -1,5 +1,8 @@
 import { appendFile, readFile, readdir } from 'node:fs/promises';
-import { classifyClaim, planIssueClosures, STUCK_LABEL, findDrift, normalizeAnswer, expectationKey } from '../lib/health.js';
+import {
+  classifyClaim, planIssueClosures, planIssueOpens, diagnoseStuck,
+  STUCK_LABEL, findDrift, normalizeAnswer, expectationKey,
+} from '../lib/health.js';
 import { planDnsChanges, planZoneVerificationRecords } from '../lib/dns.js';
 import { Resolver } from 'node:dns/promises';
 
@@ -103,6 +106,10 @@ if (process.env.GITHUB_STEP_SUMMARY) {
 // issues API had a bad minute would be a poor trade.
 await closeRecoveredIssues(rows);
 
+// The other half. Without this the check knew a name was broken and never
+// told the one person who could fix it.
+await openStuckIssues(rows, claims);
+
 // `stuck` and `down` are reported, never failed on. Both describe something
 // a third party has not done -- an owner who has not re-run their provider's
 // verification, a host having a bad afternoon -- and a scheduled job that
@@ -118,7 +125,41 @@ const drift = await findDnsDrift(claims);
 if (drift.length > 0) {
   console.error(`health: ${drift.length} declared record(s) missing from DNS`);
   for (const record of drift) console.error(`  ${record.type} ${record.host} -> ${record.want}`);
-  process.exit(1);
+
+  // Drift used to exit 1 and stop there, which made it an alarm nobody could
+  // act on without opening a laptop -- and, worse, a red run masks every other
+  // finding in the same job. `selim`'s quoted TXT held this red for days and
+  // hid two names whose DNS was genuinely missing.
+  //
+  // It is now self-healing: the names are handed to the repair job, which
+  // calls sync-dns with exactly them. That is the same path a human would
+  // take by hand (workflow_dispatch with `names`), so nothing new can go
+  // wrong that could not already. The alarm moves with it -- if the repair
+  // fails, that job goes red, which is the signal that actually needs a
+  // person. Exiting 0 here is what lets the repair job run at all.
+  // The last label before the domain is the claim: `arpitraj.runs-on.dev` and
+  // `_vercel.arpitraj.runs-on.dev` both belong to `arpitraj`. The zone mirror
+  // at `_vercel.runs-on.dev` belongs to no claim and yields `_vercel`, so the
+  // result is intersected with the registry -- sync-dns rebuilds the mirror on
+  // every run regardless of which names it was given, so repairing any real
+  // name repairs the mirror alongside it.
+  const registry = new Set(claims.map((claim) => claim.name));
+  const names = [...new Set(
+    drift
+      .map((record) => String(record.host).replace(`.${DOMAIN}`, '').split('.').pop())
+      .filter((name) => registry.has(name)),
+  )].sort();
+
+  if (names.length === 0) {
+    console.error('health: drift is at the zone level only, which no per-name resync repairs');
+    process.exit(1);
+  }
+
+  console.error(`health: handing ${names.length} name(s) to the repair job: ${names.join(' ')}`);
+  if (process.env.GITHUB_OUTPUT) {
+    await appendFile(process.env.GITHUB_OUTPUT, `drifted=${names.join(' ')}\n`, 'utf8');
+  }
+  process.exit(0);
 }
 console.log(`health: every declared record is live in DNS (${stuck.length} name(s) awaiting provider verification)`);
 
@@ -217,6 +258,97 @@ async function closeRecoveredIssues(statusRows) {
       console.log(`closed #${number} (${name} recovered)`);
     } catch (err) {
       console.error(`health: could not close #${number}: ${err.message}`);
+    }
+  }
+}
+
+// One issue per stuck name, saying which specific mistake was made. Best
+// effort like the closures: a failure here must not cost the run its probe.
+const STUCK_BODY = {
+  'vercel-app-url': (n, c) => `Your record points at \`${c.records.CNAME}\`, which is your project's **deployment URL** rather than a custom-domain target.
+
+Vercel decides what to serve from the \`Host\` header, and \`${n}.runs-on.dev\` is not registered on your project, so nothing there matches it and your site is never served for this hostname. A CNAME to a \`.vercel.app\` address looks like it should work and never does.
+
+**Fix:** add \`${n}.runs-on.dev\` as a domain on your Vercel project. Vercel will say the domain belongs to another team (it does — we own \`runs-on.dev\`) and give you a \`vc-domain-verify=\` TXT challenge. Put that on /manage as a subdomain record with label \`_vercel\` and type \`TXT\`, and replace the CNAME with the target Vercel shows you.`,
+
+  'vercel-no-challenge': (n, c) => `Your record points at \`${c.records.CNAME}\`, which is the right kind of target, but no ownership challenge is published — so Vercel can never verify the domain.
+
+\`runs-on.dev\` belongs to us, not to you, so Vercel needs proof you control this specific name before it will serve it.
+
+**Fix:** on your Vercel project's domain settings, copy the \`vc-domain-verify=${n}.runs-on.dev,…\` TXT value it offers. Add it on /manage as a subdomain record with label \`_vercel\`, type \`TXT\`. Save, wait a minute for our DNS sync, then hit Refresh on Vercel.`,
+
+  'vercel-awaiting-verification': (n) => `Your CNAME and your \`_vercel\` TXT challenge are both published correctly, but \`${n}.runs-on.dev\` is still serving our profile card rather than your project — so Vercel has not completed verification.
+
+**Fix:** open your Vercel project's domain settings and press **Refresh** next to \`${n}.runs-on.dev\`. Verification often needs that nudge once the DNS is in place.
+
+If it still will not verify, say so here — a challenge value can go stale if the domain was removed and re-added on Vercel, in which case you need the new one.`,
+
+  'platform-default-host': (n, c) => `Your record points at \`${c.records.CNAME}\`, your platform's default host, and nothing is answering for \`${n}.runs-on.dev\` there.
+
+Pointing DNS at the platform is only half of it: the platform also has to be told it should answer for this hostname, otherwise it has no matching site and falls through.
+
+**Fix:** add \`${n}.runs-on.dev\` as a custom domain in your hosting provider's settings (GitHub Pages: repo Settings → Pages → Custom domain; Netlify and Cloudflare Pages have the same under domain management). Then re-check here.`,
+
+  unknown: (n, c) => `\`${n}.runs-on.dev\` resolves and holds a valid certificate, but it is serving our profile card rather than your site — which means your provider is not yet answering for this hostname.
+
+Currently pointing at: \`${c.records?.CNAME ?? (c.records?.A ?? []).join(', ')}\`
+
+**Fix:** whichever host you are using, add \`${n}.runs-on.dev\` to it as a custom domain. DNS alone is not enough — the provider has to recognise the hostname before it will serve anything for it.`,
+};
+
+async function openStuckIssues(statusRows, allClaims) {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  if (!token || !repo) return;
+
+  const api = (path, init = {}) =>
+    fetch(`https://api.github.com/repos/${repo}${path}`, {
+      ...init,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json',
+      },
+    });
+
+  // Both states matter for deduping: an owner who closed their issue without
+  // fixing the name should not be handed a fresh one every morning.
+  let issues;
+  try {
+    const res = await api(`/issues?state=all&labels=${STUCK_LABEL}&per_page=100`);
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    issues = (await res.json()).filter((issue) => !issue.pull_request);
+  } catch (err) {
+    console.error(`health: could not list ${STUCK_LABEL} issues: ${err.message}`);
+    return;
+  }
+
+  const byName = new Map(allClaims.map((claim) => [claim.name, claim]));
+  for (const { name } of planIssueOpens(statusRows, issues)) {
+    const claim = byName.get(name);
+    if (!claim) continue;
+    const kind = diagnoseStuck(claim);
+    const owner = claim.owner?.github;
+    const body = `${owner ? `@${owner} — ` : ''}${STUCK_BODY[kind](name, claim)}
+
+---
+Opened automatically by the daily health check, which noticed \`${name}.runs-on.dev\` is serving the registry's profile card instead of your site. It closes itself once your name starts serving. If this is wrong, or you meant to serve the card, just close it.`;
+
+    try {
+      const res = await api('/issues', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: `${name}.runs-on.dev is not serving your site yet`,
+          body,
+          labels: [STUCK_LABEL],
+        }),
+      });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      const { number } = await res.json();
+      console.log(`opened #${number} (${name}: ${kind})`);
+    } catch (err) {
+      console.error(`health: could not open an issue for ${name}: ${err.message}`);
     }
   }
 }
