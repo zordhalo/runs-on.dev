@@ -1,0 +1,98 @@
+name: prune-verification
+
+# Vercel caps one TXT hostname at 50 values. Every claim mirroring a
+# `vc-domain-verify=` challenge holds one at `_vercel.runs-on.dev`, and past
+# the cap sync-dns cannot publish at all — the next claim's verification can
+# never complete (issues #104, #105).
+#
+# A challenge is only load-bearing while a domain is pending verification.
+# This drops the ones that have demonstrably finished, from the CLAIM rather
+# than from DNS: planZoneVerificationRecords re-derives the desired set from
+# the claim files every run, so deleting the record alone gets it recreated on
+# the next sync. Removing it at the source is what makes it stay gone.
+#
+# Manual-only on purpose. Deciding wrongly deletes a stranger's in-flight
+# verification, so the trigger is a person who has read the dry run. Once this
+# has been exercised a few times a schedule can be added -- but the durable fix
+# for NEW claims is pruning at the moment of successful verification, in the
+# app, not a periodic sweep.
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Write the changes. Leave false for a dry run.'
+        type: boolean
+        default: false
+      limit:
+        description: 'Prune at most this many records (blank = all eligible).'
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+# Rewriting domains/ while another run is doing the same would race to commit
+# the same files. Queue rather than cancel: a half-finished prune that gets
+# cancelled after writing but before committing leaves nothing behind, but
+# there is no reason to interrupt one that is mid-flight.
+concurrency:
+  group: prune-verification
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Always run the report first, whatever the inputs say, so the log of an
+      # apply run also contains the evidence the apply was based on.
+      - name: Report what would be pruned
+        run: node scripts/prune-verification.mjs
+        env:
+          LIMIT: ${{ inputs.limit }}
+
+      - name: Apply and commit
+        if: ${{ inputs.apply }}
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          node scripts/prune-verification.mjs
+
+          if [ -z "$(git status --porcelain domains/)" ]; then
+            echo 'no records changed, nothing to commit.'
+            exit 0
+          fi
+
+          git add domains/
+          git commit -m 'prune: drop verification challenges from verified claims'
+
+          # main can move under us between checkout and push. Unlike the owners
+          # index this is NOT a pure function of the tree -- it depends on a
+          # live probe -- so a retry re-probes rather than replaying a stale
+          # plan. Rebasing keeps the prune on top of whatever landed.
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "::warning::push rejected on attempt $attempt; rebasing and re-running"
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/prune-verification.mjs
+            if [ -z "$(git status --porcelain domains/)" ]; then
+              echo 'nothing left to prune after refresh.'
+              exit 0
+            fi
+            git add domains/
+            git commit -m 'prune: drop verification challenges from verified claims'
+          done
+
+          echo '::error::could not push the prune after 3 attempts'
+          exit 1
+        env:
+          APPLY: 'true'
+          LIMIT: ${{ inputs.limit }}
