@@ -130,3 +130,23 @@ test('findDrift compares MX on priority as well as host', () => {
   const right = new Map([['MX m.runs-on.dev', ['10 mx.example.com']]]);
   assert.deepEqual(findDrift(expected, right), []);
 });
+
+// A TXT wrapped in quotes is zone-file presentation, not content: the provider
+// stores the inner string, so comparing raw reported drift that no resync could
+// clear and failed health-check forever. selim.runs-on.dev sat in that state.
+test('a quoted TXT compares equal to the value DNS holds', () => {
+  assert.equal(
+    normalizeAnswer('TXT', '"Under Construction... SOON"'),
+    normalizeAnswer('TXT', 'Under Construction... SOON'),
+  );
+});
+
+test('only one surrounding pair is stripped, inner quotes survive', () => {
+  assert.equal(normalizeAnswer('TXT', '"say \\"hi\\""'), 'say \\"hi\\"');
+  assert.equal(normalizeAnswer('TXT', 'no quotes here'), 'no quotes here');
+});
+
+test('a verification token is unaffected by TXT normalization', () => {
+  const t = 'vc-domain-verify=selim.runs-on.dev,ABC123def';
+  assert.equal(normalizeAnswer('TXT', t), t);
+});
