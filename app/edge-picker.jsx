@@ -2,52 +2,114 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Home, Settings2, BarChart3, BookOpenText, CircleHelp, Info } from 'lucide-react';
+import Link from 'next/link';
+
+// Inline Lucide icons (SVG paths copied verbatim from lucide.dev): the dock
+// is the app's only icon consumer, and six inline SVGs avoid taking on the
+// repo's first UI dependency and its update cadence.
+function icon(children) {
+  return function Icon({ size = 18, strokeWidth = 2 }) {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        {children}
+      </svg>
+    );
+  };
+}
+
+const HomeIcon = icon(
+  <>
+    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+    <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+  </>
+);
+
+const Settings2Icon = icon(
+  <>
+    <path d="M14 17H5" />
+    <path d="M19 7h-9" />
+    <circle cx="17" cy="17" r="3" />
+    <circle cx="7" cy="7" r="3" />
+  </>
+);
+
+const BarChart3Icon = icon(
+  <>
+    <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+    <path d="M18 17V9" />
+    <path d="M13 17V5" />
+    <path d="M8 17v-3" />
+  </>
+);
+
+const BookOpenTextIcon = icon(
+  <>
+    <path d="M12 5v16" />
+    <path d="M16 13h2" />
+    <path d="M16 9h2" />
+    <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" />
+    <path d="M6 13h2" />
+    <path d="M6 9h2" />
+  </>
+);
+
+const CircleHelpIcon = icon(
+  <>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+    <path d="M12 17h.01" />
+  </>
+);
+
+const InfoIcon = icon(
+  <>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 16v-4" />
+    <path d="M12 8h.01" />
+  </>
+);
 
 const ROUTES = [
-  { id: 'home', label: 'Home', path: '/', Icon: Home },
-  { id: 'manage', label: 'Manage', path: '/manage', Icon: Settings2 },
-  { id: 'stats', label: 'Stats', path: '/stats', Icon: BarChart3 },
-  { id: 'docs', label: 'Docs', path: '/docs', Icon: BookOpenText },
-  { id: 'faq', label: 'FAQ', path: '/faq', Icon: CircleHelp },
-  { id: 'about', label: 'About', path: '/about', Icon: Info },
+  { id: 'home', label: 'Home', path: '/', Icon: HomeIcon },
+  { id: 'manage', label: 'Manage', path: '/manage', Icon: Settings2Icon },
+  { id: 'stats', label: 'Stats', path: '/stats', Icon: BarChart3Icon },
+  { id: 'docs', label: 'Docs', path: '/docs', Icon: BookOpenTextIcon },
+  { id: 'faq', label: 'FAQ', path: '/faq', Icon: CircleHelpIcon },
+  { id: 'about', label: 'About', path: '/about', Icon: InfoIcon },
 ];
 
 const ICON_SIZE = 18;
 
-function openPickerDb() {
-  return new Promise((resolve) => {
-    if (typeof window === 'undefined' || !window.indexedDB) {
-      resolve(null);
-      return;
-    }
-    const req = indexedDB.open('edge-picker', 1);
-    req.onupgradeneeded = () => {
-      req.result.createObjectStore('state');
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => resolve(null);
-  });
+// One scalar (the resting position); localStorage is one line and has the
+// same failure modes as any async store would.
+const POS_KEY = 'edge-picker:scrollPos';
+
+function loadSavedPos() {
+  try {
+    const saved = window.localStorage.getItem(POS_KEY);
+    const n = Number(saved);
+    return Number.isFinite(n) ? n : null;
+  } catch {
+    return null;
+  }
 }
 
-function idbGet(db, key) {
-  return new Promise((resolve) => {
-    if (!db) { resolve(undefined); return; }
-    const tx = db.transaction('state', 'readonly');
-    const req = tx.objectStore('state').get(key);
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => resolve(undefined);
-  });
-}
-
-function idbPut(db, key, value) {
-  return new Promise((resolve) => {
-    if (!db) { resolve(); return; }
-    const tx = db.transaction('state', 'readwrite');
-    tx.objectStore('state').put(value, key);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => resolve();
-  });
+function savePos(value) {
+  try {
+    window.localStorage.setItem(POS_KEY, String(value));
+  } catch {
+    // Private mode / storage full: the position just doesn't persist.
+  }
 }
 
 export default function EdgePicker() {
@@ -80,46 +142,13 @@ export default function EdgePicker() {
   const lastPointerTime = useRef(0);
   const velocityY = useRef(0);
   const hasDraggedRef = useRef(false);
-  const targetItemOnDown = useRef(null);
   const lastDetentIndex = useRef(initialIndex);
-  const audioContextRef = useRef(null);
-
-  const playHapticTick = useCallback((direction = 1) => {
-    try {
-      if (!audioContextRef.current) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        audioContextRef.current = new AudioCtx();
-      }
-      const ctx = audioContextRef.current;
-      if (ctx.state === 'suspended') ctx.resume();
-
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(direction > 0 ? 1420 : 1200, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.035);
-
-      gain.gain.setValueAtTime(0.25, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + 0.035);
-    } catch {
-      // Audio awaiting user gesture
-    }
-  }, []);
 
   const checkDetent = useCallback(
     (pos) => {
       const currentDetent = Math.round(pos);
       if (currentDetent !== lastDetentIndex.current) {
-        const dir = currentDetent > lastDetentIndex.current ? 1 : -1;
         lastDetentIndex.current = currentDetent;
-        playHapticTick(dir);
 
         const normalized = ((currentDetent % itemCount) + itemCount) % itemCount;
         const route = items[normalized];
@@ -129,7 +158,7 @@ export default function EdgePicker() {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [items, itemCount, router, pathname, playHapticTick]
+    [items, itemCount, router, pathname]
   );
 
   const animateToTarget = useCallback(
@@ -186,24 +215,26 @@ export default function EdgePicker() {
 
   const dockLength = isCompact ? 116 : 380;
 
+  // Slot geometry: the active pill at the center, first neighbor at D1,
+  // then a fixed step. Spacing is deliberately wide so the expanded dock
+  // shows exactly five icons: the pill plus two neighbors on each side.
+  const NEIGHBOR_STEP = 46;
   const getSlotY = useCallback((relOffset, currentPillH) => {
     if (relOffset === 0) return 0;
     const sign = relOffset > 0 ? 1 : -1;
     const abs = Math.abs(relOffset);
-    const D1 = currentPillH / 2 + 12 + 10;
-    const step = 32;
+    const D1 = currentPillH / 2 + 33;
 
     if (abs <= 1) {
       return sign * abs * D1;
     }
-    return sign * (D1 + (abs - 1) * step);
+    return sign * (D1 + (abs - 1) * NEIGHBOR_STEP);
   }, []);
 
-  const handlePointerDown = (e, specificIndex = null) => {
+  const handlePointerDown = (e) => {
     if (isCompact) {
       setIsCompact(false);
       expandedAtRef.current = Date.now();
-      playHapticTick(1);
       e.preventDefault();
       e.stopPropagation();
       return;
@@ -216,7 +247,6 @@ export default function EdgePicker() {
 
     isPointerDownRef.current = true;
     hasDraggedRef.current = false;
-    targetItemOnDown.current = specificIndex;
     pointerDownTimeRef.current = performance.now();
 
     pointerStartY.current = e.clientY;
@@ -225,9 +255,10 @@ export default function EdgePicker() {
     lastPointerTime.current = performance.now();
     velocityY.current = 0;
 
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
+    // Pointer capture is deliberately NOT taken here: a plain tap must let
+    // the click fall through to the route anchors below. Capture is taken
+    // on the container only once a real drag starts, which retargets the
+    // subsequent events (and the compatibility click) away from them.
   };
 
   const handlePointerMove = (e) => {
@@ -244,18 +275,20 @@ export default function EdgePicker() {
       hasDraggedRef.current = true;
       setIsDragging(true);
       isDraggingRef.current = true;
+      try {
+        containerRef.current?.setPointerCapture(e.pointerId);
+      } catch {}
     }
 
     if (!hasDraggedRef.current) return;
 
-    const pxPerItem = 32;
-    const instantVelocity = stepDelta / pxPerItem / timeDelta;
+    const instantVelocity = stepDelta / NEIGHBOR_STEP / timeDelta;
     velocityY.current = velocityY.current * 0.4 + instantVelocity * 0.6;
 
     lastPointerY.current = currentY;
     lastPointerTime.current = now;
 
-    const newPos = pointerStartPos.current - deltaFromStart / pxPerItem;
+    const newPos = pointerStartPos.current - deltaFromStart / NEIGHBOR_STEP;
     setScrollPos(newPos);
     checkDetent(newPos);
   };
@@ -272,18 +305,10 @@ export default function EdgePicker() {
       e.currentTarget.releasePointerCapture(e.pointerId);
     } catch {}
 
-    // Tap: select and center without text
+    // Taps: if the pointerdown started on a route anchor, its own click
+    // handles navigation; nothing to do here. Taps on the dock bezel itself
+    // still snap the nearest slot to the center.
     if (!wasDragging) {
-      if (targetItemOnDown.current !== null) {
-        const tappedIdx = targetItemOnDown.current;
-        const currentCenter = Math.round(scrollPosRef.current);
-
-        if (tappedIdx !== currentCenter) {
-          animateToTarget(tappedIdx);
-        }
-        return;
-      }
-
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         const tapRelY = e.clientY - (rect.top + rect.height / 2);
@@ -293,7 +318,7 @@ export default function EdgePicker() {
           let bestSlot = currentCenter;
           let minDiff = Infinity;
 
-          for (let s = -3; s <= 3; s++) {
+          for (let s = -2; s <= 2; s++) {
             const slotY = getSlotY(s, pillHeight);
             const diff = Math.abs(tapRelY - slotY);
             if (diff < minDiff) {
@@ -317,6 +342,20 @@ export default function EdgePicker() {
     if (targetSnap < currentNorm - maxTravel) targetSnap = currentNorm - maxTravel;
 
     animateToTarget(targetSnap, -velocityY.current * 1.4);
+  };
+
+  // Keyboard: the dock is operable with arrow keys while focus is inside
+  // it (the pill anchor is the single tab stop). Each detent crossing
+  // navigates, same as a drag detent does.
+  const handleKeyDown = (e) => {
+    if (isCompact) return;
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      animateToTarget(Math.round(scrollPosRef.current) - 1);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      animateToTarget(Math.round(scrollPosRef.current) + 1);
+    }
   };
 
   const wheelTimeoutRef = useRef(null);
@@ -414,25 +453,19 @@ export default function EdgePicker() {
     return () => clearInterval(interval);
   }, [router]);
 
-  // IndexedDB persistence
+  // Resting position persistence
   useEffect(() => {
-    openPickerDb()
-      .then((db) => idbGet(db, 'scrollPos'))
-      .then((saved) => {
-        if (typeof saved === 'number' && saved >= 0 && saved < itemCount) {
-          setScrollPos(saved);
-          scrollPosRef.current = saved;
-          lastDetentIndex.current = Math.round(saved);
-        }
-      })
-      .catch(() => {});
+    const saved = loadSavedPos();
+    if (saved !== null && saved >= 0 && saved < itemCount) {
+      setScrollPos(saved);
+      scrollPosRef.current = saved;
+      lastDetentIndex.current = Math.round(saved);
+    }
   }, [itemCount]);
 
   useEffect(() => {
     if (Number.isInteger(scrollPos)) {
-      openPickerDb()
-        .then((db) => idbPut(db, 'scrollPos', ((scrollPos % itemCount) + itemCount) % itemCount))
-        .catch(() => {});
+      savePos(((scrollPos % itemCount) + itemCount) % itemCount);
     }
   }, [scrollPos, itemCount]);
 
@@ -448,7 +481,9 @@ export default function EdgePicker() {
   const activeNormalizedIndex = ((currentNearestCenter % itemCount) + itemCount) % itemCount;
   const activeItem = items[activeNormalizedIndex];
 
-  const visibleItemOffsets = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
+  // The reel renders the active pill plus two neighbors each side: five
+  // icons in the expanded window, nothing half-visible beyond them.
+  const visibleItemOffsets = [-2, -1, 1, 2];
 
   // Paper theme
   const pillShadow = '0 0 0 1px rgba(255,255,255,0.15) inset, 0 4px 12px rgba(0,0,0,0.35)';
@@ -456,10 +491,11 @@ export default function EdgePicker() {
   return (
     <div
       ref={containerRef}
-      onPointerDown={(e) => handlePointerDown(e, null)}
+      onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
+      onKeyDown={handleKeyDown}
       onPointerEnter={(e) => {
         if (e.pointerType === 'mouse') setIsHovered(true);
       }}
@@ -468,7 +504,6 @@ export default function EdgePicker() {
         if (isCompact) {
           setIsCompact(false);
           expandedAtRef.current = Date.now();
-          playHapticTick(1);
           e.preventDefault();
           e.stopPropagation();
         }
@@ -534,13 +569,15 @@ export default function EdgePicker() {
           WebkitClipPath: 'url(#dockNotchClipObject)',
         }}
       >
-        {/* Active Pill at Center Notch */}
-        <div
-          onPointerDown={(e) => {
-            if (!isCompact) {
-              e.stopPropagation();
-              handlePointerDown(e, currentNearestCenter);
-            }
+        {/* Active Pill at Center Notch: a real anchor for the active route,
+            carrying aria-current. It is the dock's single tab stop; arrow
+            keys (handled above) move through the rest. */}
+        <Link
+          href={activeItem.path}
+          aria-current="page"
+          aria-label={activeItem.label}
+          onClick={(e) => {
+            if (hasDraggedRef.current || isCompact) e.preventDefault();
           }}
           style={{
             height: `${pillHeight}px`,
@@ -575,9 +612,12 @@ export default function EdgePicker() {
               />
             )}
           </div>
-        </div>
+        </Link>
 
-        {/* Looping Reel Neighbors */}
+        {/* Looping Reel Neighbors: real anchors so every destination is a
+            link (keyboard, middle-click, copy-link, crawlers). tabIndex -1
+            keeps tab order to the single pill stop; the arrows operate the
+            reel. Plain clicks navigate; clicks after a drag are suppressed. */}
         {visibleItemOffsets.map((offset) => {
           const integerIdx = currentNearestCenter + offset;
           const catalogIdx = ((integerIdx % itemCount) + itemCount) % itemCount;
@@ -602,13 +642,14 @@ export default function EdgePicker() {
           const scale = Math.max(0.72, 1 - dist / (maxDist * 2.4));
 
           return (
-            <div
+            <Link
               key={integerIdx}
-              onPointerDown={(e) => {
-                if (!isCompact) {
-                  e.stopPropagation();
-                  handlePointerDown(e, integerIdx);
-                }
+              href={item.path}
+              tabIndex={-1}
+              aria-label={item.label}
+              title={`Jump to ${item.label}`}
+              onClick={(e) => {
+                if (hasDraggedRef.current) e.preventDefault();
               }}
               style={{
                 transform: `translateY(${yPos}px) scale(${scale})`,
@@ -619,12 +660,11 @@ export default function EdgePicker() {
                 transition: 'opacity 0.25s ease',
               }}
               className="absolute right-[9px] w-[34px] h-8 flex items-center justify-center pointer-events-auto cursor-pointer group"
-              title={`Jump to ${item.label}`}
             >
               <span className="w-6 h-6 rounded-full flex items-center justify-center group-hover:bg-white/10 group-hover:scale-125 transition-all text-neutral-400 hover:text-white">
                 <item.Icon size={ICON_SIZE} strokeWidth={2} />
               </span>
-            </div>
+            </Link>
           );
         })}
       </div>
