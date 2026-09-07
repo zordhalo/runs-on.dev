@@ -34,12 +34,15 @@ async function addDomainToProject(domain, project, vercelToken) {
     },
   );
 
-  // 409 = already added, which is fine — we still need the config info
-  if (res.status === 409) {
-    return { alreadyAdded: true };
-  }
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
+    // "Already added" arrives as 409 Conflict, or as 400 with the
+    // domain_already_in_use error code when the domain is attached to
+    // another project on the same account. Both mean we can proceed to
+    // reading the config.
+    if (res.status === 409 || body.error?.code === 'domain_already_in_use') {
+      return { alreadyAdded: true };
+    }
     throw new Error(body.error?.message ?? `Vercel API returned ${res.status}`);
   }
   return await res.json();
@@ -92,7 +95,9 @@ export async function POST(request) {
     return Response.json({ error: 'not_owner' }, { status: 403 });
   }
 
-  const vercelToken = session.vercelToken ?? process.env.VERCEL_TOKEN;
+  // Session token only, same as the other Vercel routes: no operator-token
+  // fallback, so a setup always touches the user's own Vercel account.
+  const vercelToken = session.vercelToken;
   if (!vercelToken) {
     return Response.json({ error: 'vercel_not_connected' }, { status: 400 });
   }
@@ -111,7 +116,18 @@ export async function POST(request) {
 
   // ── Step 2: Determine the correct CNAME and verification TXT ──
   if (domainConfig.alreadyAdded || !domainConfig.verification) {
-    domainConfig = (await getDomainConfig(domain, project, vercelToken)) ?? domainConfig;
+    const fetched = await getDomainConfig(domain, project, vercelToken);
+    if (!fetched) {
+      // A failed config read must not fall through to a record write with
+      // no verification TXT: the save would look successful and the domain
+      // would never verify. Fail the whole setup instead.
+      return Response.json({
+        error: 'vercel_config_failed',
+        detail: 'could not read the domain configuration from Vercel; nothing was saved',
+        steps,
+      }, { status: 502 });
+    }
+    domainConfig = fetched;
   }
 
   // The Vercel API returns no CNAME target field — it only tells you the
