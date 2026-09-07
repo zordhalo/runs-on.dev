@@ -71,18 +71,17 @@ export default async function Manage() {
 
 function Shell({ children }) {
   return (
-    <main className="mx-auto max-w-2xl px-6 py-16 sm:py-24">
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
       <p className="font-(family-name:--font-mono) text-xs tracking-[0.14em] text-(--color-muted) uppercase">
         Manage
       </p>
-      <h1 className="mt-3 font-(family-name:--font-display) text-2xl font-medium tracking-tight text-(--color-ink) sm:text-3xl">
-        Point your name
+      <h1 className="mt-2 font-(family-name:--font-display) text-2xl font-medium tracking-tight text-(--color-ink) sm:text-3xl">
+        Your name
       </h1>
-      <p className="mt-3 text-sm leading-relaxed text-(--color-muted)">
-        Saving writes your record straight to the registry and DNS updates within
-        seconds. Every save is a public commit, the same as a merged pull request.
+      <p className="mt-2 text-sm leading-relaxed text-(--color-muted)">
+        Changes save straight to the registry. DNS updates within seconds.
       </p>
-      <div className="mt-8 space-y-8">{children}</div>
+      <div className="mt-8 space-y-6">{children}</div>
     </main>
   );
 }
