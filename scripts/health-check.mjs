@@ -1,6 +1,6 @@
 import { appendFile, readFile, readdir } from 'node:fs/promises';
 import {
-  classifyClaim, planIssueClosures, planIssueOpens, diagnoseStuck,
+  classifyClaim, planIssueClosures, planIssueOpens, diagnoseStuck, stuckIssueBody,
   STUCK_LABEL, findDrift, normalizeAnswer, expectationKey,
 } from '../lib/health.js';
 import { planDnsChanges, planZoneVerificationRecords } from '../lib/dns.js';
@@ -262,40 +262,6 @@ async function closeRecoveredIssues(statusRows) {
   }
 }
 
-// One issue per stuck name, saying which specific mistake was made. Best
-// effort like the closures: a failure here must not cost the run its probe.
-const STUCK_BODY = {
-  'vercel-app-url': (n, c) => `Your record points at \`${c.records.CNAME}\`, which is your project's **deployment URL** rather than a custom-domain target.
-
-Vercel decides what to serve from the \`Host\` header, and \`${n}.runs-on.dev\` is not registered on your project, so nothing there matches it and your site is never served for this hostname. A CNAME to a \`.vercel.app\` address looks like it should work and never does.
-
-**Fix:** add \`${n}.runs-on.dev\` as a domain on your Vercel project. Vercel will say the domain belongs to another team (it does — we own \`runs-on.dev\`) and give you a \`vc-domain-verify=\` TXT challenge. Put that on /manage as a subdomain record with label \`_vercel\` and type \`TXT\`, and replace the CNAME with the target Vercel shows you.`,
-
-  'vercel-no-challenge': (n, c) => `Your record points at \`${c.records.CNAME}\`, which is the right kind of target, but no ownership challenge is published — so Vercel can never verify the domain.
-
-\`runs-on.dev\` belongs to us, not to you, so Vercel needs proof you control this specific name before it will serve it.
-
-**Fix:** on your Vercel project's domain settings, copy the \`vc-domain-verify=${n}.runs-on.dev,…\` TXT value it offers. Add it on /manage as a subdomain record with label \`_vercel\`, type \`TXT\`. Save, wait a minute for our DNS sync, then hit Refresh on Vercel.`,
-
-  'vercel-awaiting-verification': (n) => `Your CNAME and your \`_vercel\` TXT challenge are both published correctly, but \`${n}.runs-on.dev\` is still serving our profile card rather than your project — so Vercel has not completed verification.
-
-**Fix:** open your Vercel project's domain settings and press **Refresh** next to \`${n}.runs-on.dev\`. Verification often needs that nudge once the DNS is in place.
-
-If it still will not verify, say so here — a challenge value can go stale if the domain was removed and re-added on Vercel, in which case you need the new one.`,
-
-  'platform-default-host': (n, c) => `Your record points at \`${c.records.CNAME}\`, your platform's default host, and nothing is answering for \`${n}.runs-on.dev\` there.
-
-Pointing DNS at the platform is only half of it: the platform also has to be told it should answer for this hostname, otherwise it has no matching site and falls through.
-
-**Fix:** add \`${n}.runs-on.dev\` as a custom domain in your hosting provider's settings (GitHub Pages: repo Settings → Pages → Custom domain; Netlify and Cloudflare Pages have the same under domain management). Then re-check here.`,
-
-  unknown: (n, c) => `\`${n}.runs-on.dev\` resolves and holds a valid certificate, but it is serving our profile card rather than your site — which means your provider is not yet answering for this hostname.
-
-Currently pointing at: \`${c.records?.CNAME ?? (c.records?.A ?? []).join(', ')}\`
-
-**Fix:** whichever host you are using, add \`${n}.runs-on.dev\` to it as a custom domain. DNS alone is not enough — the provider has to recognise the hostname before it will serve anything for it.`,
-};
-
 async function openStuckIssues(statusRows, allClaims) {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
@@ -329,11 +295,7 @@ async function openStuckIssues(statusRows, allClaims) {
     const claim = byName.get(name);
     if (!claim) continue;
     const kind = diagnoseStuck(claim);
-    const owner = claim.owner?.github;
-    const body = `${owner ? `@${owner} — ` : ''}${STUCK_BODY[kind](name, claim)}
-
----
-Opened automatically by the daily health check, which noticed \`${name}.runs-on.dev\` is serving the registry's profile card instead of your site. It closes itself once your name starts serving. If this is wrong, or you meant to serve the card, just close it.`;
+    const body = stuckIssueBody(kind, name, claim);
 
     try {
       const res = await api('/issues', {

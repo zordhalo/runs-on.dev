@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  classifyClaim, issueName, planIssueClosures, planIssueOpens, diagnoseStuck,
+  classifyClaim, issueName, planIssueClosures, planIssueOpens, diagnoseStuck, stuckIssueBody,
   normalizeAnswer, findDrift,
 } from '../lib/health.js';
 
@@ -206,4 +206,46 @@ test('platform default hosts are recognised, and anything else falls back', () =
   assert.equal(diagnoseStuck({ records: { CNAME: 'me.github.io' } }), 'platform-default-host');
   assert.equal(diagnoseStuck({ records: { CNAME: 'x.pages.dev' } }), 'platform-default-host');
   assert.equal(diagnoseStuck({ records: { A: ['1.2.3.4'] } }), 'unknown');
+});
+
+// --- the issue text itself ---
+//
+// These exist because the first real run of the issue opener died with
+// "Cannot access 'STUCK_BODY' before initialization": the templates were a
+// module-level const in the script, below the call site, so they sat in the
+// temporal dead zone. Nothing local caught it -- without a token the writer
+// returns early and never reaches them. Rendering every kind here does.
+
+const stuckClaim = {
+  name: 'aman', owner: { github: 'aman690888' },
+  records: { CNAME: 'abc.vercel-dns-017.com' },
+};
+
+test('every diagnosis renders a body naming the owner and the name', () => {
+  for (const kind of ['vercel-app-url', 'vercel-no-challenge', 'vercel-awaiting-verification', 'platform-default-host', 'unknown']) {
+    const claim = kind === 'vercel-app-url'
+      ? { ...stuckClaim, records: { CNAME: 'portfolio.vercel.app' } }
+      : stuckClaim;
+    const body = stuckIssueBody(kind, 'aman', claim);
+    assert.ok(body.startsWith('@aman690888 — '), `${kind} should address the owner`);
+    assert.ok(body.includes('aman.runs-on.dev'), `${kind} should name the hostname`);
+    assert.ok(body.includes('**Fix:**') || kind === 'unknown', `${kind} should say what to do`);
+  }
+});
+
+test('an unrecognised diagnosis falls back rather than throwing', () => {
+  const body = stuckIssueBody('something-new', 'aman', stuckClaim);
+  assert.ok(body.includes('aman.runs-on.dev'));
+});
+
+test('a claim with no owner still renders', () => {
+  const body = stuckIssueBody('unknown', 'aman', { name: 'aman', records: {} });
+  assert.ok(!body.startsWith('@'));
+  assert.ok(body.includes('aman.runs-on.dev'));
+});
+
+test('an A-record claim renders its addresses rather than undefined', () => {
+  const body = stuckIssueBody('unknown', 'aman', { name: 'aman', records: { A: ['1.2.3.4', '5.6.7.8'] } });
+  assert.ok(body.includes('1.2.3.4, 5.6.7.8'));
+  assert.ok(!body.includes('undefined'));
 });
