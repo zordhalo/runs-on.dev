@@ -249,3 +249,17 @@ test('an A-record claim renders its addresses rather than undefined', () => {
   assert.ok(body.includes('1.2.3.4, 5.6.7.8'));
   assert.ok(!body.includes('undefined'));
 });
+
+// An issue opened by hand carries no dns-stuck label. Deduping on the label
+// alone filed a second issue at an owner who already had one open, with a
+// conversation running in it -- so the hostname in the title is what counts.
+test('an unlabelled issue naming the host still counts as spoken for', () => {
+  const issues = [{ number: 119, title: 'amanworks.runs-on.dev: CNAME restored after a manage-page bug removed it' }];
+  const out = planIssueOpens(rows({ amanworks: 'stuck', other: 'stuck' }), issues);
+  assert.deepEqual(out.map((x) => x.name), ['other']);
+});
+
+test('an issue whose title does not name a claim is ignored by the dedupe', () => {
+  const issues = [{ number: 1, title: 'Add a dark mode toggle' }];
+  assert.deepEqual(planIssueOpens(rows({ amanworks: 'stuck' }), issues).map((x) => x.name), ['amanworks']);
+});

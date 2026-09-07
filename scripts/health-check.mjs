@@ -278,15 +278,26 @@ async function openStuckIssues(statusRows, allClaims) {
       },
     });
 
-  // Both states matter for deduping: an owner who closed their issue without
-  // fixing the name should not be handed a fresh one every morning.
+  // Two lists, because either alone lets a duplicate through.
+  //
+  // Labelled in every state: an owner who closed their nudge without fixing
+  // the name should not be handed a fresh one every morning.
+  //
+  // Open issues regardless of label: a nudge opened by hand carries no label,
+  // and the first real run filed a second issue at an owner who already had
+  // one open and a conversation running in it. Deduping on the hostname in
+  // the title rather than on the label is what stops that.
   let issues;
   try {
-    const res = await api(`/issues?state=all&labels=${STUCK_LABEL}&per_page=100`);
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-    issues = (await res.json()).filter((issue) => !issue.pull_request);
+    const [labelled, open] = await Promise.all([
+      api(`/issues?state=all&labels=${STUCK_LABEL}&per_page=100`),
+      api('/issues?state=open&per_page=100'),
+    ]);
+    if (!labelled.ok) throw new Error(`${labelled.status} ${labelled.statusText}`);
+    if (!open.ok) throw new Error(`${open.status} ${open.statusText}`);
+    issues = [...await labelled.json(), ...await open.json()].filter((issue) => !issue.pull_request);
   } catch (err) {
-    console.error(`health: could not list ${STUCK_LABEL} issues: ${err.message}`);
+    console.error(`health: could not list issues to dedupe against: ${err.message}`);
     return;
   }
 
