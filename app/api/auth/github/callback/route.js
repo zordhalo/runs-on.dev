@@ -49,8 +49,19 @@ export async function GET(request) {
   // The value is HttpOnly and encoded at the set site, so it should never
   // be hostile — but run it through validateName anyway so the redirect is
   // safe by construction rather than by argument.
+  //
+  // decodeURIComponent throws URIError on a malformed sequence, and this
+  // cookie is not as trustworthy as HttpOnly suggests: a claimed
+  // <name>.runs-on.dev can set a cookie for the parent domain, so a hostile
+  // claim could plant `oauth_claim=%` and turn every sign-in on the apex into
+  // a 500. Decoding defensively keeps a bad value merely ignored.
   const rawClaim = cookie.match(/(?:^|;\s*)oauth_claim=([^;]+)/)?.[1];
-  const decodedClaim = rawClaim ? decodeURIComponent(rawClaim) : '';
+  let decodedClaim = '';
+  try {
+    decodedClaim = rawClaim ? decodeURIComponent(rawClaim) : '';
+  } catch {
+    decodedClaim = '';
+  }
   const claimName = validateName(decodedClaim).ok ? encodeURIComponent(decodedClaim) : '';
   const redirectUrl = claimName
     ? `/?signed-in=1&claim=${claimName}`
