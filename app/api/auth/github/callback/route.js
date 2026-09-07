@@ -1,4 +1,5 @@
 import { SESSION_TTL_MS, signSession } from '../../../../../lib/session.js';
+import { validateName } from '../../../../../lib/name.js';
 
 export async function GET(request) {
   const url = new URL(request.url);
@@ -45,7 +46,12 @@ export async function GET(request) {
 
   // Read back the claim name from the 404 page (set alongside oauth_state)
   // so the user lands on the homepage with their name already filled in.
-  const claimName = cookie.match(/(?:^|;\s*)oauth_claim=([^;]+)/)?.[1];
+  // The value is HttpOnly and encoded at the set site, so it should never
+  // be hostile — but run it through validateName anyway so the redirect is
+  // safe by construction rather than by argument.
+  const rawClaim = cookie.match(/(?:^|;\s*)oauth_claim=([^;]+)/)?.[1];
+  const decodedClaim = rawClaim ? decodeURIComponent(rawClaim) : '';
+  const claimName = validateName(decodedClaim).ok ? encodeURIComponent(decodedClaim) : '';
   const redirectUrl = claimName
     ? `/?signed-in=1&claim=${claimName}`
     : '/?signed-in=1';
