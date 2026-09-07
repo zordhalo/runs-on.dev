@@ -4,11 +4,17 @@ import { isReserved } from '../../../lib/blocklist.js';
 import { getRecord, getContentsMeta, putRecord } from '../../../lib/registry.js';
 import { createRateLimiter } from '../../../lib/throttle.js';
 
-// Swaps the user's claimed name for a new one. Copies all records (CNAME,
-// subdomains, profile) to the new name, then deletes the old one. Vercel-
-// specific records (_vercel TXT) are stripped since the verification token
-// is domain-specific and won't work on the new name — the client triggers
-// the Vercel setup flow for the new domain immediately after the swap.
+// Swaps the user's claimed name for a new one. Releases the old name
+// FIRST, then creates the new record with everything carried over
+// (CNAME, subdomains, profile). Vercel-specific records (_vercel TXT) are
+// stripped since the verification token is domain-specific and won't work
+// on the new name — the client triggers the Vercel setup flow for the new
+// domain immediately after the swap.
+//
+// Release-before-create is deliberate: if the run dies halfway, the user
+// briefly owns nothing (retryable, harmless) instead of silently owning
+// two names, which would break the one-name-per-account invariant the PR
+// path enforces.
 
 const SWAP_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const SWAP_MAX = 2;
@@ -96,18 +102,10 @@ export async function POST(request) {
     newRecord.profile = meta.data.profile;
   }
 
-  // Step 1: Create the new record (putRecord refuses to overwrite, so this
-  // fails safely if someone claimed the name between our check and now)
-  const createResult = await putRecord(newRecord, { token, fetchImpl: uncachedFetch });
-  if (!createResult.ok) {
-    return Response.json({
-      error: createResult.reason === 'exists' ? 'taken' : 'create_failed',
-      detail: createResult.reason === 'exists' ? `${to} was just claimed by someone else` : 'could not create the new record',
-    }, { status: createResult.reason === 'exists' ? 409 : 500 });
-  }
-
-  // Step 2: Delete the old record (using the SHA from our read, so if
-  // something changed it fails safely and the new record still exists)
+  // Step 1: Release the old record first (SHA from our read, so if anything
+  // changed underneath us the delete fails safely and nothing is lost). If
+  // this fails, the swap has not happened at all and the user still owns
+  // their old name — report failure honestly.
   const deleteRes = await fetch(
     `https://api.github.com/repos/${process.env.REGISTRY_REPO ?? 'zordhalo/runs-on.dev'}/contents/domains/${from}.json`,
     {
@@ -126,15 +124,27 @@ export async function POST(request) {
   ).catch(() => null);
 
   if (!deleteRes || !deleteRes.ok) {
-    // The new record was created but the old one couldn't be deleted.
-    // The user now owns both names temporarily — not ideal but recoverable.
-    // They can release the old one manually from /manage.
     return Response.json({
-      ok: true,
-      name: to,
-      oldName: from,
-      warning: 'new name created but old name could not be deleted, release it manually from /manage',
-    });
+      ok: false,
+      error: 'release_failed',
+      detail: `could not release ${from}.runs-on.dev; nothing was changed, try again`,
+    }, { status: 500 });
+  }
+
+  // Step 2: Create the new record. putRecord refuses to overwrite, so if
+  // someone claimed the new name in the seconds since our check, this fails
+  // cleanly. The old name is already released at this point; the user owns
+  // nothing for the moment, which a retry fixes.
+  const createResult = await putRecord(newRecord, { token, fetchImpl: uncachedFetch });
+  if (!createResult.ok) {
+    const taken = createResult.reason === 'exists';
+    return Response.json({
+      ok: false,
+      error: taken ? 'taken' : 'create_failed',
+      detail: taken
+        ? `${from}.runs-on.dev was released, but ${to} was just claimed by someone else. Claim a different name from the homepage.`
+        : `${from}.runs-on.dev was released, but the new record could not be created. Claim ${to} again from the homepage while it is still free.`,
+    }, { status: taken ? 409 : 500 });
   }
 
   return Response.json({
