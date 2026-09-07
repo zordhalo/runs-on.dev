@@ -43,7 +43,14 @@ jobs:
   prune:
     runs-on: ubuntu-latest
     steps:
+      # ssh-key, not the default token: main is protected by a ruleset whose
+      # only bypass this repo can express is DeployKey (Integration bypass is
+      # org-only, and this repo is user-owned). A push authenticated by the
+      # default GITHUB_TOKEN is rejected with GH006 even though the workflow
+      # has contents: write.
       - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.REGISTRY_DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

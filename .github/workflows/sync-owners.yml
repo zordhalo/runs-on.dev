@@ -27,7 +27,13 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      # ssh-key, not the default token: see prune-verification.yml. Without it
+      # this job only ever "succeeded" because the index already matched and it
+      # short-circuited before pushing -- a claim landing by PR merge would have
+      # been rejected with GH006 under a green check.
       - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.REGISTRY_DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
