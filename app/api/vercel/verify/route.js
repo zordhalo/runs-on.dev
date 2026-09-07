@@ -1,12 +1,12 @@
 import { sessionFromRequest } from '../../../../lib/session.js';
 import { validateName } from '../../../../lib/name.js';
-import { getRecord } from '../../../../lib/registry.js';
+import { getRecord, getContentsMeta, putRecordUpdate } from '../../../../lib/registry.js';
 import { createRateLimiter } from '../../../../lib/throttle.js';
 
 // Calls Vercel's domain verification API on behalf of the signed-in owner,
-// using a token they provided for this session. The token is NOT stored
-// persistently — it lives in the .env.local (POC) or the session cookie
-// (production), and this route is the only thing that touches it.
+// using the Vercel token in their session (set by the OAuth callback). The
+// token is never stored anywhere but the signed session cookie, so it dies
+// with the session.
 //
 // This exists because Vercel frequently never re-checks a pending domain
 // even when the DNS and TXT records are correct. The only reliable fix is
@@ -58,9 +58,10 @@ export async function POST(request) {
     return Response.json({ error: 'not_owner' }, { status: 403 });
   }
 
-  // POC: token comes from env. In production, it comes from the session
-  // after the user connects their Vercel account.
-  const vercelToken = session.vercelToken ?? process.env.VERCEL_TOKEN;
+  // The Vercel token comes from the session, put there by the OAuth callback.
+  // There is deliberately no operator-token fallback: every call a user makes
+  // must run against their own Vercel account, not the registry's.
+  const vercelToken = session.vercelToken;
   if (!vercelToken) {
     return Response.json({ error: 'vercel_not_connected' }, { status: 400 });
   }
@@ -97,7 +98,7 @@ export async function POST(request) {
     try {
       const uncachedFetch = (url, init) => fetch(url, init, { cache: 'no-store' });
       const meta = await getContentsMeta(`domains/${name}.json`, {
-        token: registryToken,
+        token,
         fetchImpl: uncachedFetch,
       }).catch(() => null);
 
@@ -111,9 +112,8 @@ export async function POST(request) {
           delete head.subdomains;
         }
 
-        const { putRecordUpdate } = await import('../../../../lib/registry.js');
         await putRecordUpdate(head, {
-          token: registryToken,
+          token,
           sha: meta.sha,
           editor: session.login,
           fetchImpl: uncachedFetch,
