@@ -6,7 +6,7 @@
   "claimedAt": "2026-09-03T14:43:46.573Z",
   "records": {
     "TXT": [
-      "v=spf1 include:spf.improvmx.om ~all"
+      "v=spf1 include:spf.improvmx.com ~all"
     ],
     "MX": [
       {

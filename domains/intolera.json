@@ -1,0 +1,19 @@
+{
+  "name": "intolera",
+  "owner": {
+    "github": "papamidnite7"
+  },
+  "claimedAt": "2026-09-06T12:49:29.466Z",
+  "records": {
+    "A": [
+      "76.76.21.21"
+    ]
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=intolera.runs-on.dev,b473842ba38e4ae870c9"
+      ]
+    }
+  }
+}

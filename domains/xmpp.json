@@ -4,5 +4,17 @@
     "github": "black-roland"
   },
   "claimedAt": "2026-09-02T13:20:39.344Z",
-  "records": {}
+  "records": {
+    "A": [
+      "82.202.142.112"
+    ]
+  },
+  "subdomains": {
+    "upload": {
+      "CNAME": "xmpp.runs-on.dev"
+    },
+    "pubsub": {
+      "CNAME": "xmpp.runs-on.dev"
+    }
+  }
 }

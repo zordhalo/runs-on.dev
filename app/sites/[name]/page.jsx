@@ -15,10 +15,12 @@ const CARD_TOKEN = process.env.CARD_TOKEN ?? process.env.REGISTRY_TOKEN;
 
 async function githubProfile(login) {
   const res = await fetch(`https://api.github.com/users/${login}`, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${CARD_TOKEN}`,
-    },
+    // Authorization only when a token actually exists: `Bearer undefined`
+    // is a malformed credential GitHub answers with 401, not an anonymous
+    // request — the same trap lib/claim-banner.jsx guards against.
+    headers: CARD_TOKEN
+      ? { Accept: 'application/vnd.github+json', Authorization: `Bearer ${CARD_TOKEN}` }
+      : { Accept: 'application/vnd.github+json' },
     next: { revalidate: 3600 },
   });
   if (!res.ok) return null;
@@ -42,7 +44,15 @@ export async function generateMetadata({ params }) {
   if (!record) return { title: { absolute: 'Not found' }, robots: { index: false } };
 
   const profile = await githubProfile(record.owner.github);
-  return cardMetadata({ name, record, profile });
+  // Field-by-field merge, same as the page below: record.profile wins where
+  // set, GitHub fills the rest, so title/description and the rendered card
+  // can never disagree.
+  const merged = {
+    ...profile,
+    name: record.profile?.name ?? profile?.name,
+    bio: record.profile?.bio ?? profile?.bio,
+  };
+  return cardMetadata({ name, record, profile: merged });
 }
 
 export default async function Site({ params }) {
@@ -64,6 +74,16 @@ export default async function Site({ params }) {
 
   const profile = await githubProfile(record.owner.github);
 
+  // The record's profile block overrides what GitHub reports, field by
+  // field: an owner who set profile.name keeps their chosen display name
+  // even when the GitHub profile says something else, and an unset field
+  // falls back rather than blanking the card. cardMetadata receives the
+  // merged view so the page and its meta tags can never disagree.
+  const overrides = record.profile ?? {};
+  const displayName = overrides.name ?? profile?.name;
+  const bio = overrides.bio ?? profile?.bio;
+  const links = Array.isArray(overrides.links) ? overrides.links : [];
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-16 sm:py-24">
       <p className="font-(family-name:--font-mono) text-xs tracking-[0.14em] text-(--color-muted) uppercase">
@@ -82,14 +102,45 @@ export default async function Site({ params }) {
             />
           )}
           <div>
-            <h1 className="font-(family-name:--font-display) text-2xl font-medium tracking-tight text-(--color-ink) sm:text-3xl">
-              {name}.runs-on.dev
-            </h1>
-            {profile?.name && <p className="text-sm text-(--color-muted)">{profile.name}</p>}
+            <div className="flex items-center gap-2">
+              <a
+                href={`https://${name}.runs-on.dev`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-(family-name:--font-display) text-2xl font-medium tracking-tight text-(--color-ink) underline decoration-(--color-muted) underline-offset-4 transition-colors hover:text-(--color-signal) hover:decoration-(--color-signal) sm:text-3xl"
+              >
+                {name}.runs-on.dev
+              </a>
+              <a
+                href="/manage"
+                className="flex items-center justify-center border border-(--color-rule) px-2.5 py-1 font-(family-name:--font-mono) text-xs text-(--color-muted) transition-colors hover:border-(--color-signal) hover:text-(--color-signal)"
+              >
+                manage
+              </a>
+            </div>
+            {displayName && <p className="text-sm text-(--color-muted)">{displayName}</p>}
           </div>
         </div>
 
-        {profile?.bio && <p className="mt-4 text-sm leading-relaxed">{profile.bio}</p>}
+        {bio && <p className="mt-4 text-sm leading-relaxed">{bio}</p>}
+
+        {links.length > 0 && (
+          <ul className="mt-6 space-y-2">
+            {links.map((link) => (
+              <li key={`${link.label}-${link.url}`}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between border border-(--color-rule) px-4 py-3 font-(family-name:--font-mono) text-sm text-(--color-ink) transition-colors hover:border-(--color-signal)"
+                >
+                  <span className="truncate">{link.label}</span>
+                  <span aria-hidden className="ml-3 shrink-0 text-(--color-muted)">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
 
         <dl className="mt-6 space-y-1 border-t border-(--color-rule) pt-4 font-(family-name:--font-mono) text-xs sm:text-[13px]">
           <div className="flex gap-2">
@@ -109,6 +160,32 @@ export default async function Site({ params }) {
               <dd className="text-(--color-ink)">{record.claimedAt}</dd>
             </div>
           )}
+          {/* The banner links must be absolute to the apex: this page renders
+              on <name>.runs-on.dev hosts, where a relative /banner/<name>
+              would be rewritten by proxy.js into /sites/<name>/banner/... and
+              404. The banner route lives on runs-on.dev itself. */}
+          <div className="flex gap-2">
+            <dt className="w-24 shrink-0 text-(--color-muted)">share</dt>
+            <dd>
+              <a
+                className="text-(--color-signal) underline"
+                href={`https://runs-on.dev/banner/${name}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                banner
+              </a>
+              {' / '}
+              <a
+                className="text-(--color-signal) underline"
+                href={`https://runs-on.dev/banner/${name}?theme=dark`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                dark
+              </a>
+            </dd>
+          </div>
         </dl>
       </div>
 

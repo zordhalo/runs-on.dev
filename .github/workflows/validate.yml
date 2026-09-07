@@ -17,9 +17,16 @@ jobs:
       # of lib/pr.js and scripts/validate-pr.mjs — a PR that rewrites validateChangeset to
       # return { ok: true } would approve itself. The validator reads the PR's files over
       # the API, so it never needs the PR's working tree.
+      #
+      # `base.ref` (the branch tip) rather than `base.sha` (the branch as of the last PR
+      # event): both are trusted content, but base.sha is frozen in the stored event payload,
+      # so a re-run of an old PR keeps executing the validator as it was when the PR opened.
+      # A fix to the validator would then never reach the already-open PRs it was written for.
+      # BASE_SHA below stays base.sha — "what does the registry look like under this PR" is
+      # a question about the PR, and must not drift while the PR is being reviewed.
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
+          ref: ${{ github.event.pull_request.base.ref }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

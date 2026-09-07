@@ -3,6 +3,69 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { validateRecord } from '../lib/schema.js';
 
+// --- profile ---
+
+test('accepts a full profile block', () => {
+  const out = validateRecord({
+    ...valid,
+    profile: {
+      name: 'Lucas',
+      bio: 'Builds things',
+      links: [{ label: 'Site', url: 'https://example.com' }],
+    },
+  });
+  assert.deepEqual(out, { ok: true, errors: [] });
+});
+
+test('accepts a partial profile — any subset of fields', () => {
+  assert.equal(validateRecord({ ...valid, profile: {} }).ok, true);
+  assert.equal(validateRecord({ ...valid, profile: { name: 'L' } }).ok, true);
+  assert.equal(
+    validateRecord({ ...valid, profile: { links: [{ label: 'a', url: 'http://x.com' }] } }).ok,
+    true,
+  );
+});
+
+test('rejects unknown profile keys', () => {
+  const out = validateRecord({ ...valid, profile: { nickname: 'L' } });
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.includes('unknown key: profile.nickname'));
+});
+
+test('rejects an empty or overlong name/bio', () => {
+  // Presence means content: an empty string would render as a deliberate blank.
+  assert.equal(validateRecord({ ...valid, profile: { name: '' } }).ok, false);
+  assert.equal(validateRecord({ ...valid, profile: { bio: 'x'.repeat(201) } }).ok, false);
+  assert.equal(validateRecord({ ...valid, profile: { name: 'x'.repeat(61) } }).ok, false);
+});
+
+test('rejects profile links that are not absolute http(s) URLs', () => {
+  // Links render as clickable rows on a trusted domain, so they follow the
+  // URL-record rules, not looser ones.
+  for (const url of ['javascript:alert(1)', 'data:text/html,x', '//evil.com', 'not a url']) {
+    const out = validateRecord({ ...valid, profile: { links: [{ label: 'x', url }] } });
+    assert.equal(out.ok, false, url);
+  }
+});
+
+test('rejects extra keys on a link entry', () => {
+  const out = validateRecord({
+    ...valid,
+    profile: { links: [{ label: 'x', url: 'https://a.com', icon: 'y' }] },
+  });
+  assert.equal(out.ok, false);
+});
+
+test('rejects more than 8 links, an empty array, and overlong labels', () => {
+  const links = Array.from({ length: 9 }, () => ({ label: 'x', url: 'https://a.com' }));
+  assert.equal(validateRecord({ ...valid, profile: { links } }).ok, false);
+  assert.equal(validateRecord({ ...valid, profile: { links: [] } }).ok, false);
+  assert.equal(
+    validateRecord({ ...valid, profile: { links: [{ label: 'x'.repeat(41), url: 'https://a.com' }] } }).ok,
+    false,
+  );
+});
+
 const valid = {
   name: 'lucas',
   owner: { github: 'zordhalo' },
@@ -153,12 +216,60 @@ test('accepts a valid subdomains entry', () => {
   assert.deepEqual(out, { ok: true, errors: [] });
 });
 
-test('rejects a subdomain label with a dot', () => {
+test('rejects a subdomain label with a dot but no leading underscore', () => {
   const out = validateRecord({
     ...valid,
     subdomains: { 'foo.bar': { TXT: ['hello'] } },
   });
   assert.equal(out.ok, false);
+});
+
+// --- two-label verification subdomains (#82) ---
+
+test('accepts a two-label verification subdomain like _vercel.recruitment', () => {
+  const out = validateRecord({
+    ...valid,
+    subdomains: { '_vercel.recruitment': { TXT: ['vc-domain-verify=recruitment.lucas.runs-on.dev,abc123'] } },
+  });
+  assert.deepEqual(out, { ok: true, errors: [] });
+});
+
+test('rejects three-label subdomains (arbitrary nesting)', () => {
+  const out = validateRecord({
+    ...valid,
+    subdomains: { '_a.b.c': { TXT: ['hello'] } },
+  });
+  assert.equal(out.ok, false);
+});
+
+test('rejects two-label without the underscore-first order', () => {
+  // a.b has no underscore prefix and is not a verification label
+  assert.equal(validateRecord({ ...valid, subdomains: { 'a.b': { TXT: ['hi'] } } }).ok, false);
+  // _a_b is one label with internal underscore, not two labels
+  assert.equal(validateRecord({ ...valid, subdomains: { 'a._b': { TXT: ['hi'] } } }).ok, false);
+});
+
+test('two-label subdomains round-trip through planDnsChanges', async () => {
+  const { planDnsChanges } = await import('../lib/dns.js');
+  const record = {
+    ...valid,
+    subdomains: { '_vercel.recruitment': { TXT: ['vc-domain-verify=recruitment.lucas.runs-on.dev,abc123'] } },
+  };
+  const changes = planDnsChanges(record);
+  assert.deepEqual(changes, [
+    { type: 'TXT', name: '_vercel.recruitment.lucas', value: 'vc-domain-verify=recruitment.lucas.runs-on.dev,abc123' },
+  ]);
+});
+
+test('the JSON Schema mirror allows the two-label form', () => {
+  // The mirror must agree with lib/schema.js, per the drift contract.
+  const nested = '_vercel.recruitment';
+  const oneLabel = '_vercel';
+  const bare = 'a.b';
+  // Test via validateRecord which reads the same grammar
+  assert.equal(validateRecord({ ...valid, subdomains: { [nested]: { TXT: ['hi'] } } }).ok, true);
+  assert.equal(validateRecord({ ...valid, subdomains: { [oneLabel]: { TXT: ['hi'] } } }).ok, true);
+  assert.equal(validateRecord({ ...valid, subdomains: { [bare]: { TXT: ['hi'] } } }).ok, false);
 });
 
 test('rejects a subdomain holding URL', () => {
@@ -320,4 +431,16 @@ test('the guard applies at the root too, not only under subdomains', () => {
   });
   assert.equal(out.ok, false);
   assert.ok(out.errors.some((e) => e.includes('truncated Vercel verification token')));
+});
+
+test('the JSON Schema mirror declares profile with the same field set', () => {
+  // Same drift-prevention contract as the name/owner mirrors above: the
+  // published schema is linked from the PR template, so it must not promise
+  // a shape the runtime validator rejects, or vice versa. `profile` is
+  // declared as a $ref into $defs, like `records` is.
+  const declared = mirror.properties.profile;
+  assert.equal(declared.$ref, '#/$defs/profile');
+  const def = mirror.$defs.profile;
+  assert.deepEqual(Object.keys(def.properties).sort(), ['bio', 'links', 'name']);
+  assert.equal(def.additionalProperties, false);
 });

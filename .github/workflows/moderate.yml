@@ -1,0 +1,31 @@
+name: moderate
+
+# Two triggers: a schedule that sweeps all existing comments, and an
+# issue_comment event that catches new spam within seconds of it landing.
+on:
+  schedule:
+    # Every 30 minutes, off the top and bottom of the hour.
+    - cron: '7,37 * * * *'
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  moderate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # GITHUB_TOKEN can delete comments with the permissions above. Blocking
+      # requires a personal admin token; if the ADMIN_TOKEN secret is set,
+      # the script blocks the spammer's account as well. Without it, the
+      # comment is still deleted and the login is logged for manual review.
+      - run: node scripts/moderate-spam.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}

@@ -1,0 +1,18 @@
+{
+  "name": "sachin",
+  "owner": {
+    "github": "Sachinxcode-01"
+  },
+  "claimedAt": "2026-09-06T09:46:37.492Z",
+  "records": {},
+  "profile": {
+    "name": "Sachin K",
+    "bio": "Computer Science student & Python developer building AI applications",
+    "links": [
+      {
+        "label": "Portfolio",
+        "url": "https://sachinxcoder-chi.vercel.app/"
+      }
+    ]
+  }
+}

@@ -10,8 +10,11 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=shovith.runs-on.dev,41524820ec7711f5f3ac"
+        "vc-domain-verify=shovith.runs-on.dev,4d3ea646bfff9f6ec0a6"
       ]
     }
+  },
+  "profile": {
+    "name": "Shovith Debnath"
   }
 }

@@ -1,0 +1,22 @@
+{
+  "name": "faraz",
+  "owner": {
+    "github": "SFarazH"
+  },
+  "claimedAt": "2026-09-06T14:48:08.599Z",
+  "records": {
+    "A": [
+      "76.76.21.21"
+    ],
+    "TXT": [
+      "vc-domain-verify=runs-on.dev,ba5448833f5c46f7a59a"
+    ]
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=runs-on.dev,ba5448833f5c46f7a59a"
+      ]
+    }
+  }
+}

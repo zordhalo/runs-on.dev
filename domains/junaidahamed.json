@@ -5,13 +5,11 @@
   },
   "claimedAt": "2026-09-02T18:47:58.838Z",
   "records": {
-    "CNAME": "f2969c747c6b302e.vercel-dns-017.com"
+    "CNAME": "junaidahamed.vercel-dns.com"
   },
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=junaidahamed.runs-on.dev,25e8b2b4a9c1b606ae48"
-      ]
+    "junaidahamed": {
+      "CNAME": "f2969c747c6b302e.vercel-dns-017.com"
     }
   }
 }

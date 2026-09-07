@@ -4,5 +4,7 @@
     "github": "developergkg"
   },
   "claimedAt": "2026-09-02T15:16:51.628Z",
-  "records": {}
+  "records": {
+    "CNAME": "pied-piper-scrum-board.netlify.app"
+  }
 }

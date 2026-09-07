@@ -4,5 +4,26 @@
     "github": "mlwn4096"
   },
   "claimedAt": "2026-09-02T14:40:05.084Z",
-  "records": {}
+  "records": {},
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=mlwn.runs-on.dev,6fcc5b4fff21c59c270b"
+      ]
+    },
+    "_gooogle": {
+      "TXT": [
+        "google-site-verification=64GRvb6iuiEALBALfkoyOsWehqy4AmwmQeZ5bC641qY"
+      ]
+    }
+  },
+  "profile": {
+    "name": "mlwn4096",
+    "links": [
+      {
+        "label": "My Portfolio",
+        "url": "https://www.mlwn.in/"
+      }
+    ]
+  }
 }

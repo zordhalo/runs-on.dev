@@ -4,6 +4,14 @@
     "github": "Zyaxxy"
   },
   "claimedAt": "2026-09-01T08:25:47.460Z",
-  "records": { "CNAME": "cname.vercel-dns.com" }
-
+  "records": {
+    "CNAME": "7cf809aa0f269b0a.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=dexi.runs-on.dev,0083b0e3f348eefdd543"
+      ]
+    }
+  }
 }

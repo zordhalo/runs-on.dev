@@ -1,0 +1,17 @@
+{
+  "name": "pushkarom",
+  "owner": {
+    "github": "PushkarOM"
+  },
+  "claimedAt": "2026-09-06T06:27:11.293Z",
+  "records": {
+    "CNAME": "13c8b23618b19df1.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=pushkarom.runs-on.dev,44886458736335c53449"
+      ]
+    }
+  }
+}

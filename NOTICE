@@ -1,0 +1,57 @@
+runs-on.dev
+Copyright (c) 2026 Advance Labs Inc
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version. See LICENSE for the full text.
+
+Because runs-on.dev is run as a network service, AGPL section 13 applies: if
+you run a modified version and let others interact with it over a network, you
+must offer those users the source of your modified version. The registry links
+its own source from the homepage for that reason.
+
+
+Prior MIT licensing
+-------------------
+
+Up to and including commit 3492bf7, this repository was distributed under the
+MIT License. That grant is not revoked: anyone who obtained the code under MIT
+keeps their MIT rights to the code as it existed at that point.
+
+Contributions made before the relicense were submitted under MIT. The MIT
+License permits their inclusion in a work distributed under the AGPL, and the
+original permission notice is preserved here for that purpose:
+
+    MIT License
+
+    Copyright (c) 2026 Advance Labs Inc
+
+    Permission is hereby granted, free of charge, to any person obtaining a
+    copy of this software and associated documentation files (the "Software"),
+    to deal in the Software without restriction, including without limitation
+    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    and/or sell copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+    THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+    DEALINGS IN THE SOFTWARE.
+
+
+Bundled data
+------------
+
+data/reserved-words.json is seeded from the English list of
+LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words and keeps its own
+CC BY 4.0 license. See data/README.md.
+
+Records under domains/ are configuration submitted by the claimant named in
+each file, under the terms in POLICY.md.

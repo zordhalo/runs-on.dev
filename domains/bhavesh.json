@@ -4,5 +4,14 @@
     "github": "Bhav3shChawla"
   },
   "claimedAt": "2026-09-02T23:08:22.320Z",
-  "records": {}
+  "records": {
+    "CNAME": "0653b7efcb2e9590.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=bhavesh.runs-on.dev,e8ca1e4ae70d376387cf"
+      ]
+    }
+  }
 }

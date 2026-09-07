@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   modeOf, linesToList, parseMx, mxToLines, buildRecords,
-  buildSubdomains, subdomainsToRows,
+  buildSubdomains, subdomainsToRows, buildProfile, profileToRows,
 } from '../lib/record-fields.js';
 import { validateRecord } from '../lib/schema.js';
 
@@ -127,4 +127,55 @@ test('the Vercel verification record the guide documents builds correctly', () =
     ]),
   });
   assert.deepEqual(out, { ok: true, errors: [] });
+});
+
+// --- profile ---
+
+test('buildProfile emits only filled fields', () => {
+  assert.deepEqual(
+    buildProfile({ name: '  Lucas ', bio: '', linkRows: [] }),
+    { name: 'Lucas' },
+  );
+  assert.deepEqual(buildProfile({ name: '', bio: 'hello', linkRows: [] }), { bio: 'hello' });
+});
+
+test('buildProfile returns undefined when everything is empty — the API removes the block', () => {
+  assert.equal(
+    buildProfile({ name: '  ', bio: '', linkRows: [{ label: '', url: '' }] }),
+    undefined,
+  );
+});
+
+test('half-filled link rows survive so the schema reports them', () => {
+  // Same discipline as malformed MX lines: drop nothing the owner typed.
+  const out = buildProfile({ linkRows: [{ label: 'Site', url: '' }] });
+  assert.deepEqual(out, { links: [{ label: 'Site', url: '' }] });
+  assert.equal(
+    validateRecord({
+      name: 'lucas', owner: { github: 'z' }, claimedAt: '2026-01-01T00:00:00Z',
+      records: {}, profile: out,
+    }).ok,
+    false,
+  );
+});
+
+test('a complete profile builds a record the schema accepts', () => {
+  const profile = buildProfile({
+    name: 'Lucas',
+    bio: 'Builds',
+    linkRows: [{ label: 'Site', url: 'https://example.com' }, { label: '', url: '' }],
+  });
+  const out = validateRecord({
+    name: 'lucas', owner: { github: 'z' }, claimedAt: '2026-01-01T00:00:00Z',
+    records: {}, profile,
+  });
+  assert.deepEqual(out, { ok: true, errors: [] });
+});
+
+test('profile links round-trip through rows', () => {
+  const profile = { name: 'L', links: [{ label: 'a', url: 'https://a.com' }] };
+  assert.deepEqual(
+    buildProfile({ name: 'L', bio: '', linkRows: profileToRows(profile) }),
+    profile,
+  );
 });

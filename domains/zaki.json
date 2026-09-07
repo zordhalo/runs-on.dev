@@ -1,0 +1,25 @@
+{
+  "name": "zaki",
+  "owner": {
+    "github": "zakiuhh"
+  },
+  "claimedAt": "2026-09-06T21:33:47.787Z",
+  "records": {
+    "TXT": [
+      "vc-domain-verify=zaki.runs-on.dev,e431bd1f989a797abf85"
+    ]
+  },
+  "profile": {
+    "name": "Zaki Ul Hassan",
+    "links": [
+      {
+        "label": "Github",
+        "url": "https://github.com/zakiuhh"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://github.com/in/zakiuh"
+      }
+    ]
+  }
+}

@@ -4,5 +4,14 @@
     "github": "amineedahou"
   },
   "claimedAt": "2026-09-03T11:46:44.777Z",
-  "records": {}
+  "records": {
+    "CNAME": "edda94c99c4cc459.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=aminedahou.runs-on.dev,28650526545c580c0b99"
+      ]
+    }
+  }
 }

@@ -66,6 +66,11 @@ verification.
 - Each label matches `^_?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$`, the same
   grammar as `name`, plus one optional leading underscore, and no dots (a
   subdomain is exactly one level deep).
+- A two-label form `_<label>.<label>` is also accepted for verification
+  records: Vercel reads its challenge from `_vercel.<domain>` and a
+  subdomain of a claim (e.g. `recruitment.you.runs-on.dev`) needs its TXT
+  at `_vercel.recruitment.you.runs-on.dev`. Only underscore-first is
+  allowed; a bare `a.b` is still rejected.
 - Each value holds `A`, `TXT`, `CNAME`, or `MX` under the same coexistence
   rules as the root `records` object. `URL` is not allowed on a
   subdomain. The app only ever looks up the claimed name itself, so a
@@ -88,6 +93,34 @@ coexist on one host, so each claim's `vc-domain-verify=…` string sits there
 alongside everyone else's. Reconciliation only ever deletes zone-level TXTs
 whose value starts `vc-domain-verify=` and is claimed by nobody — anything
 an operator places at that host by hand survives every sync.
+
+## `profile`
+
+An optional object controlling what the profile card shows at
+`<name>.runs-on.dev` when the name has no DNS records pointing it
+elsewhere. Every field is optional and falls back to the owner's GitHub
+profile; `links` exist only here.
+
+```json
+"profile": {
+  "name": "Your Display Name",
+  "bio": "A line about what you build",
+  "links": [
+    { "label": "Portfolio", "url": "https://your-site.example.com" },
+    { "label": "GitHub", "url": "https://github.com/your-login" }
+  ]
+}
+```
+
+- `name`: 1–60 characters, replaces the GitHub display name.
+- `bio`: 1–200 characters, replaces the GitHub bio.
+- `links`: 1–8 entries of `{ "label": 1–40 chars, "url": absolute
+  http(s) URL }`. Links render as rows on the card, so each URL is held to
+  the same scheme rules as a `URL` record: `javascript:`, `data:`, and
+  protocol-relative forms are rejected.
+- No other keys. The card art also feeds a shareable banner at
+  `https://runs-on.dev/banner/<name>` (add `?theme=dark` for GitHub
+  READMEs) and the social preview when the link is shared.
 
 ## Why CNAME can't coexist with other record types
 

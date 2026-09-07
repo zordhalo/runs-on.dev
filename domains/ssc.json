@@ -1,0 +1,19 @@
+{
+  "name": "ssc",
+  "owner": {
+    "github": "subhansh-dev"
+  },
+  "claimedAt": "2026-09-05T04:48:09.525Z",
+  "records": {
+    "CNAME": "03a9f80515aeef78.vercel-dns-017.com"
+  },
+  "profile": {
+    "name": "subhansh-dev",
+    "links": [
+      {
+        "label": "meow",
+        "url": "https://subhansh.dev"
+      }
+    ]
+  }
+}

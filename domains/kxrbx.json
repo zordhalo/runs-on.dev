@@ -1,0 +1,23 @@
+{
+  "name": "kxrbx",
+  "owner": {
+    "github": "Kxrbx"
+  },
+  "claimedAt": "2026-09-04T11:37:11.835Z",
+  "records": {},
+  "profile": {
+    "name": "Kxrbx",
+    "bio": "Building lightweight AI Orchestrator Clawlet, and making funny AI apps.",
+    "links": [
+      {
+        "label": "X",
+        "url": "https://x.com/kxrbx"
+      }
+    ]
+  },
+  "subdomains": {
+    "viberoulette": {
+      "CNAME": "viberoulette-sand.vercel.app"
+    }
+  }
+}

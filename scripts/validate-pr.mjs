@@ -1,4 +1,10 @@
-import { validateChangeset, parseRecordFile, RecordParseError } from '../lib/pr.js';
+import {
+  validateChangeset,
+  parseRecordFile,
+  RecordParseError,
+  readRecordAt,
+  countOwnedNames,
+} from '../lib/pr.js';
 
 const REPO = process.env.GITHUB_REPOSITORY;
 const PR = process.env.PR_NUMBER;
@@ -25,12 +31,10 @@ const api = (path) =>
     },
   });
 
-async function readAt(path, ref) {
-  const res = await api(`/repos/${REPO}/contents/${path}?ref=${ref}`);
-  if (!res.ok) return null;
-  const body = await res.json();
-  return parseRecordFile(path, Buffer.from(body.content, 'base64').toString('utf8'));
-}
+// Thin wrappers around the lib functions, providing only the real GitHub
+// API fetcher. The counting and parsing logic lives in lib/pr.js where it
+// can be tested without env vars (issue #84).
+const readAt = (path, ref) => readRecordAt(path, ref, { api: (p) => api(`/repos/${REPO}${p}`) });
 
 // Eligibility is read from the PR author's public GitHub profile, the same two
 // fields the session carries into evaluateClaim on the website. Throwing rather
@@ -43,37 +47,20 @@ async function getUser(login) {
   return { created_at: u.created_at, public_repos: u.public_repos };
 }
 
-// Counted from domains/ itself rather than the owners/ index, because domains/
-// is the registry — the index is derived data rebuilt after merge by
-// sync-owners, and a stale or missing index must never read as "owns nothing"
-// and hand out a second name.
-async function countOwnedNames(login) {
-  const res = await api(`/repos/${REPO}/contents/domains?ref=${BASE_SHA}`);
-  if (!res.ok) throw new Error(`GET domains/ -> ${res.status}`);
-  const entries = await res.json();
-  const records = entries.filter((e) => e.type === 'file' && e.name.endsWith('.json'));
-
-  const target = login.toLowerCase();
-  let owned = 0;
-
-  // Modest concurrency: enough to keep a few hundred records quick, low enough
-  // not to trip secondary rate limits on a shared Actions IP.
-  const BATCH = 10;
-  for (let i = 0; i < records.length; i += BATCH) {
-    const slice = records.slice(i, i + BATCH);
-    const parsed = await Promise.all(slice.map(async (entry) => {
-      const r = await api(`/repos/${REPO}/contents/domains/${entry.name}?ref=${BASE_SHA}`);
-      if (!r.ok) throw new Error(`GET domains/${entry.name} -> ${r.status}`);
-      const body = await r.json();
-      return parseRecordFile(path, Buffer.from(body.content, 'base64').toString('utf8'));
-    }));
-    for (const rec of parsed) {
-      if (String(rec?.owner?.github ?? '').toLowerCase() === target) owned += 1;
-    }
-  }
-
-  return owned;
-}
+const countOwned = (login) =>
+  countOwnedNames(login, {
+    listDomainEntries: async () => {
+      const res = await api(`/repos/${REPO}/contents/domains?ref=${BASE_SHA}`);
+      if (!res.ok) throw new Error(`GET domains/ -> ${res.status}`);
+      return res.json();
+    },
+    readRecord: async (filePath) => {
+      const res = await api(`/repos/${REPO}/contents/${filePath}?ref=${BASE_SHA}`);
+      if (!res.ok) throw new Error(`GET ${filePath} -> ${res.status}`);
+      const body = await res.json();
+      return parseRecordFile(filePath, Buffer.from(body.content, 'base64').toString('utf8'));
+    },
+  });
 
 const prRes = await api(`/repos/${REPO}/pulls/${PR}`);
 if (!prRes.ok) {
@@ -105,7 +92,7 @@ try {
     readFile: (p) => readAt(p, HEAD_SHA),
     readBase: (p) => readAt(p, BASE_SHA),
     getUser,
-    countOwnedNames,
+    countOwnedNames: countOwned,
   });
 } catch (err) {
   if (!(err instanceof RecordParseError)) throw err;

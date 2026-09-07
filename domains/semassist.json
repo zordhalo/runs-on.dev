@@ -1,0 +1,21 @@
+{
+  "name": "semassist",
+  "owner": {
+    "github": "SujayYadav776"
+  },
+  "claimedAt": "2026-09-03T19:53:16.954Z",
+  "records": {
+    "CNAME": "0d8b076dac30249d.vercel-dns-017.com"
+  },
+  "profile": {
+    "name": "SujayYadav776",
+    "bio": "skillydv"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=semassist.runs-on.dev,22e85776a925b052400f"
+      ]
+    }
+  }
+}

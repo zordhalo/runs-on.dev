@@ -1,0 +1,17 @@
+{
+  "name": "bucketspace",
+  "owner": {
+    "github": "vanrajsinh650"
+  },
+  "claimedAt": "2026-09-06T05:33:49.380Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=bucketspace.runs-on.dev,fede5859a61cc2bf0714"
+      ]
+    }
+  }
+}

@@ -4,6 +4,7 @@ import {
   planDnsChanges,
   planZoneVerificationRecords,
   reconcileZoneVerification,
+  reconcileDnsRecords,
   listPath,
   createPath,
   removePath,
@@ -124,6 +125,87 @@ test('claims without _vercel TXTs plan no zone records', () => {
     ]),
     [],
   );
+});
+
+// --- reconcileDnsRecords (issue #54) ---
+
+test('identical existing and desired records are all unchanged — nothing touched', () => {
+  const existing = [
+    { id: 'rec_1', type: 'CNAME', name: 'lucas', value: 'cname.vercel-dns.com' },
+  ];
+  const desired = [
+    { type: 'CNAME', name: 'lucas', value: 'cname.vercel-dns.com' },
+  ];
+  const { unchanged, remove, create } = reconcileDnsRecords(existing, desired);
+  assert.equal(unchanged.length, 1);
+  assert.equal(remove.length, 0);
+  assert.equal(create.length, 0);
+});
+
+test('a CNAME value change produces exactly one remove and one create, not a full wipe', () => {
+  const existing = [
+    { id: 'rec_1', type: 'CNAME', name: 'lucas', value: 'old.vercel-dns.com' },
+    { id: 'rec_2', type: 'TXT', name: '_vercel.lucas', value: 'vc-domain-verify=lucas.runs-on.dev,abc' },
+  ];
+  const desired = [
+    { type: 'CNAME', name: 'lucas', value: 'new.vercel-dns.com' },
+    { type: 'TXT', name: '_vercel.lucas', value: 'vc-domain-verify=lucas.runs-on.dev,abc' },
+  ];
+  const { unchanged, remove, create } = reconcileDnsRecords(existing, desired);
+  // The TXT is untouched even though the CNAME changed — this is the exact
+  // safety property issue #54 asks for: a failed create only takes down the
+  // record being changed, not the whole name.
+  assert.equal(unchanged.length, 1);
+  assert.equal(unchanged[0].type, 'TXT');
+  assert.equal(remove.length, 1);
+  assert.equal(remove[0].value, 'old.vercel-dns.com');
+  assert.equal(create.length, 1);
+  assert.equal(create[0].value, 'new.vercel-dns.com');
+});
+
+test('an empty desired set removes everything (name released)', () => {
+  const existing = [
+    { id: 'rec_1', type: 'CNAME', name: 'lucas', value: 'x.example.com' },
+  ];
+  const { remove, create, unchanged } = reconcileDnsRecords(existing, []);
+  assert.equal(remove.length, 1);
+  assert.equal(create.length, 0);
+  assert.equal(unchanged.length, 0);
+});
+
+test('MX records with the same priority match across mxPriority and priority field names', () => {
+  const existing = [
+    { id: 'rec_1', type: 'MX', name: 'lucas', value: 'mx1.example.com', mxPriority: 10 },
+  ];
+  const desired = [
+    { type: 'MX', name: 'lucas', value: 'mx1.example.com', priority: 10 },
+  ];
+  const { unchanged, remove, create } = reconcileDnsRecords(existing, desired);
+  assert.equal(unchanged.length, 1);
+  assert.equal(remove.length, 0);
+  assert.equal(create.length, 0);
+});
+
+test('MX priority change produces a remove + create pair', () => {
+  const existing = [
+    { id: 'rec_1', type: 'MX', name: 'lucas', value: 'mx1.example.com', mxPriority: 10 },
+  ];
+  const desired = [
+    { type: 'MX', name: 'lucas', value: 'mx1.example.com', priority: 20 },
+  ];
+  const { remove, create } = reconcileDnsRecords(existing, desired);
+  assert.equal(remove.length, 1);
+  assert.equal(create.length, 1);
+});
+
+test('a no-op save touches zero DNS records', () => {
+  // The scenario a double-clicked Save produces: same record, same values.
+  // The old flow deleted and recreated everything; this must be a no-op.
+  const record = { type: 'CNAME', name: 'lucas', value: 'cname.vercel-dns.com' };
+  const existing = [{ id: 'rec_1', ...record }];
+  const { unchanged, remove, create } = reconcileDnsRecords(existing, [record]);
+  assert.deepEqual({ remove, create }, { remove: [], create: [] });
+  assert.equal(unchanged.length, 1);
 });
 
 test('reconcile creates missing values and drops only unclaimed vc-domain-verify TXTs', () => {

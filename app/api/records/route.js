@@ -61,7 +61,10 @@ export async function POST(request) {
 
   // Replace only what the request actually sent. A form that does not yet
   // understand `subdomains` must not silently delete an owner's _atproto
-  // entry just by omitting it from the payload.
+  // entry just by omitting it from the payload. `profile` follows the same
+  // contract, with `null` as the explicit "remove it" signal, because
+  // omitting the key and emptying the fields are different intents: the
+  // first is an older form, the second is an owner clearing their card.
   const head = { ...meta.data };
   if ('records' in body) head.records = body.records;
   if ('subdomains' in body) {
@@ -69,6 +72,10 @@ export async function POST(request) {
     const empty = subs === null || (typeof subs === 'object' && Object.keys(subs).length === 0);
     if (empty) delete head.subdomains;
     else head.subdomains = subs;
+  }
+  if ('profile' in body) {
+    if (body.profile === null) delete head.profile;
+    else head.profile = body.profile;
   }
 
   // Nothing to do. Answering before the ownership check would leak whether a

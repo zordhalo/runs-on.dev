@@ -1,0 +1,17 @@
+{
+  "name": "deny",
+  "owner": {
+    "github": "denyryn"
+  },
+  "claimedAt": "2026-09-03T21:41:06.027Z",
+  "records": {
+    "CNAME": "b933c5817a568f02.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=deny.runs-on.dev,91cf2402ccdb418f7418"
+      ]
+    }
+  }
+}

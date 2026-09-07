@@ -1,0 +1,15 @@
+{
+  "name": "mwaleedkhalil",
+  "owner": {
+    "github": "Muhammad-Waleed-Khalil"
+  },
+  "claimedAt": "2026-09-06T16:43:05.914Z",
+  "records": {},
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=mwaleedkhalil.runs-on.dev,fc9e668dcc98803736a8"
+      ]
+    }
+  }
+}

@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validateChangeset, parseRecordFile, RecordParseError } from '../lib/pr.js';
+import {
+  validateChangeset,
+  parseRecordFile,
+  RecordParseError,
+  countOwnedNames,
+  readRecordAt,
+} from '../lib/pr.js';
 
 const owned = {
   name: 'lucas',
@@ -293,4 +299,98 @@ test('a RecordParseError is distinguishable from any other failure', () => {
   // contributor mistake.
   assert.equal(new RecordParseError('p', new Error('x')) instanceof RecordParseError, true);
   assert.equal(new TypeError('boom') instanceof RecordParseError, false);
+});
+
+// --- countOwnedNames (issue #84: moved here so it can be tested) ---
+
+// A stub registry: enough entries to exercise the batching, owned by a mix
+// of accounts, with the casing difference that the real world produces.
+const stubEntries = [
+  { type: 'file', name: 'lucas.json' },
+  { type: 'file', name: 'shrey.json' },
+  { type: 'file', name: 'hussain.json' },
+  { type: 'file', name: 'dexi.json' },
+  { type: 'file', name: 'README.md' },
+  { type: 'dir', name: 'nested' },
+  { type: 'file', name: 'talha.json' },
+  { type: 'file', name: 'shovith.json' },
+  { type: 'file', name: 'lucas2.json' },
+  { type: 'file', name: 'lucas3.json' },
+  { type: 'file', name: 'lucas4.json' },
+  { type: 'file', name: 'lucas5.json' },
+];
+
+const stubRecords = {
+  'domains/lucas.json': { owner: { github: 'Zordhalo' } },
+  'domains/shrey.json': { owner: { github: 'satanrayshe' } },
+  'domains/hussain.json': { owner: { github: 'theonlyhussain' } },
+  'domains/dexi.json': { owner: { github: 'Zordhalo' } },
+  'domains/talha.json': { owner: { github: 'talha-dev' } },
+  'domains/shovith.json': { owner: { github: 'HAWKAY002' } },
+  'domains/lucas2.json': { owner: { github: 'Zordhalo' } },
+  'domains/lucas3.json': { owner: { github: 'Zordhalo' } },
+  'domains/lucas4.json': { owner: { github: 'Zordhalo' } },
+  'domains/lucas5.json': { owner: { github: 'someone-else' } },
+};
+
+const stubDeps = {
+  listDomainEntries: async () => stubEntries,
+  readRecord: async (path) => stubRecords[path] ?? null,
+};
+
+test('counts only the records owned by the target login, case-insensitively', async () => {
+  assert.equal(await countOwnedNames('zordhalo', stubDeps), 5);
+  assert.equal(await countOwnedNames('ZORDHALO', stubDeps), 5);
+  assert.equal(await countOwnedNames('hawkay002', stubDeps), 1);
+  assert.equal(await countOwnedNames('nobody', stubDeps), 0);
+});
+
+test('ignores non-file entries and non-JSON files', async () => {
+  // README.md and the directory entry must not produce a readRecord call
+  // for their name, because they were filtered before counting.
+  const called = [];
+  const tracking = {
+    listDomainEntries: async () => stubEntries,
+    readRecord: async (path) => {
+      called.push(path);
+      return stubRecords[path] ?? null;
+    },
+  };
+  await countOwnedNames('zordhalo', tracking);
+  assert.ok(!called.includes('domains/README.md'));
+  assert.ok(!called.includes('domains/nested'));
+});
+
+test('a record with a missing or null owner counts as not owned', async () => {
+  const sparse = {
+    listDomainEntries: async () => [{ type: 'file', name: 'x.json' }],
+    readRecord: async () => ({}),
+  };
+  assert.equal(await countOwnedNames('anyone', sparse), 0);
+});
+
+// The path readRecordAt builds is relative to the repo, because the injected
+// api already carries the /repos/{owner}/{repo} prefix. A doubled prefix here
+// 404s, and since a failed read returns null every record PR is rejected as
+// "could not read the changed file" — so the shape is worth pinning.
+test('readRecordAt requests a repo-relative contents path', async () => {
+  const seen = [];
+  const rec = await readRecordAt('domains/lucas.json', 'abc123', {
+    api: async (path) => {
+      seen.push(path);
+      return {
+        ok: true,
+        json: async () => ({ content: Buffer.from(JSON.stringify(owned)).toString('base64') }),
+      };
+    },
+  });
+  assert.deepEqual(seen, ['/contents/domains/lucas.json?ref=abc123']);
+  assert.equal(rec.name, 'lucas');
+});
+
+test('readRecordAt returns null when the file is absent', async () => {
+  const rec = await readRecordAt('domains/nope.json', 'abc123', {
+    api: async () => ({ ok: false, status: 404 }),
+  });
+  assert.equal(rec, null);
 });

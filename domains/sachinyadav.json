@@ -1,0 +1,17 @@
+{
+  "name": "sachinyadav",
+  "owner": {
+    "github": "Sr2328"
+  },
+  "claimedAt": "2026-09-06T03:53:18.458Z",
+  "records": {
+    "URL": "https://sachin-yadav-portfolio-blue.vercel.app/"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=sachinyadav.runs-on.dev,558c4f64d7ecf2d81344"
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "sportsops",
+  "owner": {
+    "github": "tannu610"
+  },
+  "claimedAt": "2026-09-03T19:45:29.866Z",
+  "records": {},
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=sportsops.runs-on.dev,b723783b66b52ac9ec52"
+      ]
+    }
+  }
+}

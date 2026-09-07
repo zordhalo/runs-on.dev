@@ -1,0 +1,17 @@
+{
+  "name": "reyyan",
+  "owner": {
+    "github": "reyyan9s"
+  },
+  "claimedAt": "2026-09-04T08:00:04.732Z",
+  "records": {
+    "CNAME": "37b568299720f35b.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=reyyan.runs-on.dev,9f28df0d8a0a2dced49a"
+      ]
+    }
+  }
+}

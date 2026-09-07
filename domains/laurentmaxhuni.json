@@ -12,6 +12,14 @@
       "TXT": [
         "vc-domain-verify=laurentmaxhuni.runs-on.dev,bc36c1d84295d671eb22"
       ]
+    },
+    "ideator": {
+      "CNAME": "763f1689be7f24de.vercel-dns-017.com"
+    },
+    "_vercel.ideator": {
+      "TXT": [
+        "vc-domain-verify=ideator.laurentmaxhuni.runs-on.dev,c36b97adfcf0a17ae673"
+      ]
     }
   }
 }

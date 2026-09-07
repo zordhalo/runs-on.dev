@@ -1,0 +1,15 @@
+{
+  "name": "sridhar",
+  "owner": {
+    "github": "sridharpandiarajan"
+  },
+  "claimedAt": "2026-09-06T16:07:45.291Z",
+  "records": {},
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=sridhar.runs-on.dev,cac1ba9ce024a38bfa77"
+      ]
+    }
+  }
+}
