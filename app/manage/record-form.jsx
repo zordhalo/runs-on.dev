@@ -121,6 +121,11 @@ export default function RecordForm({ name, record }) {
   const [linkRows, setLinkRows] = useState(() => profileToRows(record.profile));
   const [dnsStatus, setDnsStatus] = useState(null);
 
+  // What the record held when the page loaded, not what the form currently
+  // builds: the point is to warn that saving in card mode would drop records
+  // that exist on the saved record right now.
+  const hadRecords = Object.keys(record.records ?? {}).length > 0;
+
   useEffect(() => {
     fetch(`/api/dns-check?name=${encodeURIComponent(name)}`)
       .then((res) => (res.ok ? res.json() : null))
@@ -202,31 +207,24 @@ export default function RecordForm({ name, record }) {
         <p className="mt-2 text-xs leading-relaxed text-(--color-muted)">{PROVIDERS.find((p) => p.id === mode)?.hint}</p>
       </div>
 
-      {/* Profile Card mode */}
+      {/* Profile Card mode: this mode means "no DNS records", so entering it
+          and saving clears them. The profile editor itself lives further down,
+          outside the mode switch, because `profile` and `records` are
+          independent keys -- gating the bio behind this mode meant anyone with
+          a CNAME who wanted to edit their bio silently lost their records. */}
       {mode === 'card' && (
         <div className="border-t border-(--color-rule) px-6 py-5 sm:px-8">
           <p className="text-sm font-medium text-(--color-ink)">Profile card</p>
-          <p className="mt-1 text-xs text-(--color-muted)">Your name serves a card built from your GitHub profile. Override any field below.</p>
-          <div className="mt-4 space-y-4">
-            <label className="block">
-              <span className="text-xs text-(--color-muted)">display name</span>
-              <input value={displayName} onChange={(e) => { setDisplayName(e.target.value); setStatus(null); }} placeholder="GitHub profile name" className="mt-1 w-full border border-(--color-rule) bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
-            </label>
-            <label className="block">
-              <span className="text-xs text-(--color-muted)">bio</span>
-              <textarea value={bio} onChange={(e) => { setBio(e.target.value); setStatus(null); }} placeholder="GitHub profile bio" rows={2} className="mt-1 w-full resize-y border border-(--color-rule) bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
-            </label>
-            {linkRows.map((row, i) => (
-              <div key={i} className="flex flex-wrap items-center gap-2">
-                <input value={row.label} onChange={(e) => setLinkRow(i, { label: e.target.value })} placeholder="My portfolio" aria-label="Link label" className="w-36 border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
-                <input value={row.url} onChange={(e) => setLinkRow(i, { url: e.target.value })} placeholder="https://…" aria-label="Link URL" spellCheck={false} className="min-w-0 flex-1 border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
-                <button type="button" onClick={() => removeLink(i)} className="font-(family-name:--font-mono) text-xs text-(--color-muted) underline hover:text-(--color-ink)">remove</button>
-              </div>
-            ))}
-            {linkRows.length < MAX_LINKS && (
-              <button type="button" onClick={() => { setLinkRows((rows) => [...rows, { label: '', url: '' }]); setStatus(null); }} className="border border-(--color-rule) px-3 py-1.5 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-80">+ add a link</button>
-            )}
-          </div>
+          <p className="mt-1 text-xs text-(--color-muted)">
+            Your name serves a card built from your GitHub profile. No DNS records are published.
+          </p>
+          {hadRecords && (
+            <p className="mt-3 border border-(--color-signal) px-3 py-2 font-(family-name:--font-mono) text-xs text-(--color-signal)">
+              Saving in this mode removes the DNS records on this name. To edit your card
+              without changing where the name points, pick your current mode above and edit
+              the profile section below instead.
+            </p>
+          )}
         </div>
       )}
 
@@ -266,6 +264,38 @@ export default function RecordForm({ name, record }) {
           <SubdomainRecords name={name} subRows={subRows} setRow={setRow} addRow={addRow} removeRow={removeRow} />
         </div>
       )}
+
+      {/* Profile card fields. Always available, whatever the records mode:
+          `profile` is its own key on the record and is served by the card, so
+          editing a bio must never require touching where the name points. */}
+      <div className="border-t border-(--color-rule) px-6 py-5 sm:px-8">
+        <p className="text-sm font-medium text-(--color-ink)">Profile card details</p>
+        <p className="mt-1 text-xs text-(--color-muted)">
+          {mode === 'card'
+            ? 'Override any field below. Blank falls back to your GitHub profile.'
+            : 'Saved with your name and shown if you ever switch to the profile card. Editing these does not change your DNS.'}
+        </p>
+        <div className="mt-4 space-y-4">
+          <label className="block">
+            <span className="text-xs text-(--color-muted)">display name</span>
+            <input value={displayName} onChange={(e) => { setDisplayName(e.target.value); setStatus(null); }} placeholder="GitHub profile name" className="mt-1 w-full border border-(--color-rule) bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
+          </label>
+          <label className="block">
+            <span className="text-xs text-(--color-muted)">bio</span>
+            <textarea value={bio} onChange={(e) => { setBio(e.target.value); setStatus(null); }} placeholder="GitHub profile bio" rows={2} className="mt-1 w-full resize-y border border-(--color-rule) bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
+          </label>
+          {linkRows.map((row, i) => (
+            <div key={i} className="flex flex-wrap items-center gap-2">
+              <input value={row.label} onChange={(e) => setLinkRow(i, { label: e.target.value })} placeholder="My portfolio" aria-label="Link label" className="w-36 border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
+              <input value={row.url} onChange={(e) => setLinkRow(i, { url: e.target.value })} placeholder="https://…" aria-label="Link URL" spellCheck={false} className="min-w-0 flex-1 border border-(--color-rule) bg-transparent px-2 py-1.5 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)" />
+              <button type="button" onClick={() => removeLink(i)} className="font-(family-name:--font-mono) text-xs text-(--color-muted) underline hover:text-(--color-ink)">remove</button>
+            </div>
+          ))}
+          {linkRows.length < MAX_LINKS && (
+            <button type="button" onClick={() => { setLinkRows((rows) => [...rows, { label: '', url: '' }]); setStatus(null); }} className="border border-(--color-rule) px-3 py-1.5 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-80">+ add a link</button>
+          )}
+        </div>
+      </div>
 
       {/* Save */}
       <div className="flex flex-wrap items-center gap-4 border-t border-(--color-rule) px-6 py-5 sm:px-8">
@@ -485,7 +515,11 @@ function ReleaseZone({ name }) {
             to claim immediately. DNS records and your profile card are removed.
             This cannot be undone.
           </p>
-          <div className="flex flex-wrap items-center gap-2">
+          {/* Stacked on mobile: the confirm input is flex-1 in the same row as
+              two buttons, which squeezed it to a few characters on a phone --
+              exactly the field someone has to type a name into exactly. Inline
+              again from sm up, where there is room for all three. */}
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
             <input
               value={confirmText}
               onChange={(e) => setConfirmText(e.target.value)}
@@ -493,24 +527,26 @@ function ReleaseZone({ name }) {
               aria-label="Type the name to confirm release"
               spellCheck={false}
               autoCapitalize="off"
-              className="min-w-0 flex-1 border border-red-200 bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-red-500"
+              className="w-full min-w-0 border border-red-200 bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-red-500 sm:w-auto sm:flex-1"
             />
-            <button
-              type="button"
-              onClick={release}
-              disabled={releasing || confirmText.trim().toLowerCase() !== name}
-              className="border px-4 py-2 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-90 disabled:opacity-50"
-              style={{ borderColor: '#dc2626', background: '#dc2626', color: '#fff' }}
-            >
-              {releasing ? 'Releasing…' : 'Release permanently'}
-            </button>
-            <button
-              type="button"
-              onClick={() => { setOpen(false); setConfirmText(''); setResult(null); }}
-              className="border border-(--color-rule) px-4 py-2 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-80"
-            >
-              Cancel
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={release}
+                disabled={releasing || confirmText.trim().toLowerCase() !== name}
+                className="border px-4 py-2 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-90 disabled:opacity-50"
+                style={{ borderColor: '#dc2626', background: '#dc2626', color: '#fff' }}
+              >
+                {releasing ? 'Releasing…' : 'Release permanently'}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setOpen(false); setConfirmText(''); setResult(null); }}
+                className="border border-(--color-rule) px-4 py-2 font-(family-name:--font-mono) text-xs transition-opacity hover:opacity-80"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
           {result && (
             <p className={`text-xs font-(family-name:--font-mono) ${result.ok ? 'text-green-600' : 'text-red-500'}`}>

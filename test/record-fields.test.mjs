@@ -179,3 +179,33 @@ test('profile links round-trip through rows', () => {
     profile,
   );
 });
+
+// The manage form's four provider modes select what goes in `records`, and
+// 'card' means "publish nothing". That is correct on its own -- but the profile
+// editor used to render only inside the card-mode branch, so the single path to
+// editing a bio was to switch modes, and saving then wrote records:{} and
+// silently dropped a live CNAME. The profile fields now sit outside the mode
+// switch. These pin the contract that made the coupling dangerous.
+test('card mode publishes no records', () => {
+  assert.deepEqual(buildRecords('card', { cname: 'example.vercel.app' }), {});
+});
+
+test('a records mode ignores the fields belonging to other modes', () => {
+  assert.deepEqual(
+    buildRecords('cname', { cname: 'example.vercel.app', url: 'https://elsewhere.test' }),
+    { CNAME: 'example.vercel.app' },
+  );
+});
+
+test('building a profile never produces records', () => {
+  // profile and records are independent keys; editing one must not touch the
+  // other, which is exactly what the manage form got wrong.
+  const profile = buildProfile({ name: 'Ada', bio: 'builds things', linkRows: [] });
+  assert.equal('records' in (profile ?? {}), false);
+  assert.equal(profile.bio, 'builds things');
+});
+
+test('modeOf reports cname for a record that has one, so the form opens there', () => {
+  assert.equal(modeOf({ CNAME: 'example.vercel.app' }), 'cname');
+  assert.equal(modeOf({}), 'card');
+});
