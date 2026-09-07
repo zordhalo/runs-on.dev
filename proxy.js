@@ -38,5 +38,21 @@ export function proxy(request) {
     return new NextResponse('not found', { status: 404 });
   }
 
+  // A claimed host serves exactly one thing: that name's card, at "/". Every
+  // other path belongs to the registry, and the card page renders the site
+  // footer and the nav dock, whose links are relative -- so clicking "manage"
+  // on kl.runs-on.dev asked kl.runs-on.dev for /manage, which rewrote to
+  // /sites/kl/manage, which does not exist, and 404'd. Every link on a card
+  // was broken this way, and so was any path a visitor typed.
+  //
+  // Sending them to the apex is where they were always meant to go. 307 rather
+  // than a permanent redirect: this is a routing decision we might revisit if
+  // claims ever serve sub-paths of their own, and a cached 308 would outlive
+  // the change in browsers we cannot reach.
+  if (request.nextUrl.pathname !== '/') {
+    const target = new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, `https://${ROOT}`);
+    return NextResponse.redirect(target, 307);
+  }
+
   return NextResponse.rewrite(new URL(`/sites/${name}${request.nextUrl.pathname}`, request.url));
 }
