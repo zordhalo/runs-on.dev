@@ -122,9 +122,17 @@ export default function RecordForm({ name, record }) {
   const [dnsStatus, setDnsStatus] = useState(null);
 
   // What the record held when the page loaded, not what the form currently
-  // builds: the point is to warn that saving in card mode would drop records
-  // that exist on the saved record right now.
-  const hadRecords = Object.keys(record.records ?? {}).length > 0;
+  // builds: the point is to warn that saving in a mode that drops records the
+  // file already has — card wipes everything, redirect drops a CNAME, cname
+  // drops A/TXT/MX — before the user hits Save.
+  const existingTypes = Object.keys(record.records ?? {});
+  const MODE_LABEL = { card: 'Profile Card', cname: 'Custom Domain', url: 'Redirect', advanced: 'Advanced DNS' };
+  // buildRecords(mode) returns exactly the types that mode can express, so
+  // any record type the file holds that the mode cannot keep is one that
+  // save would remove.
+  const kept = new Set(Object.keys(buildRecords(mode, { cname, url, a, txt, mx })));
+  const dropped = existingTypes.filter((t) => !kept.has(t));
+  const willDropRecords = dropped.length > 0;
 
   useEffect(() => {
     fetch(`/api/dns-check?name=${encodeURIComponent(name)}`)
@@ -207,24 +215,32 @@ export default function RecordForm({ name, record }) {
         <p className="mt-2 text-xs leading-relaxed text-(--color-muted)">{PROVIDERS.find((p) => p.id === mode)?.hint}</p>
       </div>
 
-      {/* Profile Card mode: this mode means "no DNS records", so entering it
-          and saving clears them. The profile editor itself lives further down,
-          outside the mode switch, because `profile` and `records` are
-          independent keys -- gating the bio behind this mode meant anyone with
-          a CNAME who wanted to edit their bio silently lost their records. */}
+      {/* Mode-specific section. The profile editor lives outside this
+          switch (further down) because `profile` and `records` are
+          independent keys — gating the bio behind this mode meant anyone
+          with a CNAME who wanted to edit their bio silently lost their
+          records. */}
       {mode === 'card' && (
         <div className="border-t border-(--color-rule) px-6 py-5 sm:px-8">
           <p className="text-sm font-medium text-(--color-ink)">Profile card</p>
           <p className="mt-1 text-xs text-(--color-muted)">
             Your name serves a card built from your GitHub profile. No DNS records are published.
           </p>
-          {hadRecords && (
-            <p className="mt-3 border border-(--color-signal) px-3 py-2 font-(family-name:--font-mono) text-xs text-(--color-signal)">
-              Saving in this mode removes the DNS records on this name. To edit your card
-              without changing where the name points, pick your current mode above and edit
-              the profile section below instead.
-            </p>
-          )}
+        </div>
+      )}
+
+      {/* Warn when a save in this mode would remove records the file
+          currently holds. The WYSIWYG model makes switching mode drop
+          anything the new mode can't express; the banner makes that
+          visible rather than silent, for every destructive transition
+          (card, redirect, and cname each drop whatever the record had). */}
+      {willDropRecords && (
+        <div className="border-t border-(--color-rule) px-6 py-3 sm:px-8">
+          <p className="border border-(--color-signal) px-3 py-2 font-(family-name:--font-mono) text-xs text-(--color-signal)">
+            Saving in {MODE_LABEL[mode]} mode removes the {dropped.join(', ')} record(s)
+            on this name. To edit your card or redirect without changing where the name points,
+            edit the profile section below or keep your current mode.
+          </p>
         </div>
       )}
 
