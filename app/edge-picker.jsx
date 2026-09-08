@@ -486,7 +486,9 @@ export default function EdgePicker() {
   const visibleItemOffsets = [-2, -1, 1, 2];
 
   // Paper theme
-  const pillShadow = '0 0 0 1px rgba(255,255,255,0.15) inset, 0 4px 12px rgba(0,0,0,0.35)';
+  // Cutout look: the pill keeps only its inset hairline ring, no outer
+  // drop shadow, matching the flat bezel.
+  const pillShadow = '0 0 0 1px rgba(255,255,255,0.15) inset';
 
   return (
     <div
@@ -538,7 +540,7 @@ export default function EdgePicker() {
 
       {/* Curved SVG Dock Bezel: MAINTAINED in both expanded and compact states */}
       <svg
-        className="absolute right-0 top-0 h-full w-[56px] pointer-events-none drop-shadow-[-4px_0_14px_rgba(0,0,0,0.65)]"
+        className="absolute right-0 top-0 h-full w-[56px] pointer-events-none"
         viewBox="0 0 56 380"
         preserveAspectRatio="none"
       >
