@@ -346,6 +346,7 @@ export default function RecordForm({ name, record }) {
                 value={cname}
                 onChange={(e) => { setCname(e.target.value); setStatus(null); }}
                 placeholder={PRESETS.find((p) => p.id === selectedPreset)?.placeholder ?? 'your-provider.example.com'}
+                aria-label="CNAME target"
                 spellCheck={false}
                 autoCapitalize="off"
                 className="mt-3 w-full border border-(--color-rule) bg-transparent px-3 py-2 font-(family-name:--font-mono) text-sm text-(--color-ink) outline-none focus:border-(--color-signal)"
