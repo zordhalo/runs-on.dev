@@ -178,7 +178,15 @@ const PRESETS = [
 export default function RecordForm({ name, record }) {
   const [mode, setMode] = useState(() => modeOf(record.records));
   const [cname, setCname] = useState(record.records?.CNAME ?? '');
-  const [selectedPreset, setSelectedPreset] = useState(null);
+  // Highlight the preset the loaded CNAME already matches (a Vercel user
+  // returning to their record sees the Vercel steps, not bare fields). Only
+  // derivable values match; anything hand-typed leaves no chip active.
+  const [selectedPreset, setSelectedPreset] = useState(() => {
+    const initial = record.records?.CNAME ?? '';
+    if (!initial) return null;
+    const ownerLogin = record.owner?.github;
+    return PRESETS.find((p) => p.prefillFor?.(ownerLogin) === initial)?.id ?? null;
+  });
   const [url, setUrl] = useState(record.records?.URL ?? '');
   const [a, setA] = useState((record.records?.A ?? []).join('\n'));
   const [txt, setTxt] = useState((record.records?.TXT ?? []).join('\n'));
