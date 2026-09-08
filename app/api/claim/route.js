@@ -76,10 +76,20 @@ export async function POST(request) {
     // machinery of an atomic two-file commit via the Git Data API for that.
     try {
       const names = [...(ownerIndex?.names ?? []), name];
-      const indexResult = await putOwnerIndex(session.login, names, {
+      // One retry: this write is what keeps the one-per-account limit honest
+      // on the next request, and its usual failure (403/429) is exactly the
+      // transient a second attempt survives. The claim itself is never failed
+      // over it; the sync-owners rebuild heals whatever both attempts miss.
+      let indexResult = await putOwnerIndex(session.login, names, {
         token: TOKEN(),
         sha: ownerIndex?.sha,
-      });
+      }).catch(() => ({ ok: false, reason: 'threw' }));
+      if (!indexResult.ok) {
+        indexResult = await putOwnerIndex(session.login, names, {
+          token: TOKEN(),
+          sha: ownerIndex?.sha,
+        }).catch(() => ({ ok: false, reason: 'threw' }));
+      }
       if (!indexResult.ok) {
         console.warn(`owner index write failed for ${session.login}: ${indexResult.reason}`);
       }

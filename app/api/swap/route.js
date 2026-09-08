@@ -2,6 +2,7 @@ import { sessionFromRequest } from '../../../lib/session.js';
 import { validateName } from '../../../lib/name.js';
 import { isReserved } from '../../../lib/blocklist.js';
 import { getRecord, getContentsMeta, putRecord } from '../../../lib/registry.js';
+import { getOwnerIndex, putOwnerIndex } from '../../../lib/owners.js';
 import { createRateLimiter } from '../../../lib/throttle.js';
 
 // Swaps the user's claimed name for a new one. Releases the old name
@@ -145,6 +146,28 @@ export async function POST(request) {
         ? `${from}.runs-on.dev was released, but ${to} was just claimed by someone else. Claim a different name from the homepage.`
         : `${from}.runs-on.dev was released, but the new record could not be created. Claim ${to} again from the homepage while it is still free.`,
     }, { status: taken ? 409 : 500 });
+  }
+
+  // Keep the owners/ index in step with the swap. sync-owners rebuilds it on
+  // the next push, but /manage and the homepage read the index the moment
+  // this response returns (the client redirects within seconds), and a stale
+  // entry renders the swapped-away name as "could not be read" instead of
+  // the new one. Best-effort for the same reason as /api/claim's index
+  // write: the swap already succeeded, so never fail the request over it.
+  try {
+    const index = await getOwnerIndex(session.login, { token, fetchImpl: uncachedFetch }).catch(() => null);
+    const names = (index?.names ?? []).filter((n) => n !== from);
+    if (!names.includes(to)) names.push(to);
+    const indexResult = await putOwnerIndex(session.login, names, {
+      token,
+      sha: index?.sha,
+      fetchImpl: uncachedFetch,
+    });
+    if (!indexResult.ok) {
+      console.warn(`owner index update failed for ${session.login} after swap: ${indexResult.reason}`);
+    }
+  } catch (err) {
+    console.warn(`owner index update threw for ${session.login} after swap: ${err.message}`);
   }
 
   return Response.json({

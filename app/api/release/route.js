@@ -1,6 +1,7 @@
 import { sessionFromRequest } from '../../../lib/session.js';
 import { validateName } from '../../../lib/name.js';
 import { getContentsMeta } from '../../../lib/registry.js';
+import { getOwnerIndex, putOwnerIndex } from '../../../lib/owners.js';
 import { createRateLimiter } from '../../../lib/throttle.js';
 
 // Releases a claimed name: deletes domains/<name>.json from the repo,
@@ -82,6 +83,31 @@ export async function POST(request) {
   }
   if (!res.ok) {
     return Response.json({ error: 'delete_failed', detail: `GitHub returned ${res.status}` }, { status: 502 });
+  }
+
+  // Drop the released name from the owners/ index now, not whenever the
+  // sync-owners rebuild lands: /api/claim counts from this index, so a stale
+  // entry would tell a user who just released their only name that they are
+  // still at the one-per-account limit. Best-effort; the release already
+  // succeeded.
+  try {
+    const index = await getOwnerIndex(session.login, {
+      token: process.env.REGISTRY_TOKEN,
+      fetchImpl: uncachedFetch,
+    }).catch(() => null);
+    if (index?.names?.includes(name)) {
+      const names = index.names.filter((n) => n !== name);
+      const indexResult = await putOwnerIndex(session.login, names, {
+        token: process.env.REGISTRY_TOKEN,
+        sha: index.sha,
+        fetchImpl: uncachedFetch,
+      });
+      if (!indexResult.ok) {
+        console.warn(`owner index update failed for ${session.login} after release: ${indexResult.reason}`);
+      }
+    }
+  } catch (err) {
+    console.warn(`owner index update threw for ${session.login} after release: ${err.message}`);
   }
 
   return Response.json({

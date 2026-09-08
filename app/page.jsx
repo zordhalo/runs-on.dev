@@ -46,6 +46,10 @@ async function ownedName(session) {
   const name = index?.names?.[0];
   if (!name) return null;
   const record = await getRecord(name, { token }).catch(() => null);
+  // An index entry whose record cannot be read (a stale index after a swap,
+  // or a transient read failure) must not render as "your name is a bare
+  // card": fall back to the claim form, which answers with the truth.
+  if (!record) return null;
   return { name, record };
 }
 

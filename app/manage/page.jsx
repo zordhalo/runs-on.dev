@@ -53,17 +53,24 @@ export default async function Manage() {
   const records = await Promise.all(
     names.map((name) => getRecord(name, { token: TOKEN() }).catch(() => null)),
   );
+  const unreadable = names.filter((_, i) => !records[i]);
 
   return (
     <Shell>
       {records.map((record, i) =>
         record ? (
           <RecordForm key={names[i]} name={names[i]} record={record} />
-        ) : (
-          <p key={names[i]} className="text-sm text-(--color-muted)">
-            Could not read domains/{names[i]}.json just now. Reload to try again.
-          </p>
-        ),
+        ) : null,
+      )}
+      {/* An indexed name whose file cannot be read is skipped rather than
+          replacing the whole page with an error: one unreadable record must
+          not hide the others, and "reload to try again" was a promise the
+          stale-index window after a swap could not keep. */}
+      {unreadable.length > 0 && (
+        <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">
+          {'// not shown just now: '}
+          {unreadable.map((name) => `domains/${name}.json`).join(', ')}
+        </p>
       )}
     </Shell>
   );
