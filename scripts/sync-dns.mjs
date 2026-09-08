@@ -32,44 +32,53 @@ const vercel = (path, init = {}) =>
     headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
   });
 
-async function existingFor(name) {
-  // Page through every record. A single limit=100 call silently misses a name's records
-  // once the zone grows past one page: the delete loop then removes nothing while the
-  // create loop still runs, leaving duplicate and orphaned records instead of a clean
-  // replace, with no error to explain the wrong DNS.
+// The whole zone, paged once and cached for the run. A 20-claim merge used
+// to walk the zone 20 times (once per changed file in existingFor) plus one
+// for the zone mirror — ~21 full paginations where one would do. The zone
+// is the unit the reconciler reasons about, and a single sync run is short
+// enough that staleness between files is not a concern.
+let zoneRecordsCache;
+async function zoneRecords() {
+  if (zoneRecordsCache) return zoneRecordsCache;
   const found = [];
   let cursor = '';
-
   for (;;) {
     const res = await vercel(listPath(DOMAIN, cursor));
     if (!res.ok) {
       console.error(`sync-dns: failed to list records for ${DOMAIN}: ${res.status} ${res.statusText}`);
       process.exit(1);
     }
-
     const body = await res.json();
-    // `name` here can never be '*' or '' — it comes from the ^domains/([a-z0-9-]+)\.json$
-    // match below, so the wildcard record can never be selected for deletion. Preserve
-    // that invariant if this ever stops deriving the name from the filename.
-    //
-    // Also match single-level nested records (`<label>.<name>`, e.g.
-    // `_atproto.lucas`), so a subdomain that gets removed or renamed is
-    // cleaned up along with the root name instead of orphaned in DNS. The
-    // leading dot in the suffix means this can only match a genuine child of
-    // `name`, never an unrelated record that happens to end with the same
-    // characters.
-    found.push(...body.records.filter((r) => r.name === name || r.name.endsWith(`.${name}`)));
-
+    found.push(...body.records);
     const next = body.pagination?.next;
-    if (!next) return found;
+    if (!next) { zoneRecordsCache = found; return found; }
     cursor = next;
   }
+}
+
+async function existingFor(name) {
+  // Filter the single cached walk by name and children (`.<name>`). The
+  // leading dot means only genuine children match, never an unrelated
+  // record that happens to end the same way. `name` is never '*' or '' —
+  // it comes from the ^domains/([a-z0-9-]+)\.json$ match below — so the
+  // wildcard can never be selected for deletion.
+  return (await zoneRecords()).filter(
+    (r) => r.name === name || r.name.endsWith(`.${name}`),
+  );
 }
 
 async function deleteRecord(stale) {
   const res = await vercel(removePath(DOMAIN, stale.id), { method: 'DELETE' });
   if (!res.ok) {
     const detail = await res.text().catch(() => '');
+    // 404 means the record is already gone — a prior run interrupted after
+    // deleting it, an operator removed it from the dashboard, or another
+    // sync beat this one. Either way the desired state (record absent)
+    // already holds, so treat it as success and keep syncing the rest.
+    if (res.status === 404) {
+      console.log(`deleted ${stale.type} ${stale.name} (already gone)`);
+      return;
+    }
     console.error(`sync-dns: failed to delete ${stale.type} ${stale.name}: ${formatApiError(res.status, detail)}`);
     process.exit(1);
   }
