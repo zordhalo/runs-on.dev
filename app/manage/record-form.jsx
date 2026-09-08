@@ -215,13 +215,14 @@ export default function RecordForm({ name, record }) {
   // the field — but never over something the user typed themselves: only an
   // empty field or another preset's own prefill is replaced.
   function selectPreset(preset) {
-    setSelectedPreset((current) => (current === preset.id ? null : preset.id));
-    if (selectedPreset === preset.id) return;
+    const deselecting = selectedPreset === preset.id;
+    setSelectedPreset(deselecting ? null : preset.id);
+    setStatus(null);
+    if (deselecting) return;
     const prefill = preset.prefillFor?.(record.owner?.github);
     if (!prefill) return;
     const presetValues = PRESETS.map((p) => p.prefillFor?.(record.owner?.github)).filter(Boolean);
     if (!cname.trim() || presetValues.includes(cname.trim())) setCname(prefill);
-    setStatus(null);
   }
 
   function setRow(i, patch) {
