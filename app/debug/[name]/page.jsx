@@ -5,6 +5,7 @@ import { validateName } from '../../../lib/name.js';
 import { getRecord } from '../../../lib/registry.js';
 import { classifyClaim, diagnoseStuck } from '../../../lib/health.js';
 import { probe } from '../../../lib/dns-probe.js';
+import { createRateLimiter } from '../../../lib/throttle.js';
 import { REPO_URL } from '../../../lib/repo.js';
 
 // A public, shareable diagnosis for one name: what the record declares, what
@@ -24,6 +25,14 @@ export const metadata = {
 
 const ZONE = 'runs-on.dev';
 const TOKEN = () => process.env.CARD_TOKEN ?? process.env.REGISTRY_TOKEN;
+
+// Every load spends a registry read, five DNS lookups, and one outbound
+// probe, and random names defeat the record cache's 30-second revalidate —
+// the same shape that made /api/check worth throttling. Per-name budget,
+// same as dns-check: a human checking their name never sees it; a loop does.
+const DEBUG_WINDOW_MS = 60 * 1000;
+const DEBUG_MAX = 10;
+const takeDebug = createRateLimiter({ windowMs: DEBUG_WINDOW_MS, max: DEBUG_MAX });
 
 async function safe(fn, fallback) {
   try {
@@ -75,6 +84,23 @@ const VERDICT = {
 export default async function DebugPage({ params }) {
   const { name } = await params;
   if (!validateName(name).ok) notFound();
+
+  // Gate before any network work: an over-budget request must cost nothing
+  // beyond the render. A page cannot answer 429, so this renders a plain
+  // slow-down state instead.
+  const budget = takeDebug(name);
+  if (!budget.ok) {
+    return (
+      <main className="mx-auto max-w-2xl px-6 py-16">
+        <p className="font-(family-name:--font-mono) text-xs tracking-[0.14em] text-(--color-muted) uppercase">Debug</p>
+        <h1 className="mt-2 font-(family-name:--font-display) text-2xl font-medium text-(--color-ink)">{name}.runs-on.dev</h1>
+        <p className="mt-4 text-sm leading-relaxed text-(--color-muted)">
+          Too many checks on this name in the last minute. Live DNS answers change on
+          the scale of minutes anyway — reload shortly.
+        </p>
+      </main>
+    );
+  }
 
   // Distinguish "no record" from "could not read": a registry hiccup must
   // not render a claimed name as unclaimed — this page's whole value is
