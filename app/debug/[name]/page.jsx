@@ -69,16 +69,41 @@ const VERDICT = {
   card: { label: 'Serving the profile card', color: '#9ca3af' },
   stuck: { label: 'Stuck on the profile card', color: '#eab308' },
   down: { label: 'No answer', color: '#ef4444' },
+  unknown: { label: 'Unclassified', color: '#9ca3af' },
 };
 
 export default async function DebugPage({ params }) {
   const { name } = await params;
   if (!validateName(name).ok) notFound();
 
-  const record = await safe(
-    () => getRecord(name, { token: TOKEN(), fetchImpl: (u, i) => fetch(u, { ...i, next: { revalidate: 30 } }) }),
-    null,
-  );
+  // Distinguish "no record" from "could not read": a registry hiccup must
+  // not render a claimed name as unclaimed — this page's whole value is
+  // being trusted, and getRecord returns null only for 404, throwing for
+  // everything else.
+  let record = null;
+  let readFailed = false;
+  try {
+    record = await getRecord(name, {
+      token: TOKEN(),
+      fetchImpl: (u, i) => fetch(u, { ...i, next: { revalidate: 30 } }),
+    });
+  } catch {
+    readFailed = true;
+  }
+
+  if (readFailed) {
+    return (
+      <main className="mx-auto max-w-2xl px-6 py-16">
+        <p className="font-(family-name:--font-mono) text-xs tracking-[0.14em] text-(--color-muted) uppercase">Debug</p>
+        <h1 className="mt-2 font-(family-name:--font-display) text-2xl font-medium text-(--color-ink)">{name}.runs-on.dev</h1>
+        <p className="mt-4 text-sm leading-relaxed text-(--color-muted)">
+          The registry could not be read just now, so there is nothing trustworthy to
+          report. Reload in a moment — a claimed name is not "not claimed" because a
+          read failed.
+        </p>
+      </main>
+    );
+  }
 
   if (!record) {
     return (
@@ -118,6 +143,12 @@ export default async function DebugPage({ params }) {
     rows.push({ ok: live, text: live ? `CNAME → ${cname[0]}` : `CNAME not visible yet (want ${wantedCname})` });
   }
   if (wantedTxt.length > 0) {
+    // The challenge has to be live at the claim's own _vercel label before
+    // the zone mirror copies it up, so this row names which half is lagging
+    // when the zone row below is still red.
+    const atName = flattenTxt(txtVercelLabel);
+    const liveAtName = wantedTxt.some((v) => atName.includes(v));
+    rows.push({ ok: liveAtName, text: liveAtName ? '_vercel TXT live at the name' : `_vercel TXT not live at _vercel.${name} yet` });
     const zone = flattenTxt(txtVercelZone);
     const published = wantedTxt.some((v) => zone.includes(v));
     rows.push({ ok: published, text: published ? '_vercel TXT published at the zone' : '_vercel TXT not at the zone yet' });
