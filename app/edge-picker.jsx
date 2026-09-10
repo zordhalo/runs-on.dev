@@ -586,7 +586,7 @@ export default function EdgePicker() {
             background: 'var(--paper)',
             boxShadow: pillShadow,
           }}
-          className={`absolute right-[9px] w-[34px] rounded-full flex items-center justify-center z-20 pointer-events-auto transition-[height] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          className={`absolute right-[9px] w-[34px] rounded-full flex items-center justify-center z-20 pointer-events-auto transition-[height] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] outline-none focus-visible:ring-2 focus-visible:ring-(--color-signal) focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${
             isCompact ? 'pointer-events-none' : 'cursor-pointer active:scale-95'
           }`}
         >
@@ -659,7 +659,7 @@ export default function EdgePicker() {
                 pointerEvents: isCompact ? 'none' : 'auto',
                 transition: 'opacity 0.25s ease',
               }}
-              className="absolute right-[9px] w-[34px] h-8 flex items-center justify-center pointer-events-auto cursor-pointer group"
+              className="absolute right-[9px] w-[34px] h-8 flex items-center justify-center pointer-events-auto cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-(--color-signal) focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
             >
               <span className="w-6 h-6 rounded-full flex items-center justify-center group-hover:bg-white/10 group-hover:scale-125 transition-all text-neutral-400 hover:text-white">
                 <item.Icon size={ICON_SIZE} strokeWidth={2} />
