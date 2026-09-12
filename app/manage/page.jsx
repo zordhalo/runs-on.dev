@@ -3,6 +3,7 @@ import { readSession } from '../../lib/session.js';
 import { getOwnerIndex } from '../../lib/owners.js';
 import { getRecord } from '../../lib/registry.js';
 import RecordForm from './record-form.jsx';
+import TokenZone from './token-zone.jsx';
 
 export const metadata = {
   title: 'Manage your name — runs-on.dev',
@@ -72,6 +73,9 @@ export default async function Manage() {
           {unreadable.map((name) => `domains/${name}.json`).join(', ')}
         </p>
       )}
+      {/* Account-scoped, so it renders once after the per-name forms rather
+          than inside them: the token speaks for @login, not for one name. */}
+      <TokenZone login={session.login} />
     </Shell>
   );
 }

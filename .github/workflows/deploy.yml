@@ -24,8 +24,9 @@ on:
     # which costs one deploy instead of one per claim.
     # `.moderation/**` joins them for the same reason: the spam log is
     # evidence, not application code, and a burst of spam should not spend
-    # the deploy budget.
-    paths-ignore: ['domains/**', 'owners/**', 'data/**', 'docs/**', '.moderation/**', '*.md']
+    # the deploy budget. `sites/**` is registry data too (hosted-site
+    # pointers, written per deploy), so it never triggers a build either.
+    paths-ignore: ['domains/**', 'owners/**', 'data/**', 'docs/**', '.moderation/**', 'sites/**', '*.md']
   schedule:
     # Daily at 04:00 UTC, off the top of the hour so it doesn't co-fire with
     # the health check. Rebuilds /stats from the current state of domains/.
