@@ -4,5 +4,14 @@
     "github": "epiGnosko"
   },
   "claimedAt": "2026-09-13T03:10:28.107Z",
-  "records": {}
+  "records": {
+    "CNAME": "b8c56d09b533f66e.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=epignosko.runs-on.dev,265dc21c43b37b364f8a"
+      ]
+    }
+  }
 }

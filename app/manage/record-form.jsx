@@ -111,9 +111,88 @@ const PROVIDERS = [
   { id: 'advanced', label: 'Advanced DNS', hint: 'A, TXT, and MX records. For power users.', icon: 'M4 6h16M4 12h16M4 18h16' },
 ];
 
+// Provider presets for CNAME mode. Each one knows the target shape the
+// provider actually needs and the steps that provider requires beyond DNS —
+// which is exactly where the health check's stuck names come from: pointing
+// at a deployment URL instead of a custom-domain target, or attaching the
+// domain on the provider's side never happening at all. The preset fills the
+// half DNS can do and walks the user through the half it can't.
+const PRESETS = [
+  {
+    id: 'github-pages',
+    label: 'GitHub Pages',
+    placeholder: 'yourusername.github.io',
+    prefillFor: (login) => (login ? `${String(login).toLowerCase()}.github.io` : ''),
+    guide: null,
+    steps: (name, login) => [
+      `Target ${login ? `${String(login).toLowerCase()}.github.io` : 'yourusername.github.io'} (or <project>.github.io if the site lives in a project repo)`,
+      `In that repo: Settings → Pages → Custom domain, enter ${name}.runs-on.dev, save`,
+      "Save here. The zone publishes within a minute, HTTPS follows on GitHub's side",
+    ],
+  },
+  {
+    id: 'netlify',
+    label: 'Netlify',
+    placeholder: 'your-site.netlify.app',
+    prefillFor: null,
+    guide: null,
+    steps: (name) => [
+      "Target your site's netlify.app address (Domain settings shows it)",
+      `In Netlify: Domain settings → Add a domain → ${name}.runs-on.dev`,
+      'Save here, then let Netlify provision the certificate',
+    ],
+  },
+  {
+    id: 'cloudflare-pages',
+    label: 'Cloudflare Pages',
+    placeholder: 'your-project.pages.dev',
+    prefillFor: null,
+    guide: null,
+    steps: (name) => [
+      "Target your project's pages.dev address",
+      `In Cloudflare: your Pages project → Custom domains → Set up a custom domain → ${name}.runs-on.dev`,
+      'Save here. Cloudflare issues the certificate once the CNAME is live',
+    ],
+  },
+  {
+    id: 'vercel',
+    label: 'Vercel',
+    placeholder: 'cname.vercel-dns.com',
+    prefillFor: () => 'cname.vercel-dns.com',
+    guide: '/docs/guides/vercel',
+    steps: (name) => [
+      `In your Vercel project: Settings → Domains → Add, enter ${name}.runs-on.dev`,
+      'It will show a verification TXT starting with vc-domain-verify= — copy the whole value',
+      'Add it below as a subdomain record: label _vercel, type TXT',
+      'Save here. Vercel needs one re-check after the TXT is live, so give it a minute',
+    ],
+  },
+  {
+    id: 'render',
+    label: 'Render',
+    placeholder: 'your-service.onrender.com',
+    prefillFor: null,
+    guide: null,
+    steps: (name) => [
+      "Target your service's onrender.com address",
+      `In Render: your service → Settings → Custom Domains → Add ${name}.runs-on.dev`,
+      'Save here; Render validates the CNAME and issues the certificate',
+    ],
+  },
+];
+
 export default function RecordForm({ name, record }) {
   const [mode, setMode] = useState(() => modeOf(record.records));
   const [cname, setCname] = useState(record.records?.CNAME ?? '');
+  // Highlight the preset the loaded CNAME already matches (a Vercel user
+  // returning to their record sees the Vercel steps, not bare fields). Only
+  // derivable values match; anything hand-typed leaves no chip active.
+  const [selectedPreset, setSelectedPreset] = useState(() => {
+    const initial = record.records?.CNAME ?? '';
+    if (!initial) return null;
+    const ownerLogin = record.owner?.github;
+    return PRESETS.find((p) => p.prefillFor?.(ownerLogin) === initial)?.id ?? null;
+  });
   const [url, setUrl] = useState(record.records?.URL ?? '');
   const [a, setA] = useState((record.records?.A ?? []).join('\n'));
   const [txt, setTxt] = useState((record.records?.TXT ?? []).join('\n'));
@@ -128,9 +207,17 @@ export default function RecordForm({ name, record }) {
   const [dnsStatus, setDnsStatus] = useState(null);
 
   // What the record held when the page loaded, not what the form currently
-  // builds: the point is to warn that saving in card mode would drop records
-  // that exist on the saved record right now.
-  const hadRecords = Object.keys(record.records ?? {}).length > 0;
+  // builds: the point is to warn that saving in a mode that drops records the
+  // file already has — card wipes everything, redirect drops a CNAME, cname
+  // drops A/TXT/MX — before the user hits Save.
+  const existingTypes = Object.keys(record.records ?? {});
+  const MODE_LABEL = { card: 'Profile Card', cname: 'Custom Domain', url: 'Redirect', advanced: 'Advanced DNS' };
+  // buildRecords(mode) returns exactly the types that mode can express, so
+  // any record type the file holds that the mode cannot keep is one that
+  // save would remove.
+  const kept = new Set(Object.keys(buildRecords(mode, { cname, url, a, txt, mx })));
+  const dropped = existingTypes.filter((t) => !kept.has(t));
+  const willDropRecords = dropped.length > 0;
 
   useEffect(() => {
     fetch(`/api/dns-check?name=${encodeURIComponent(name)}`)
@@ -143,6 +230,21 @@ export default function RecordForm({ name, record }) {
     setMode(id);
     setStatus(null);
     setErrors([]);
+  }
+
+  // Picking a preset swaps the placeholder and, when the preset can derive a
+  // target (GitHub Pages from the owner's login, Vercel's generic), prefills
+  // the field — but never over something the user typed themselves: only an
+  // empty field or another preset's own prefill is replaced.
+  function selectPreset(preset) {
+    const deselecting = selectedPreset === preset.id;
+    setSelectedPreset(deselecting ? null : preset.id);
+    setStatus(null);
+    if (deselecting) return;
+    const prefill = preset.prefillFor?.(record.owner?.github);
+    if (!prefill) return;
+    const presetValues = PRESETS.map((p) => p.prefillFor?.(record.owner?.github)).filter(Boolean);
+    if (!cname.trim() || presetValues.includes(cname.trim())) setCname(prefill);
   }
 
   function setRow(i, patch) {
@@ -224,24 +326,32 @@ export default function RecordForm({ name, record }) {
         <p className="mt-3 text-xs leading-relaxed text-(--color-muted)">{PROVIDERS.find((p) => p.id === mode)?.hint}</p>
       </div>
 
-      {/* Profile Card mode: this mode means "no DNS records", so entering it
-          and saving clears them. The profile editor itself lives further down,
-          outside the mode switch, because `profile` and `records` are
-          independent keys -- gating the bio behind this mode meant anyone with
-          a CNAME who wanted to edit their bio silently lost their records. */}
+      {/* Mode-specific section. The profile editor lives outside this
+          switch (further down) because `profile` and `records` are
+          independent keys — gating the bio behind this mode meant anyone
+          with a CNAME who wanted to edit their bio silently lost their
+          records. */}
       {mode === 'card' && (
         <div className="slit-top px-6 py-5 sm:px-8">
           <p className="text-[14px] text-(--color-ink)">Profile card</p>
           <p className="mt-1.5 text-xs leading-relaxed text-(--color-muted)">
             Your name serves a card built from your GitHub profile. No DNS records are published.
           </p>
-          {hadRecords && (
-            <p className="mt-3 slit-bar-l rounded-r-lg bg-(--color-card) px-3 py-2.5 pl-5 font-(family-name:--font-mono) text-xs leading-relaxed text-(--color-ash)">
-              Saving in this mode removes the DNS records on this name. To edit your card
-              without changing where the name points, pick your current mode above and edit
-              the profile section below instead.
-            </p>
-          )}
+        </div>
+      )}
+
+      {/* Warn when a save in this mode would remove records the file
+          currently holds. The WYSIWYG model makes switching mode drop
+          anything the new mode can't express; the banner makes that
+          visible rather than silent, for every destructive transition
+          (card, redirect, and cname each drop whatever the record had). */}
+      {willDropRecords && (
+        <div className="slit-top px-6 py-3 sm:px-8">
+          <p className="slit-bar-l rounded-r-lg bg-(--color-card) px-3 py-2.5 pl-5 font-(family-name:--font-mono) text-xs leading-relaxed text-(--color-flag)">
+            Saving in {MODE_LABEL[mode]} mode removes the {dropped.join(', ')} record(s)
+            on this name. To edit your card or redirect without changing where the name points,
+            edit the profile section below or keep your current mode.
+          </p>
         </div>
       )}
 
@@ -249,11 +359,64 @@ export default function RecordForm({ name, record }) {
       {mode === 'cname' && (
         <>
           <div className="slit-top px-6 py-5 sm:px-8">
+            <span className="text-[14px] text-(--color-ink)">CNAME target</span>
+
+            {/* Provider presets: fill the target shape and walk the steps
+                that provider needs beyond DNS. Optional — a plain hostname
+                typed below works exactly as before. */}
+            <div className="mt-3 flex flex-wrap gap-2">
+              {PRESETS.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => selectPreset(p)}
+                  aria-pressed={selectedPreset === p.id}
+                  className={`border px-3 py-1.5 font-(family-name:--font-mono) text-xs transition-colors ${
+                    selectedPreset === p.id
+                      ? 'border-(--color-signal) bg-(--color-signal)/10 text-(--color-signal)'
+                      : 'border-(--color-rule) text-(--color-muted) hover:border-(--color-muted) hover:text-(--color-ink)'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+
             <label className="block">
-              <span className="text-[14px] text-(--color-ink)">CNAME target</span>
-              <input value={cname} onChange={(e) => { setCname(e.target.value); setStatus(null); }} placeholder="your-provider.example.com" spellCheck={false} autoCapitalize="off" className={`mt-2 ${INPUT}`} />
+              <input
+                value={cname}
+                onChange={(e) => { setCname(e.target.value); setStatus(null); }}
+                placeholder={PRESETS.find((p) => p.id === selectedPreset)?.placeholder ?? 'your-provider.example.com'}
+                aria-label="CNAME target"
+                spellCheck={false}
+                autoCapitalize="off"
+                className={`mt-3 ${INPUT}`}
+              />
             </label>
             <p className="mt-2 text-xs text-(--color-muted)">Copy the exact value from your provider.</p>
+
+            {(() => {
+              const preset = PRESETS.find((p) => p.id === selectedPreset);
+              if (!preset) return null;
+              return (
+                <div className="mt-4 border border-(--color-rule) bg-(--color-card) px-4 py-3">
+                  <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">{'// '}{preset.label} setup</p>
+                  <ol className="mt-2 space-y-1.5 text-xs leading-relaxed text-(--color-ink)">
+                    {preset.steps(name, record.owner?.github).map((step, i) => (
+                      <li key={i} className="flex gap-2">
+                        <span className="font-(family-name:--font-mono) text-(--color-muted)">{i + 1}.</span>
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  {preset.guide && (
+                    <a href={preset.guide} className="mt-3 inline-block font-(family-name:--font-mono) text-xs text-(--color-signal) underline">
+                      full guide →
+                    </a>
+                  )}
+                </div>
+              );
+            })()}
           </div>
           <SubdomainRecords name={name} subRows={subRows} setRow={setRow} addRow={addRow} removeRow={removeRow} />
         </>

@@ -4,6 +4,7 @@ import './globals.css';
 import Footer from './components/Footer.jsx';
 import Nav from './components/Nav.jsx';
 import EdgePicker from './edge-picker.jsx';
+import { Analytics } from '@vercel/analytics/next';
 
 // Satoshi stands in for Aeonik (per the style reference's own substitute
 // list): geometric, slightly warm, carrying body copy at weight 400.
@@ -73,6 +74,7 @@ export default function RootLayout({ children }) {
         {children}
         <Footer />
         <EdgePicker />
+        <Analytics />
       </body>
     </html>
   );
