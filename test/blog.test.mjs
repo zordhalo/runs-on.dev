@@ -2,7 +2,7 @@
 // tests read the real committed data.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { getPost, publishedPosts } from '../lib/blog.js';
+import { getPost, publishedPosts, postSerial } from '../lib/blog.js';
 
 test('publishedPosts lists the launch posts, published only, newest first', () => {
   const posts = publishedPosts();
@@ -42,4 +42,12 @@ test('the redesign post carries its featured cover', () => {
 test('the redesign post carries its featured cover', () => {
   const post = getPost('2026-09-12-a-new-look-for-runs-on-dev');
   assert.equal(post.image, '/blog-media/redesign-cover.png');
+});
+
+
+test('serial numbers count newest-first from 1', () => {
+  const posts = publishedPosts();
+  assert.equal(postSerial(posts[0].slug), 1, 'newest post is №1');
+  assert.equal(postSerial(posts[posts.length - 1].slug), posts.length, 'oldest post has the highest serial');
+  assert.equal(postSerial('no-such-post'), null);
 });

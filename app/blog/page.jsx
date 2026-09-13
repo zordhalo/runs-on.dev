@@ -1,4 +1,4 @@
-import { publishedPosts } from '../../lib/blog.js';
+import { publishedPosts, postSerial, formatSerial } from '../../lib/blog.js';
 import { Divider } from '../components/ui.jsx';
 
 export const metadata = {
@@ -10,7 +10,7 @@ export const metadata = {
 
 const CATEGORY_LABEL = { announcement: 'Announcement', feature: 'Feature', engineering: 'Engineering', guide: 'Guide' };
 
-function PostRow({ post }) {
+function PostRow({ post, serial }) {
   const d = new Date(post.date);
   const date = `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`;
   return (
@@ -24,9 +24,12 @@ function PostRow({ post }) {
           />
         )}
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <h2 className="text-[23px] leading-[1.07] font-normal tracking-[-0.004em] text-(--color-ink) underline decoration-(--color-iron) decoration-1 underline-offset-[5px] transition-colors group-hover:decoration-(--color-blue)">
-            {post.title}
-          </h2>
+          <div className="flex min-w-0 items-baseline gap-3">
+            <span className="font-(family-name:--font-mono) text-xs text-(--color-blue)">№ {formatSerial(serial)}</span>
+            <h2 className="text-[23px] leading-[1.07] font-normal tracking-[-0.004em] text-(--color-ink) underline decoration-(--color-iron) decoration-1 underline-offset-[5px] transition-colors group-hover:decoration-(--color-blue)">
+              {post.title}
+            </h2>
+          </div>
           <time className="font-(family-name:--font-mono) text-xs text-(--color-muted)" dateTime={post.date}>
             {date}
           </time>
@@ -59,8 +62,8 @@ export default function Blog() {
       <Divider className="mt-10" />
       {posts.length > 0 ? (
         <ul className="!list-none !p-0">
-          {posts.map((post) => (
-            <PostRow key={post.slug} post={post} />
+          {posts.map((post, i) => (
+            <PostRow key={post.slug} post={post} serial={i + 1} />
           ))}
         </ul>
       ) : (

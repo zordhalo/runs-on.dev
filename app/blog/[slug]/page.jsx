@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getPost, publishedPosts } from '../../../lib/blog.js';
+import { getPost, publishedPosts, postSerial, formatSerial } from '../../../lib/blog.js';
 
 export const dynamic = 'force-static';
 
@@ -64,11 +64,15 @@ export default async function BlogPost({ params }) {
     keywords: post.tags.join(', '),
   };
 
+  const serial = postSerial(slug);
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <p className="meta">
+        <span className="text-(--color-blue)">№ {formatSerial(serial)}</span>
+        {' · '}
         {CATEGORY_LABEL[post.category] ?? post.category} · {post.date}
       </p>
       <h1 className="mt-3 text-[34px] leading-[1.08] font-normal tracking-[-0.005em] text-(--color-ink) sm:text-[44px] sm:tracking-[-0.007em]">
