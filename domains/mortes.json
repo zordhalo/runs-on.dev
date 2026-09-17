@@ -4,6 +4,8 @@
     "github": "Mortestr"
   },
   "claimedAt": "2026-09-17T15:41:22.346Z",
-  "records": {},
+  "records": {
+    "CNAME": "https://rent-williams-precipitation-required.trycloudflare.com/"
+  },
   "country": "DE"
 }
