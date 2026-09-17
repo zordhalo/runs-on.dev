@@ -1,0 +1,9 @@
+{
+  "name": "employai",
+  "owner": { "github": "atharvkulkarni-boop" },
+  "claimedAt": "2026-09-17T18:40:00.000Z",
+  "records": { "CNAME": "cname.vercel-dns.com" },
+  "subdomains": {
+    "_vercel": { "TXT": ["vc-domain-verify=employai.runs-on.dev,54895d0e884049e324a1"] }
+  }
+}
