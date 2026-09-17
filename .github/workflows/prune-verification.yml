@@ -11,12 +11,18 @@ name: prune-verification
 # the claim files every run, so deleting the record alone gets it recreated on
 # the next sync. Removing it at the source is what makes it stay gone.
 #
-# Manual-only on purpose. Deciding wrongly deletes a stranger's in-flight
-# verification, so the trigger is a person who has read the dry run. Once this
-# has been exercised a few times a schedule can be added -- but the durable fix
-# for NEW claims is pruning at the moment of successful verification, in the
-# app, not a periodic sweep.
+# Was manual-only until it had been exercised a few times by hand (see
+# issues #104, #105 and the incident that first filled the cap). It only ever
+# prunes a challenge from a claim whose live probe positively classified as
+# 'ok' -- something other than the registry's own card answering on the
+# owner's hostname, which cannot happen before the provider has verified --
+# so a scheduled run has no path to break anyone's in-flight verification.
+# The durable fix for NEW claims is still pruning at the moment of successful
+# verification, in the app, rather than a periodic sweep, but that does not
+# exist yet.
 on:
+  schedule:
+    - cron: '47 6 * * *'
   workflow_dispatch:
     inputs:
       apply:
@@ -62,8 +68,11 @@ jobs:
         env:
           LIMIT: ${{ inputs.limit }}
 
+      # A scheduled run always applies -- there is no dispatch input to read
+      # inputs.apply from on a `schedule` event, and the whole point of
+      # scheduling this is that it no longer waits on a person to press apply.
       - name: Apply and commit
-        if: ${{ inputs.apply }}
+        if: ${{ inputs.apply || github.event_name == 'schedule' }}
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
