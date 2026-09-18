@@ -326,3 +326,14 @@ test('fit defers everything when the zone is already over the cap', () => {
   assert.deepEqual(create, []);
   assert.deepEqual(deferred, [txt(1)]);
 });
+
+test('a CNAME Vercel hands back with a trailing dot still matches the record', () => {
+  // Vercel's list API returns CNAMEs fully qualified (`cname.vercel-dns.com.`)
+  // while records hold the bare form. Keyed raw, every sync deleted and
+  // recreated an unchanged CNAME, a DNS gap on every save of that name.
+  const record = { type: 'CNAME', name: 'saiom', value: 'cname.vercel-dns.com' };
+  const existing = [{ id: 'rec_1', ...record, value: 'cname.vercel-dns.com.' }];
+  const { unchanged, remove, create } = reconcileDnsRecords(existing, [record]);
+  assert.deepEqual({ remove, create }, { remove: [], create: [] });
+  assert.equal(unchanged.length, 1);
+});
