@@ -40,6 +40,8 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    outputs:
+      over_cap: ${{ steps.sync.outputs.over_cap }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,8 +102,26 @@ jobs:
           echo 'files<<EOF' >> $GITHUB_OUTPUT
           git diff --name-only "$RANGE" '${{ github.event.after }}' -- domains/ >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
-      - run: node scripts/sync-dns.mjs
+      - id: sync
+        run: node scripts/sync-dns.mjs
         env:
           CHANGED_FILES: ${{ steps.changed.outputs.files }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+
+  # The zone mirror hit Vercel's 50-value cap and deferred some challenges.
+  # Prune the ones whose claims have verified; the prune's push (deploy key,
+  # so it does trigger workflows) re-runs this sync, which publishes what was
+  # deferred. A prune with nothing eligible commits nothing, so this cannot
+  # loop. Called, not dispatched: see the workflow_call note above.
+  prune:
+    needs: sync
+    if: needs.sync.outputs.over_cap == 'true'
+    # The called workflow declares contents: write, and a called workflow can
+    # only narrow the caller's permissions, never widen them.
+    permissions:
+      contents: write
+    uses: ./.github/workflows/prune-verification.yml
+    with:
+      apply: true
+    secrets: inherit

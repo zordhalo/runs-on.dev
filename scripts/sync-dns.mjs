@@ -1,8 +1,10 @@
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile, readdir, appendFile } from 'node:fs/promises';
 import {
   planDnsChanges,
   planZoneVerificationRecords,
   reconcileZoneVerification,
+  fitZoneVerification,
+  ZONE_VERIFICATION_CAP,
   reconcileDnsRecords,
   listPath,
   createPath,
@@ -200,10 +202,14 @@ for (const file of await readdir('domains')) {
 const existingVerification = (await existingFor(ZONE_VERIFICATION_LABEL)).filter(
   (record) => record.name === ZONE_VERIFICATION_LABEL,
 );
-const { create: toMirror, remove: toUnmirror } = reconcileZoneVerification(
+// Oldest claim first, so that when the cap forces a choice the names that
+// have waited longest get the free slots, not whichever sorts first.
+claims.sort((a, b) => String(a.claimedAt ?? '').localeCompare(String(b.claimedAt ?? '')));
+const { create: wanted, remove: toUnmirror } = reconcileZoneVerification(
   planZoneVerificationRecords(claims),
   existingVerification,
 );
+const { create: toMirror, deferred } = fitZoneVerification(wanted, toUnmirror, existingVerification);
 
 for (const stale of toUnmirror) {
   await deleteRecord(stale);
@@ -214,6 +220,14 @@ for (const change of toMirror) {
   if (!ok) process.exit(1);
 }
 
-if (toMirror.length === 0 && toUnmirror.length === 0) {
+if (deferred.length > 0) {
+  // Not a failure of this run: every name's own records above are applied.
+  // The workflow's prune job frees slots from verified claims, and its push
+  // re-runs this sync, which publishes these. If nothing can be pruned (every
+  // holder is still pending) the prune commits nothing and these stay
+  // deferred -- that warning is the signal a human needs to look.
+  console.log(`::warning::_vercel.runs-on.dev is at its ${ZONE_VERIFICATION_CAP}-value cap; deferred ${deferred.length} verification challenge(s): ${deferred.map((c) => c.value.split('=')[1].split(',')[0]).join(', ')}`);
+  if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, 'over_cap=true\n');
+} else if (toMirror.length === 0 && toUnmirror.length === 0) {
   console.log('zone verification: in sync');
 }

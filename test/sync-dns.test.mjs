@@ -4,6 +4,7 @@ import {
   planDnsChanges,
   planZoneVerificationRecords,
   reconcileZoneVerification,
+  fitZoneVerification,
   reconcileDnsRecords,
   listPath,
   createPath,
@@ -296,4 +297,32 @@ test('a non-JSON error body is still logged, not swallowed', () => {
 test('an empty error body falls back to the bare status', () => {
   assert.equal(formatApiError(500, ''), '500');
   assert.equal(formatApiError(500, '   '), '500');
+});
+
+const txt = (n) => ({ type: 'TXT', name: '_vercel', value: `vc-domain-verify=n${n}.runs-on.dev,x` });
+const held = (n) => Array.from({ length: n }, (_, i) => ({ id: `rec_${i}`, ...txt(1000 + i) }));
+
+test('fit publishes every create while under the cap', () => {
+  const { create, deferred } = fitZoneVerification([txt(1), txt(2)], [], held(10));
+  assert.equal(create.length, 2);
+  assert.deepEqual(deferred, []);
+});
+
+test('fit defers the creates that would push past the cap', () => {
+  const { create, deferred } = fitZoneVerification([txt(1), txt(2), txt(3)], [], held(48));
+  assert.deepEqual(create, [txt(1), txt(2)]);
+  assert.deepEqual(deferred, [txt(3)]);
+});
+
+test('fit counts slots freed by removals in the same run', () => {
+  const actual = held(50);
+  const { create, deferred } = fitZoneVerification([txt(1)], actual.slice(0, 1), actual);
+  assert.deepEqual(create, [txt(1)]);
+  assert.deepEqual(deferred, []);
+});
+
+test('fit defers everything when the zone is already over the cap', () => {
+  const { create, deferred } = fitZoneVerification([txt(1)], [], held(52));
+  assert.deepEqual(create, []);
+  assert.deepEqual(deferred, [txt(1)]);
 });

@@ -33,6 +33,18 @@ on:
         description: 'Prune at most this many records (blank = all eligible).'
         type: string
         default: ''
+  # Called by sync-dns the moment the mirror hits the cap, rather than waiting
+  # for the daily schedule -- a burst of claims fills the 50 slots in hours,
+  # and GitHub's cron is best-effort (the first scheduled run never fired).
+  # Same inputs, same contract; the caller passes apply: true.
+  workflow_call:
+    inputs:
+      apply:
+        type: boolean
+        default: false
+      limit:
+        type: string
+        default: ''
 
 permissions:
   contents: write
