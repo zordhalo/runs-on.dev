@@ -4,6 +4,15 @@
     "github": "vipinyadav01"
   },
   "claimedAt": "2026-09-17T12:33:19.639Z",
-  "records": {},
+  "records": {
+    "CNAME": "59eb32a32e5a9010.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=launchtrack.runs-on.dev,e7998cdd568537b495df"
+      ]
+    }
+  },
   "country": "IN"
 }
