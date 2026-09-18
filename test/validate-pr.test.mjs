@@ -208,6 +208,34 @@ test('rejects a second name for an account that already owns one', async () => {
   assert.ok(out.errors.some((e) => e.includes('one name per account')));
 });
 
+const projectClaim = (author, over = {}) => claim({
+  files: [{ filename: 'domains/clatterbox.json', status: 'added' }],
+  prAuthor: author,
+  readFile: async () => ({
+    name: 'clatterbox',
+    owner: { github: author },
+    claimedAt: '2026-09-01T11:00:00Z',
+    records: { CNAME: 'zordhalo.github.io' },
+  }),
+  countOwnedNames: async () => 1,
+  ...over,
+});
+
+test('lets the maintainer claim a listed project name past the one-name limit', async () => {
+  const out = await validateChangeset(projectClaim('zordhalo'));
+  assert.deepEqual(out, { ok: true, errors: [] });
+});
+
+test('the project exemption is not transferable to another account', async () => {
+  const out = await validateChangeset(projectClaim('someone-else'));
+  assert.ok(out.errors.some((e) => e.includes('one name per account')));
+});
+
+test('the project exemption does not cover unlisted names for the maintainer', async () => {
+  const out = await validateChangeset(claim({ countOwnedNames: async () => 1 }));
+  assert.ok(out.errors.some((e) => e.includes('one name per account')));
+});
+
 test('rejects a claim with a future claimedAt', async () => {
   const out = await validateChangeset(claim({
     readFile: async () => ({
