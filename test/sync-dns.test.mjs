@@ -6,6 +6,7 @@ import {
   reconcileZoneVerification,
   fitZoneVerification,
   reconcileDnsRecords,
+  syncEach,
   listPath,
   createPath,
   removePath,
@@ -336,4 +337,17 @@ test('a CNAME Vercel hands back with a trailing dot still matches the record', (
   const { unchanged, remove, create } = reconcileDnsRecords(existing, [record]);
   assert.deepEqual({ remove, create }, { remove: [], create: [] });
   assert.equal(unchanged.length, 1);
+});
+
+test('syncEach keeps going past a failed name and reports every failure', async () => {
+  // One record Vercel rejects used to exit the whole run: every name after
+  // it and the zone mirror were skipped until someone fixed that record.
+  const seen = [];
+  const failed = await syncEach(['a', 'bad', 'c', 'boom', 'e'], async (name) => {
+    seen.push(name);
+    if (name === 'boom') throw new Error('network');
+    return name !== 'bad';
+  });
+  assert.deepEqual(seen, ['a', 'bad', 'c', 'boom', 'e']);
+  assert.deepEqual(failed, ['bad', 'boom']);
 });

@@ -116,7 +116,10 @@ jobs:
   # loop. Called, not dispatched: see the workflow_call note above.
   prune:
     needs: sync
-    if: needs.sync.outputs.over_cap == 'true'
+    # !cancelled(), not the default success(): sync still exits red when one
+    # name fails, after it has written over_cap, and that must not block the
+    # cap relief every other waiting claim depends on.
+    if: ${{ !cancelled() && needs.sync.outputs.over_cap == 'true' }}
     # The called workflow declares contents: write, and a called workflow can
     # only narrow the caller's permissions, never widen them.
     permissions:

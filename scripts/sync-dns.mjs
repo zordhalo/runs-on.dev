@@ -11,6 +11,7 @@ import {
   removePath,
   ZONE_VERIFICATION_LABEL,
   formatApiError,
+  syncEach,
 } from '../lib/dns.js';
 
 const DOMAIN = 'runs-on.dev';
@@ -79,12 +80,13 @@ async function deleteRecord(stale) {
     // already holds, so treat it as success and keep syncing the rest.
     if (res.status === 404) {
       console.log(`deleted ${stale.type} ${stale.name} (already gone)`);
-      return;
+      return true;
     }
     console.error(`sync-dns: failed to delete ${stale.type} ${stale.name}: ${formatApiError(res.status, detail)}`);
-    process.exit(1);
+    return false;
   }
   console.log(`deleted ${stale.type} ${stale.name}`);
+  return true;
 }
 
 async function createRecord(change) {
@@ -114,7 +116,7 @@ async function createRecord(change) {
 // regardless.
 async function rollback(deleted) {
   if (deleted.length === 0) return;
-  console.error(`sync-dns: create failed — rolling back ${deleted.length} deleted record(s)`);
+  console.error(`sync-dns: sync failed — rolling back ${deleted.length} deleted record(s)`);
   for (const stale of deleted) {
     const change = { type: stale.type, name: stale.name, value: stale.value, priority: stale.mxPriority };
     const ok = await createRecord(change).catch(() => false);
@@ -127,6 +129,10 @@ async function rollback(deleted) {
 // so a mid-sync API failure can't take out records that weren't being
 // changed. If a create does fail, the just-deleted stale records are
 // restored as a best-effort rollback to the pre-sync state.
+//
+// Returns false when the name could not be synced. A rejected delete stops
+// the name there: creating the new records anyway would leave the stale
+// ones live alongside them.
 async function reconcile(name, desired) {
   const existing = await existingFor(name);
   const { unchanged, remove, create } = reconcileDnsRecords(existing, desired);
@@ -137,7 +143,10 @@ async function reconcile(name, desired) {
 
   const deleted = [];
   for (const stale of remove) {
-    await deleteRecord(stale);
+    if (!(await deleteRecord(stale))) {
+      await rollback(deleted);
+      return false;
+    }
     deleted.push(stale);
   }
 
@@ -145,21 +154,18 @@ async function reconcile(name, desired) {
     const ok = await createRecord(change);
     if (!ok) {
       await rollback(deleted);
-      process.exit(1);
+      return false;
     }
   }
 
   if (remove.length === 0 && create.length === 0 && unchanged.length > 0) {
     console.log(`${name}: already in sync`);
   }
+  return true;
 }
 
-for (const file of changed) {
-  const match = /^domains\/([a-z0-9-]+)\.json$/.exec(file);
-  if (!match) continue;
-
-  const name = match[1];
-
+async function syncName(name) {
+  const file = `domains/${name}.json`;
   let record;
   try {
     record = JSON.parse(await readFile(file, 'utf8'));
@@ -168,16 +174,23 @@ for (const file of changed) {
     // The record file is gone (owner released the name, or a maintainer removed
     // it). Without this, readFile throws and the workflow crashes here, leaving
     // the ex-owner's DNS live indefinitely.
-    for (const stale of await existingFor(name)) await deleteRecord(stale);
-    console.log(`${name}: record removed, DNS cleared`);
-    continue;
+    let ok = true;
+    for (const stale of await existingFor(name)) ok = (await deleteRecord(stale)) && ok;
+    if (ok) console.log(`${name}: record removed, DNS cleared`);
+    return ok;
   }
 
   const desired = planDnsChanges(record);
-  await reconcile(name, desired);
+  if (!(await reconcile(name, desired))) return false;
 
   if (desired.length === 0) console.log(`${name}: no records, wildcard serves the profile card`);
+  return true;
 }
+
+const names = changed
+  .map((file) => /^domains\/([a-z0-9-]+)\.json$/.exec(file)?.[1])
+  .filter(Boolean);
+const failed = await syncEach(names, syncName);
 
 // Zone-level verification mirror (see lib/dns.js for why planDnsChanges can
 // never publish this host). The desired set is the union across ALL claims,
@@ -211,13 +224,15 @@ const { create: wanted, remove: toUnmirror } = reconcileZoneVerification(
 );
 const { create: toMirror, deferred } = fitZoneVerification(wanted, toUnmirror, existingVerification);
 
+// A failed mirror write is counted, not fatal: the next sync retries it, and
+// exiting here would skip the cap check below and with it the prune.
+let mirrorFailures = 0;
 for (const stale of toUnmirror) {
-  await deleteRecord(stale);
+  if (!(await deleteRecord(stale))) mirrorFailures++;
 }
 
 for (const change of toMirror) {
-  const ok = await createRecord(change);
-  if (!ok) process.exit(1);
+  if (!(await createRecord(change))) mirrorFailures++;
 }
 
 if (deferred.length > 0) {
@@ -230,4 +245,14 @@ if (deferred.length > 0) {
   if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, 'over_cap=true\n');
 } else if (toMirror.length === 0 && toUnmirror.length === 0) {
   console.log('zone verification: in sync');
+}
+
+// Still red, so a broken name gets noticed, but only after every other name
+// and the mirror have been applied, and the log says which record to fix.
+if (failed.length > 0 || mirrorFailures > 0) {
+  const parts = [];
+  if (failed.length > 0) parts.push(`could not sync ${failed.join(', ')} (see the errors above; the record likely holds a value Vercel rejects)`);
+  if (mirrorFailures > 0) parts.push(`${mirrorFailures} zone mirror write(s) failed`);
+  console.log(`::error::sync-dns: ${parts.join('; ')}`);
+  process.exit(1);
 }
