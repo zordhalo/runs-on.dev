@@ -1,16 +1,10 @@
 {
   "name": "it",
   "owner": {
-    "github": "anki1kr"
+    "github": "ksweb00"
   },
-  "claimedAt": "2026-09-18T06:50:38.538Z",
+  "claimedAt": "2026-09-15T08:15:38.705Z",
   "records": {
-    "URL": "https://dsatracker.tech"
-  },
-  "country": "IN",
-  "subdomains": {
-    "dsa": {
-      "CNAME": "dsatracker.tech"
-    }
+    "URL": "https://expoz.onrender.com"
   }
 }
