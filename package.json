@@ -13,11 +13,16 @@
     "test": "node --test \"test/**/*.test.mjs\""
   },
   "dependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.8.0",
+    "canvas-confetti": "^1.9.4",
+    "class-variance-authority": "^0.7.1",
+    "cn": "^0.3.0",
     "gray-matter": "^4.0.3",
     "marked": "^18.0.13",
     "next": "^16.3.2",
+    "radix-ui": "^1.6.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

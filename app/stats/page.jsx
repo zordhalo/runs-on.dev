@@ -7,6 +7,7 @@ import { geoPlacement } from '../../lib/geo-placement.js';
 import { CLAIM_GEO } from '../components/claim-geo.js';
 import countryCentroids from '../../scripts/country-centroids.json';
 import { GrowthChart } from './growth-chart.jsx';
+import ConfettiStat from './confetti-stat.jsx';
 import ClaimMap from '../components/claim-map.jsx';
 
 export const metadata = {
@@ -76,7 +77,7 @@ export default function Stats() {
 
       <Section title="Where things stand">
         <div className="grid grid-cols-1 gap-12 sm:gap-16 sm:grid-cols-3">
-          <Stat label="Names claimed" value={stats.total} />
+          <ConfettiStat label="Names claimed" value={stats.total} />
           <Stat label="People" value={stats.owners} />
           <Stat label="Claimed this week" value={stats.claimedThisWeek} />
         </div>
