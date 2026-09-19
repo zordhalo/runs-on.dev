@@ -1,0 +1,23 @@
+{
+  "name": "steam",
+  "owner": {
+    "github": "kiannnxz-web"
+  },
+  "claimedAt": "2026-09-15T14:15:43.946Z",
+  "records": {
+    "TXT": [
+      "v=spf1 include:spf.improvmx.com ~all"
+    ],
+    "MX": [
+      {
+        "priority": 10,
+        "value": "mx1.improvmx.com"
+      },
+      {
+        "priority": 20,
+        "value": "mx2.improvmx.com"
+      }
+    ]
+  },
+  "country": "PH"
+}

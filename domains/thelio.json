@@ -1,0 +1,19 @@
+{
+  "name": "thelio",
+  "owner": {
+    "github": "Examera1005"
+  },
+  "claimedAt": "2026-09-17T17:50:48.707Z",
+  "records": {
+    "CNAME": "909f14616b329d57.vercel-dns-017.com"
+  },
+  "country": "CH",
+  "subdomains": {
+    "thelio": {
+      "CNAME": "909f14616b329d57.vercel-dns-017.com"
+    }
+  },
+  "profile": {
+    "name": "Examera1005"
+  }
+}

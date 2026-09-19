@@ -1,0 +1,16 @@
+{
+  "name": "abhishekupadhyay",
+  "owner": {
+    "github": "abhiupadhyay-Dev"
+  },
+  "claimedAt": "2026-09-17T11:18:24.516Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "abhishekupadhyay": {
+      "CNAME": "cb52da2b37c9d123.vercel-dns-017.com"
+    }
+  }
+}

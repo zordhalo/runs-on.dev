@@ -1,0 +1,22 @@
+{
+  "name": "jagath",
+  "owner": {
+    "github": "jagath-sajjan"
+  },
+  "claimedAt": "2026-09-17T19:42:10.764Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=jagath.runs-on.dev,a91806e4801286b57329"
+      ]
+    }
+  },
+  "profile": {
+    "name": "jagath-sajjan",
+    "bio": "hello"
+  }
+}

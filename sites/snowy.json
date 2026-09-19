@@ -1,0 +1,26 @@
+{
+  "name": "snowy",
+  "owner": "Gauravzz12",
+  "active": "7c4b0b71",
+  "deployments": [
+    {
+      "id": "e29def9b",
+      "at": "2026-09-17T18:07:28.819Z",
+      "files": 17,
+      "bytes": 5007698
+    },
+    {
+      "id": "cbe5cc6f",
+      "at": "2026-09-17T18:11:14.840Z",
+      "files": 17,
+      "bytes": 5016732
+    },
+    {
+      "id": "7c4b0b71",
+      "at": "2026-09-17T18:32:07.251Z",
+      "files": 17,
+      "bytes": 5021946
+    }
+  ],
+  "updatedAt": "2026-09-17T18:32:07.251Z"
+}

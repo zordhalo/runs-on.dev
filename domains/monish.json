@@ -1,0 +1,21 @@
+{
+  "name": "monish",
+  "owner": {
+    "github": "Monish25"
+  },
+  "claimedAt": "2026-09-17T14:52:19.141Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=monish.runs-on.dev,4e73e19a8cab4bea7b15"
+      ]
+    },
+    "monish": {
+      "CNAME": "62cbe4e8b6c79f10.vercel-dns-017.com"
+    }
+  }
+}

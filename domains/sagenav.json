@@ -1,0 +1,23 @@
+{
+  "name": "sagenav",
+  "owner": {
+    "github": "Ankitesh999"
+  },
+  "claimedAt": "2026-09-19T02:20:23.473Z",
+  "records": {
+    "A": [
+      "76.76.21.21"
+    ]
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=sagenav.runs-on.dev,8cc1de63e8a49a4cbd43"
+      ]
+    },
+    "sagenav": {
+      "CNAME": "1cdb20f1949f4927.vercel-dns-017.com"
+    }
+  }
+}

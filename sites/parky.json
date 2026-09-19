@@ -1,0 +1,20 @@
+{
+  "name": "parky",
+  "owner": "parky-nss",
+  "active": "ad40dd71",
+  "deployments": [
+    {
+      "id": "ca811b8d",
+      "at": "2026-09-18T16:58:40.250Z",
+      "files": 10,
+      "bytes": 33392
+    },
+    {
+      "id": "ad40dd71",
+      "at": "2026-09-18T18:09:07.987Z",
+      "files": 10,
+      "bytes": 32995
+    }
+  ],
+  "updatedAt": "2026-09-18T18:09:07.987Z"
+}

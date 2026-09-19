@@ -126,7 +126,8 @@
           "minItems": 1,
           "items": {
             "type": "string",
-            "maxLength": 255
+            "maxLength": 255,
+            "pattern": "[^\\s{}]"
           }
         },
         "MX": {

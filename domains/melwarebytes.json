@@ -8,11 +8,6 @@
     "CNAME": "4ab10c27dcca6f51.vercel-dns-017.com"
   },
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=melwarebytes.runs-on.dev,e0d64ff7cdba67c011cf"
-      ]
-    },
     "if2qw3y4utzy": {
       "CNAME": "gv-cas6tslwl546at.dv.googlehosted.com"
     }

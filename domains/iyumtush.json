@@ -1,0 +1,16 @@
+{
+  "name": "iyumtush",
+  "owner": {
+    "github": "iyumtush"
+  },
+  "claimedAt": "2026-09-17T09:06:40.069Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "iyumtush": {
+      "CNAME": "21b036edc88ab545.vercel-dns-017.com"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "jakubhyziak",
+  "owner": {
+    "github": "Jacob22092"
+  },
+  "claimedAt": "2026-09-17T08:14:14.676Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "PL",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=runs-on.dev,49e4a42dd79d84c45076"
+      ]
+    }
+  }
+}

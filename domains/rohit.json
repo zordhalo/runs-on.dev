@@ -1,0 +1,18 @@
+{
+  "name": "rohit",
+  "owner": {
+    "github": "DangerRohit84"
+  },
+  "claimedAt": "2026-09-17T17:51:49.655Z",
+  "records": {
+    "CNAME": "aa731896f74f3b11.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "6e33d6cc312fdda7262f"
+      ]
+    }
+  }
+}

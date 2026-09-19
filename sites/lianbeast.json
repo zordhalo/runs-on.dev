@@ -1,0 +1,14 @@
+{
+  "name": "lianbeast",
+  "owner": "lianbeast",
+  "active": "3c8af088",
+  "deployments": [
+    {
+      "id": "3c8af088",
+      "at": "2026-09-17T17:15:50.318Z",
+      "files": 3,
+      "bytes": 362793
+    }
+  ],
+  "updatedAt": "2026-09-17T17:15:50.318Z"
+}

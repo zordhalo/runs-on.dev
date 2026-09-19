@@ -105,6 +105,10 @@ narrow window can, in the worst case, leave that account owning one name
 more than the limit. The record write itself stays safe either way, since
 GitHub's Contents API refuses to create a file that already exists.
 
+The only exception to this limit is the short list of maintainer project names
+in [POLICY.md](../POLICY.md#maintainer-project-names). It is checked by
+`withinNameLimit` in `lib/claim.js`, on both the site and the pull-request path.
+
 ## Reserved names
 
 `GET /api/check` and `POST /api/claim` both reject a name that

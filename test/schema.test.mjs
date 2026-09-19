@@ -462,3 +462,32 @@ test('the JSON Schema mirror declares profile with the same field set', () => {
   assert.deepEqual(Object.keys(def.properties).sort(), ['bio', 'links', 'name']);
   assert.equal(def.additionalProperties, false);
 });
+
+test('rejects TXT values Vercel reads as empty', () => {
+  // Vercel 400s a TXT value made only of braces and whitespace ("needs to be
+  // at least 1 printable character"). One slipped in when an owner pasted the
+  // docs' JSON example into /manage a line at a time, and every sync of the
+  // name failed on it.
+  for (const bad of ['', ' ', '{', '}', ' } ']) {
+    const out = validateRecord({ ...valid, subdomains: { _vercel: { TXT: ['ok', bad] } } });
+    assert.equal(out.ok, false, JSON.stringify(bad));
+    assert.ok(out.errors.some((e) => e.includes('TXT')));
+  }
+  assert.equal(validateRecord({ ...valid, records: { TXT: ['a{b'] } }).ok, true);
+});
+
+test('rejects a CNAME pointing at the claim\'s own hostname', () => {
+  const out = validateRecord({ ...valid, records: { CNAME: `${valid.name}.runs-on.dev` } });
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.some((e) => e.includes('itself')));
+});
+
+test('rejects a subdomain CNAME pointing at its own hostname', () => {
+  const out = validateRecord({ ...valid, records: {}, subdomains: { blog: { CNAME: `blog.${valid.name}.runs-on.dev` } } });
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.some((e) => e.includes('itself')));
+});
+
+test('a CNAME to another runs-on.dev name is still allowed', () => {
+  assert.equal(validateRecord({ ...valid, records: { CNAME: 'someone-else.runs-on.dev' } }).ok, true);
+});

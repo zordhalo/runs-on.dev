@@ -5,17 +5,15 @@
   },
   "claimedAt": "2026-09-15T03:01:33.242Z",
   "records": {
-    "CNAME": "cname.vercel-dns.com"
+    "CNAME": "467d1488018f7a21.vercel-dns-017.com"
   },
   "country": "IN",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=officialyyraj.runs-on.dev,f3d879514c65d8ad4048"
-      ]
-    },
     "officialyyraj": {
       "CNAME": "467d1488018f7a21.vercel-dns-017.com"
     }
+  },
+  "profile": {
+    "name": "officiallyraj"
   }
 }

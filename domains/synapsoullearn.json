@@ -9,12 +9,5 @@
   },
   "profile": {
     "name": "Shriansh Vikram Singh"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=synapsoullearn.runs-on.dev,cb779c699c2df376b0e6"
-      ]
-    }
   }
 }

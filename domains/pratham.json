@@ -7,13 +7,6 @@
   "records": {
     "CNAME": "931d45a248dec622.vercel-dns-017.com"
   },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=pratham.runs-on.dev,797ce62aae78dca5e457"
-      ]
-    }
-  },
   "profile": {
     "name": "Pratham Solanki",
     "bio": "Just a chill guy"

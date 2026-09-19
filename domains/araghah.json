@@ -1,0 +1,21 @@
+{
+  "name": "araghah",
+  "owner": {
+    "github": "AraGhah"
+  },
+  "claimedAt": "2026-09-17T17:42:13.280Z",
+  "records": {
+    "CNAME": "5339271d94e588f3.vercel-dns-017.com"
+  },
+  "country": "CA",
+  "profile": {
+    "name": "Ara Ghahramanyan",
+    "bio": "Computer Science student and software developer building full-stack, cloud and game development projects.",
+    "links": [
+      {
+        "label": "My portfolio",
+        "url": "https://ara-hall-of-projects.vercel.app"
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "nymmo",
+  "owner": {
+    "github": "MaleakhiNymmo"
+  },
+  "claimedAt": "2026-09-18T13:26:02.634Z",
+  "records": {
+    "A": [
+      "76.76.21.21"
+    ]
+  },
+  "country": "ID",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=nymmo.runs-on.dev,b1bda5a00a13facf3bba"
+      ]
+    }
+  }
+}

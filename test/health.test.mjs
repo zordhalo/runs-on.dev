@@ -263,3 +263,33 @@ test('an issue whose title does not name a claim is ignored by the dedupe', () =
   const issues = [{ number: 1, title: 'Add a dark mode toggle' }];
   assert.deepEqual(planIssueOpens(rows({ amanworks: 'stuck' }), issues).map((x) => x.name), ['amanworks']);
 });
+
+test('a challenge for the apex is diagnosed as the wrong challenge, not awaiting verification', () => {
+  const claim = {
+    name: 'jagath',
+    records: { CNAME: 'abc.vercel-dns-017.com' },
+    subdomains: { _vercel: { TXT: ['vc-domain-verify=runs-on.dev,ecc4e84313a4d739b055'] } },
+  };
+  assert.equal(diagnoseStuck(claim), 'vercel-wrong-challenge');
+  const body = stuckIssueBody('vercel-wrong-challenge', 'jagath', claim);
+  assert.ok(body.includes('vc-domain-verify=runs-on.dev,ecc4e84313a4d739b055'));
+  assert.ok(body.includes('vc-domain-verify=jagath.runs-on.dev,'));
+});
+
+test('a challenge for a nested subdomain is the wrong challenge for the claim itself', () => {
+  const claim = {
+    name: 'safal',
+    records: { CNAME: 'abc.vercel-dns-017.com' },
+    subdomains: { _vercel: { TXT: ['vc-domain-verify=blog.safal.runs-on.dev,4325'] } },
+  };
+  assert.equal(diagnoseStuck(claim), 'vercel-wrong-challenge');
+});
+
+test('the claim\'s own challenge still reads as awaiting verification', () => {
+  const claim = {
+    name: 'saiom',
+    records: { CNAME: 'cname.vercel-dns.com' },
+    subdomains: { _vercel: { TXT: ['vc-domain-verify=saiom.runs-on.dev,bc31'] } },
+  };
+  assert.equal(diagnoseStuck(claim), 'vercel-awaiting-verification');
+});

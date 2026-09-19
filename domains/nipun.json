@@ -1,0 +1,20 @@
+{
+  "name": "nipun",
+  "owner": {
+    "github": "NeRd-StEyN"
+  },
+  "claimedAt": "2026-09-17T15:36:51.157Z",
+  "records": {
+    "A": [
+      "127.0.0.1"
+    ]
+  },
+  "country": "IN",
+  "subdomains": {
+    "atsebol": {
+      "A": [
+        "127.0.0.1"
+      ]
+    }
+  }
+}

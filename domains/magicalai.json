@@ -1,0 +1,16 @@
+{
+  "name": "magicalai",
+  "owner": {
+    "github": "justpriamextra-cyber"
+  },
+  "claimedAt": "2026-09-18T05:01:19.970Z",
+  "records": {
+    "CNAME": "0ab103e426af97ab.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "magicalai": {
+      "CNAME": "0ab103e426af97ab.vercel-dns-017.com"
+    }
+  }
+}

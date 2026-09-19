@@ -28,6 +28,17 @@ A maintainer removes it by deleting its `domains/<name>.json` file in a
 pull request; owners can release a name the same way. See
 [README.md](./README.md#what-ci-enforces) for the mechanics.
 
+## Maintainer project names
+
+Every account holds one name. The one exception is a short, public list of
+names the registry maintainer holds for their own open-source projects, on
+top of their personal name. The list lives in `MAINTAINER_PROJECT_NAMES` in
+[`lib/claim.js`](./lib/claim.js). Each entry covers one account and one
+name, so it can't be used to take any other name. Current entries:
+
+- `clatterbox` (@zordhalo): [Clatterbox](https://github.com/zordhalo/clatterbox),
+  an open-source keyboard-sound app.
+
 ## Who is responsible
 
 Advance Labs is the registrant of `runs-on.dev` and answers for what every

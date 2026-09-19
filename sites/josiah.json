@@ -1,0 +1,20 @@
+{
+  "name": "josiah",
+  "owner": "Jstarzz",
+  "active": "10f4e743",
+  "deployments": [
+    {
+      "id": "51a944ec",
+      "at": "2026-09-18T17:00:18.063Z",
+      "files": 1,
+      "bytes": 5162
+    },
+    {
+      "id": "10f4e743",
+      "at": "2026-09-18T17:04:23.920Z",
+      "files": 1,
+      "bytes": 5162
+    }
+  ],
+  "updatedAt": "2026-09-18T17:04:23.920Z"
+}

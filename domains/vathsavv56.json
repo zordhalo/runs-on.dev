@@ -16,12 +16,5 @@
         "url": "https://vathsavv56.vercel.app/"
       }
     ]
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=vathsavv56.runs-on.dev,692aa27bdac21c424f14"
-      ]
-    }
   }
 }

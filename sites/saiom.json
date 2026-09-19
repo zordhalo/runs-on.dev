@@ -1,0 +1,14 @@
+{
+  "name": "saiom",
+  "owner": "saiompatro",
+  "active": "88afd598",
+  "deployments": [
+    {
+      "id": "88afd598",
+      "at": "2026-09-17T11:01:23.629Z",
+      "files": 9,
+      "bytes": 350801
+    }
+  ],
+  "updatedAt": "2026-09-17T11:01:23.629Z"
+}

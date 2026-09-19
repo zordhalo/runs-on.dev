@@ -1,0 +1,16 @@
+{
+  "name": "amhub",
+  "owner": {
+    "github": "gus-888"
+  },
+  "claimedAt": "2026-09-17T09:59:03.369Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "BR",
+  "subdomains": {
+    "amhub": {
+      "CNAME": "91eef7cc7f01d271.vercel-dns-017.com"
+    }
+  }
+}

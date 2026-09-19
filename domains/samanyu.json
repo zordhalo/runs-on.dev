@@ -6,12 +6,5 @@
   "claimedAt": "2026-09-01T12:43:25.957Z",
   "records": {
     "CNAME": "811f6306c90fb639.vercel-dns-017.com"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=samanyu.runs-on.dev,1fe71db0b88c22164485"
-      ]
-    }
   }
 }

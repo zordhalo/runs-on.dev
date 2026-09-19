@@ -1,0 +1,16 @@
+{
+  "name": "terraliti",
+  "owner": {
+    "github": "dranimalis"
+  },
+  "claimedAt": "2026-09-18T07:02:35.892Z",
+  "records": {
+    "CNAME": "terraliti.onrender.com"
+  },
+  "country": "ID",
+  "subdomains": {
+    "terraliti": {
+      "CNAME": "terraliti.onrender.com"
+    }
+  }
+}

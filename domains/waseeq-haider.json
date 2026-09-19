@@ -1,0 +1,19 @@
+{
+  "name": "waseeq-haider",
+  "owner": {
+    "github": "waseeq-haider"
+  },
+  "claimedAt": "2026-09-17T18:54:57.124Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "PK",
+  "subdomains": {
+    "waseeq-haider": {
+      "CNAME": "673bc8863b0bc81e.vercel-dns-017.com"
+    }
+  },
+  "profile": {
+    "name": "Waseeq Haider"
+  }
+}
