@@ -66,10 +66,30 @@ export const metadata = {
   },
 };
 
+// Mobile Chrome and Safari tint the address bar / browser UI from these.
+// The site is dark-locked, so every entry is the same obsidian #101010.
+// They are hand-written in the head (not a viewport export) to control
+// ORDER: the plain media-less tag leads, which is the shape GitHub ships.
+// An engine that only reads the leading theme-color, or that mishandles
+// media-qualified ones and stops scanning, still lands on the right color;
+// spec-conforming engines match it immediately in light AND dark mode.
+// The media pair trails as belt-and-braces for engines that prefer a
+// scheme-matched variant over a bare one.
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${satoshi.variable} ${bitcount.variable} ${mono.variable}`}>
-      <body>
+    // suppressHydrationWarning: browser extensions (dark-mode tools, emulator
+    // bridges) rewrite html/body attributes before React hydrates, which
+    // raises a mismatch warning on every page load for those visitors. The
+    // markup itself is deterministic; this silences only that attribute-level
+    // noise on the two elements extensions touch, nothing deeper.
+    <html lang="en" suppressHydrationWarning style={{ backgroundColor: '#101010' }} className={`${satoshi.variable} ${bitcount.variable} ${mono.variable}`}>
+      <head>
+        <meta name="theme-color" content="#101010" />
+        <meta name="theme-color" content="#101010" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)" />
+        <meta name="color-scheme" content="dark" />
+      </head>
+      <body suppressHydrationWarning>
         <Nav />
         {children}
         <Footer />

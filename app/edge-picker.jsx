@@ -100,6 +100,22 @@ const ROUTES = [
 
 const ICON_SIZE = 18;
 
+// The dock slot for a pathname: the exact route, else the closest parent
+// section (/docs/quickstart and /docs/guides/vercel both highlight Docs,
+// /blog/x highlights Blog), else Home for pages outside every section.
+function routeIndexFor(pathname) {
+  const exact = ROUTES.findIndex((r) => r.path === pathname);
+  if (exact >= 0) return exact;
+  let best = -1;
+  for (let i = 0; i < ROUTES.length; i++) {
+    const p = ROUTES[i].path;
+    if (p !== '/' && pathname?.startsWith(`${p}/`) && (best < 0 || p.length > ROUTES[best].path.length)) {
+      best = i;
+    }
+  }
+  return Math.max(0, best);
+}
+
 // One scalar (the resting position); localStorage is one line and has the
 // same failure modes as any async store would.
 const POS_KEY = 'edge-picker:scrollPos';
@@ -128,7 +144,7 @@ export default function EdgePicker() {
   const items = ROUTES;
   const itemCount = items.length;
 
-  const initialIndex = Math.max(0, items.findIndex((r) => r.path === pathname));
+  const initialIndex = routeIndexFor(pathname);
 
   const [scrollPos, setScrollPos] = useState(initialIndex);
   const [isDragging, setIsDragging] = useState(false);
@@ -435,8 +451,7 @@ export default function EdgePicker() {
 
   // Pathname sync
   useEffect(() => {
-    const i = ROUTES.findIndex((r) => r.path === pathname);
-    if (i < 0) return;
+    const i = routeIndexFor(pathname);
     const currentNorm = ((Math.round(scrollPosRef.current) % itemCount) + itemCount) % itemCount;
     if (i === currentNorm) return;
     const current = scrollPosRef.current;
@@ -463,14 +478,20 @@ export default function EdgePicker() {
     return () => clearInterval(interval);
   }, [router]);
 
-  // Resting position persistence
+  // Resting position persistence. The saved slot is only resumed when it
+  // points at the page actually being loaded; applying it unconditionally
+  // meant a manual navigation (typed URL, refresh, content link) landed on
+  // a page whose dock pill still highlighted wherever the reel last rested.
   useEffect(() => {
     const saved = loadSavedPos();
-    if (saved !== null && saved >= 0 && saved < itemCount) {
-      setScrollPos(saved);
-      scrollPosRef.current = saved;
-      lastDetentIndex.current = Math.round(saved);
-    }
+    if (saved === null || saved < 0 || saved >= itemCount) return;
+    const savedNorm = ((Math.round(saved) % itemCount) + itemCount) % itemCount;
+    if (savedNorm !== routeIndexFor(pathname)) return;
+    setScrollPos(saved);
+    scrollPosRef.current = saved;
+    lastDetentIndex.current = Math.round(saved);
+    // pathname is read only for this mount-time reconciliation
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemCount]);
 
   useEffect(() => {
