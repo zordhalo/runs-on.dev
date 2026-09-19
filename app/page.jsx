@@ -5,7 +5,10 @@ import JsonLd from './components/JsonLd.jsx';
 import { Section, Quote } from './components/Section.jsx';
 import { Divider, StatusBadge } from './components/ui.jsx';
 import HomeMap from './components/home-map.jsx';
-import { CLAIM_GEO, GEO_RESOLVED, GEO_TOTAL } from './components/claim-geo.js';
+import { CLAIM_GEO } from './components/claim-geo.js';
+import { geoPlacement } from '../lib/geo-placement.js';
+import { readRegistry } from '../lib/registry-files.js';
+import countryCentroids from '../scripts/country-centroids.json';
 import { readSession } from '../lib/session.js';
 import { getOwnerIndex } from '../lib/owners.js';
 import { getRecord } from '../lib/registry.js';
@@ -78,10 +81,22 @@ async function ownedName(session) {
   return { name, record };
 }
 
+// Map placement recounted against the live registry. The page renders
+// dynamically (session state is in the flow), but these numbers only change
+// when the registry does, i.e. on deploy, so the disk read is memoised per
+// lambda instance rather than paid per request.
+let registryMemo = null;
+function registry() {
+  if (!registryMemo) registryMemo = readRegistry();
+  return registryMemo;
+}
+
 export default async function Home() {
   const raw = (await cookies()).get('session')?.value;
   const session = raw ? readSession(raw, process.env.SESSION_SECRET) : null;
   const owned = await ownedName(session);
+  const registryList = registry();
+  const placement = geoPlacement(registryList, CLAIM_GEO, countryCentroids);
 
   return (
     <main>
@@ -95,8 +110,8 @@ export default async function Home() {
         <StatusBadge tone="live" pulse>Free forever · live in seconds</StatusBadge>
 
         <p className="mt-5 font-(family-name:--font-mono) text-xs tracking-[0.04em] text-(--color-muted)">
-          {GEO_TOTAL} names claimed · {GEO_RESOLVED} on the public claim map · one per GitHub
-          account · open source
+          {registryList.length} names claimed · {placement.resolved} on the public claim map ·
+          one per GitHub account · open source
         </p>
 
         <div className="mt-8 flex justify-center">
@@ -112,7 +127,12 @@ export default async function Home() {
           world is a static image (keeps ~1600 elements out of the HTML);
           selecting a continent dims it and spotlights that continent
           client-side. The split-flap frame keeps the easter egg alive. */}
-      <HomeMap heading />
+      <HomeMap
+        heading
+        points={placement.points}
+        resolved={placement.resolved}
+        total={placement.total}
+      />
 
       <div className="mx-auto max-w-[1200px] px-6">
         <Section title="What this is">

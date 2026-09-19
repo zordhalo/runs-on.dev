@@ -113,10 +113,10 @@ export function DotMap({ points, filter, className = '' }) {
 
 // Continent-wise claim counts beneath the map: cells in a wrapping,
 // centre-justified row (a short last row stacks centred, not left), one per
-// continent plus the honest 404. Each cell carries the count set large at
-// weight 400, a mono caption, and a thin blue bar scaled against the largest
-// continent; the 404 cell is muted with no bar. Clicking a continent card
-// spotlights it on the map above (click again to clear).
+// continent plus the honest unplaced count. Each cell carries the count set
+// large at weight 400, a mono caption, and a thin blue bar scaled against the
+// largest continent; the unplaced cell is muted with no bar. Clicking a
+// continent card spotlights it on the map above (click again to clear).
 export function ContinentChart({ points, total, heading = false, selected = null, onSelect, className = '' }) {
   const rows = Object.values(points)
     .reduce((acc, point) => {
@@ -142,7 +142,7 @@ export function ContinentChart({ points, total, heading = false, selected = null
             Where the names are
           </h2>
           <p className="meta mt-2 normal-case">
-            {points.length} of {total} owners resolved from public GitHub profiles · counts approximate
+            {points.length} of {total} owners resolved from claim-time countries and public GitHub profiles · counts approximate
           </p>
         </div>
       )}
@@ -187,7 +187,7 @@ export function ContinentChart({ points, total, heading = false, selected = null
             <div className="text-[34px] leading-[1.03] font-normal tracking-[-0.005em] text-(--color-muted)">
               {unresolved}
             </div>
-            <div className="meta mt-2">404 not found</div>
+            <div className="meta mt-2">No location</div>
           </div>
         )}
       </div>
