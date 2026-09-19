@@ -77,14 +77,19 @@ export const metadata = {
 // scheme-matched variant over a bare one.
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" style={{ backgroundColor: '#101010' }} className={`${satoshi.variable} ${bitcount.variable} ${mono.variable}`}>
+    // suppressHydrationWarning: browser extensions (dark-mode tools, emulator
+    // bridges) rewrite html/body attributes before React hydrates, which
+    // raises a mismatch warning on every page load for those visitors. The
+    // markup itself is deterministic; this silences only that attribute-level
+    // noise on the two elements extensions touch, nothing deeper.
+    <html lang="en" suppressHydrationWarning style={{ backgroundColor: '#101010' }} className={`${satoshi.variable} ${bitcount.variable} ${mono.variable}`}>
       <head>
         <meta name="theme-color" content="#101010" />
         <meta name="theme-color" content="#101010" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)" />
         <meta name="color-scheme" content="dark" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <Nav />
         {children}
         <Footer />
