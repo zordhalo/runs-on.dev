@@ -1,0 +1,20 @@
+{
+  "name": "linux",
+  "owner": {
+    "github": "shahul-h007"
+  },
+  "claimedAt": "2026-09-20T15:24:48.538Z",
+  "records": {
+    "CNAME": "shahul-h007.github.io"
+  },
+  "country": "IN",
+  "profile": {
+    "name": "Shahul",
+    "links": [
+      {
+        "label": "Github",
+        "url": "https://github.com/shahul-h007/"
+      }
+    ]
+  }
+}

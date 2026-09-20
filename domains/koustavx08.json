@@ -8,11 +8,6 @@
     "CNAME": "cname.vercel-dns.com"
   },
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=koustavx08.runs-on.dev,b25f21cb9322e5e29757"
-      ]
-    },
     "koustavx08": {
       "CNAME": "78706058012fab5b.vercel-dns-017.com"
     }

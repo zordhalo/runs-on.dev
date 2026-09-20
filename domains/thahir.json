@@ -9,11 +9,6 @@
   },
   "country": "IN",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=thahir.runs-on.dev,72c168a99a76f8e36731"
-      ]
-    },
     "thahir": {
       "CNAME": "08fb49cd068f988a.vercel-dns-017.com"
     }

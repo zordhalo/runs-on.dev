@@ -9,8 +9,10 @@
   },
   "country": "IN",
   "subdomains": {
-    "inward": {
-      "CNAME": "85ae0c8370b9f017.vercel-dns-017.com"
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=inward.runs-on.dev,95d0ce1d4c08282b515b"
+      ]
     }
   }
 }

@@ -11,12 +11,5 @@
   "profile": {
     "name": "Anandude",
     "bio": "Passionately curious"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=ananducv.runs-on.dev,212905fe90cd575ade96"
-      ]
-    }
   }
 }

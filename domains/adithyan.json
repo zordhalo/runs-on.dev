@@ -4,6 +4,11 @@
     "github": "adithyan-sajan"
   },
   "claimedAt": "2026-09-17T11:02:44.546Z",
-  "records": {},
-  "country": "NL"
+  "records": {
+    "CNAME": "portfolio-2ll.pages.dev"
+  },
+  "country": "NL",
+  "profile": {
+    "name": "portfolio-2ll.pages.dev"
+  }
 }

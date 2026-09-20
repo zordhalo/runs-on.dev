@@ -1,0 +1,14 @@
+{
+  "name": "fluentai",
+  "owner": "mvvarmora",
+  "active": "4a55dff3",
+  "deployments": [
+    {
+      "id": "4a55dff3",
+      "at": "2026-09-20T14:50:43.572Z",
+      "files": 64,
+      "bytes": 4265515
+    }
+  ],
+  "updatedAt": "2026-09-20T14:50:43.572Z"
+}

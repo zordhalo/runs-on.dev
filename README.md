@@ -146,6 +146,21 @@ coexist with anything else: [docs/records.md](./docs/records.md).
 
 </details>
 
+## Built on runs-on.dev
+
+**[Overlap](https://overlap.runs-on.dev)** — finds meeting times for people
+spread across time zones. Share one link, everyone sets their hours once, and
+the page shows when you can all meet, with sleep treated as a hard constraint
+rather than as free time. Open source, AGPL-3.0:
+[zordhalo/overlap](https://github.com/zordhalo/overlap). Write-up:
+[the first thing built on runs-on.dev](/blog/2026-09-20-overlap-scheduling-across-time-zones).
+
+It runs on a claimed name like any other, which is the point: `domains/overlap.json`
+is an ordinary record, and the name resolved with a valid certificate before any
+DNS was configured for it.
+
+If you build something on a name from here, open a PR adding it to this list.
+
 ## How it works
 
 A single wildcard `*.runs-on.dev` DNS record points every possible

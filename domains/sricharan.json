@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "73d1c92b2b7fb386.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=sricharan.runs-on.dev,d12b6d8790fc639d8471"
-      ]
-    }
-  }
+  "country": "IN"
 }

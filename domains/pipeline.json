@@ -4,6 +4,10 @@
     "github": "l55slr"
   },
   "claimedAt": "2026-09-17T13:05:50.433Z",
-  "records": {},
+  "records": {
+    "TXT": [
+      "vc-domain-verify=runs-on.dev,64d372ee109f386ab008"
+    ]
+  },
   "country": "SY"
 }
