@@ -4,6 +4,15 @@ import { useState } from 'react';
 import { ContinentChart, continentOf } from './ui.jsx';
 import { DOTMAP } from './dotmap-data.js';
 import FlapFrame from './flap-frame.jsx';
+import {
+  PITCH,
+  DOT_R,
+  HALO_R,
+  HALO_OPACITY,
+  CORE_R,
+  CORE_OPACITY,
+  bloomCenter,
+} from './claim-bloom.js';
 
 // The home page's claim map: the base world is a static image (keeps ~1600
 // map elements out of the HTML), and the continent cards drive a client-side
@@ -14,7 +23,6 @@ import FlapFrame from './flap-frame.jsx';
 // Points, resolved, and total are recounted against the live registry by the
 // page that renders this (see lib/geo-placement.js), so the cards and the
 // unplaced count always sum to the current owner total.
-const PITCH = 10;
 const COLS = DOTMAP.cols;
 
 function cellContinent(c, r) {
@@ -59,7 +67,7 @@ export default function HomeMap({ heading = false, points = {}, resolved = 0, to
                   const dots = [];
                   for (let c = 0; c < COLS; c++) {
                     if (line[c] === '1' && cellContinent(c, r) === selected) {
-                      dots.push(<circle key={`${c}-${r}`} cx={c * PITCH + PITCH / 2} cy={r * PITCH + PITCH / 2} r={2.2} />);
+                      dots.push(<circle key={`${c}-${r}`} cx={c * PITCH + PITCH / 2} cy={r * PITCH + PITCH / 2} r={DOT_R} />);
                     }
                   }
                   return dots.length ? <g key={r}>{dots}</g> : null;
@@ -67,12 +75,11 @@ export default function HomeMap({ heading = false, points = {}, resolved = 0, to
               </g>
               <g fill="#4d7cff">
                 {overlay.map(([lat, lon], idx) => {
-                  const c = Math.min(COLS - 1, Math.max(0, Math.floor(((lon + 180) / 360) * COLS)));
-                  const r = Math.min(DOTMAP.rows.length - 1, Math.max(0, Math.floor(((84 - lat) / 140) * DOTMAP.rows.length)));
+                  const { x, y } = bloomCenter(lat, lon, COLS, DOTMAP.rows.length);
                   return (
                     <g key={idx}>
-                      <circle cx={c * PITCH + PITCH / 2} cy={r * PITCH + PITCH / 2} r={8 + 1.3} fillOpacity="0.22" />
-                      <circle cx={c * PITCH + PITCH / 2} cy={r * PITCH + PITCH / 2} r={3.2} fillOpacity="0.9" />
+                      <circle cx={x} cy={y} r={HALO_R} fillOpacity={HALO_OPACITY} />
+                      <circle cx={x} cy={y} r={CORE_R} fillOpacity={CORE_OPACITY} />
                     </g>
                   );
                 })}

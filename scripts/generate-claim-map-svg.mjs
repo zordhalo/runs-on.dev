@@ -13,9 +13,16 @@ import { CLAIM_GEO } from '../app/components/claim-geo.js';
 import countryCentroids from './country-centroids.json' with { type: 'json' };
 import { readRegistry } from '../lib/registry-files.js';
 import { geoPlacement } from '../lib/geo-placement.js';
+import {
+  PITCH,
+  DOT_R,
+  HALO_R,
+  HALO_OPACITY,
+  CORE_R,
+  CORE_OPACITY,
+  bloomCenter,
+} from '../app/components/claim-bloom.js';
 
-const PITCH = 10;
-const DOT_R = 2.2;
 const COLS = DOTMAP.cols;
 const NROWS = DOTMAP.rows.length;
 
@@ -37,17 +44,15 @@ DOTMAP.rows.forEach((line, r) => {
 
 let heat = '';
 // Per-claim blooms, geometrically identical to the selection overlay in
-// app/components/home-map.jsx: a wide faint halo plus a bright core at each
-// claim coordinate. The earlier version bucketed claims into grid cells and
+// app/components/home-map.jsx: both read their radii and opacities from
+// app/components/claim-bloom.js, so the resting map and the selected map
+// cannot disagree. The earlier version bucketed claims into grid cells and
 // drew one bloom per cell, which read noticeably sparser than the overlay
 // and made the resting map look like it was hiding the real heat.
 for (const [lat, lon] of Object.values(points)) {
-  const c = Math.min(COLS - 1, Math.max(0, Math.floor(((lon + 180) / 360) * COLS)));
-  const r = Math.min(NROWS - 1, Math.max(0, Math.floor(((84 - lat) / 140) * NROWS)));
-  const x = c * PITCH + PITCH / 2;
-  const y = r * PITCH + PITCH / 2;
-  heat += `<circle cx="${x}" cy="${y}" r="${DOT_R + 5}" fill-opacity="0.22"/>`;
-  heat += `<circle cx="${x}" cy="${y}" r="3.2" fill-opacity="0.9"/>`;
+  const { x, y } = bloomCenter(lat, lon, COLS, NROWS);
+  heat += `<circle cx="${x}" cy="${y}" r="${HALO_R}" fill-opacity="${HALO_OPACITY}"/>`;
+  heat += `<circle cx="${x}" cy="${y}" r="${CORE_R}" fill-opacity="${CORE_OPACITY}"/>`;
 }
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Dot-matrix world map; brighter dots mark where runs-on.dev names are claimed">
