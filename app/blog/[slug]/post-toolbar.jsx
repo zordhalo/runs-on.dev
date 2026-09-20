@@ -146,11 +146,15 @@ const GrokIcon = () => (
   </svg>
 );
 
+// Agents are handed the .md twin, not the HTML page: proxy.js answers an
+// Accept: text/markdown request on a post with the site-wide llms.txt index
+// rather than that post, so the extension form is the only URL that reliably
+// gets an agent the article itself.
 const AI_PROMPT = 'Read this article and give me a summary: ';
 const AI_AGENTS = [
-  { label: 'ChatGPT', Icon: ChatGPTIcon, build: (u) => `https://chatgpt.com/?q=${encodeURIComponent(AI_PROMPT + u)}` },
-  { label: 'Claude', Icon: ClaudeIcon, build: (u) => `https://claude.ai/new?q=${encodeURIComponent(AI_PROMPT + u)}` },
-  { label: 'Grok', Icon: GrokIcon, build: (u) => `https://grok.com/?q=${encodeURIComponent(AI_PROMPT + u)}` },
+  { label: 'ChatGPT', Icon: ChatGPTIcon, build: (u) => `https://chatgpt.com/?q=${encodeURIComponent(`${AI_PROMPT}${u}.md`)}` },
+  { label: 'Claude', Icon: ClaudeIcon, build: (u) => `https://claude.ai/new?q=${encodeURIComponent(`${AI_PROMPT}${u}.md`)}` },
+  { label: 'Grok', Icon: GrokIcon, build: (u) => `https://grok.com/?q=${encodeURIComponent(`${AI_PROMPT}${u}.md`)}` },
 ];
 
 const ghostButton =
@@ -173,6 +177,7 @@ export default function PostToolbar({ slug, title, description, markdown, headin
   // item key), so the check renders exactly where the action happened.
   const [copied, setCopied] = useState(null);
   const [doneItem, setDoneItem] = useState(null); // last finished copy-menu item
+  const [failed, setFailed] = useState(null); // copy that could not reach the clipboard
   const copyRef = useRef(null);
   const tocRef = useRef(null);
 
@@ -199,17 +204,26 @@ export default function PostToolbar({ slug, title, description, markdown, headin
     setTimeout(() => setCopied((c) => (c === key ? null : c)), 1600);
   };
 
+  // Both clipboard paths can fail (no secure context, permission denied, a
+  // browser that has neither). Say so rather than leaving the control silent
+  // and looking like the click never landed.
+  const flashFailed = (key) => {
+    setFailed(key);
+    setTimeout(() => setFailed((f) => (f === key ? null : f)), 2400);
+  };
+
   // Menu copy: wait for the clipboard write to succeed, show the tick beside
   // the item that ran, then close the menu once the success is visible.
   const copyFromMenu = async (key, text) => {
-    const ok = await copyText(text);
-    if (ok) {
-      setDoneItem(key);
-      setTimeout(() => {
-        setDoneItem(null);
-        setOpenMenu(null);
-      }, 900);
+    if (!(await copyText(text))) {
+      flashFailed(key);
+      return;
     }
+    setDoneItem(key);
+    setTimeout(() => {
+      setDoneItem(null);
+      setOpenMenu(null);
+    }, 900);
   };
 
   const share = async () => {
@@ -223,6 +237,7 @@ export default function PostToolbar({ slug, title, description, markdown, headin
       }
     }
     if (await copyText(url)) flashCopied('share');
+    else flashFailed('share');
   };
 
   const postLink = (post, direction) => {
@@ -247,7 +262,12 @@ export default function PostToolbar({ slug, title, description, markdown, headin
   };
 
   const itemContent = (key, label, icon) =>
-    doneItem === key || copied === key ? (
+    failed === key ? (
+      <>
+        {icon}
+        <span className="text-(--color-muted)">Copy failed</span>
+      </>
+    ) : doneItem === key || copied === key ? (
       <>
         <CheckIcon size={15} />
         <span className="text-(--color-signal)">{label === 'Copy page' ? 'Copied' : label}</span>
@@ -321,10 +341,13 @@ export default function PostToolbar({ slug, title, description, markdown, headin
               className={ghostButton}
               onClick={async () => {
                 if (await copyText(markdown)) flashCopied('page');
+                else flashFailed('page');
               }}
             >
               {copied === 'page' ? <CheckIcon size={15} /> : <CopyIcon size={15} />}
-              <span className="max-[28rem]:hidden">{copied === 'page' ? 'Copied' : 'Copy page'}</span>
+              <span className="max-[28rem]:hidden">
+                {failed === 'page' ? 'Copy failed' : copied === 'page' ? 'Copied' : 'Copy page'}
+              </span>
             </button>
             <button
               type="button"
@@ -393,7 +416,9 @@ export default function PostToolbar({ slug, title, description, markdown, headin
 
         <button type="button" onClick={share} aria-label="Share this post" className={ghostButton}>
           {copied === 'share' ? <CheckIcon size={15} /> : <ShareIcon size={15} />}
-          <span className="max-[32rem]:hidden">{copied === 'share' ? 'Copied' : 'Share'}</span>
+          <span className="max-[32rem]:hidden">
+            {failed === 'share' ? 'Copy failed' : copied === 'share' ? 'Copied' : 'Share'}
+          </span>
         </button>
       </div>
     </div>
