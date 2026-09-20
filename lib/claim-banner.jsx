@@ -12,7 +12,9 @@ import { REPO_URL } from './repo.js';
 // no shorthand, explicit sizes on images. Everything here stays inside that
 // subset on purpose.
 
-export const BANNER_SIZE = { width: 1200, height: 630 };
+// Re-exported so existing importers keep working; the number lives in
+// lib/banner-size.js.
+export { BANNER_SIZE } from './banner-size.js';
 
 const THEMES = {
   light: {

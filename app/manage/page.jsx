@@ -3,6 +3,7 @@ import { readSession } from '../../lib/session.js';
 import { getOwnerIndex } from '../../lib/owners.js';
 import { getRecord } from '../../lib/registry.js';
 import RecordForm from './record-form.jsx';
+import BadgeZone from './badge-zone.jsx';
 import TokenZone from './token-zone.jsx';
 
 export const metadata = {
@@ -60,7 +61,13 @@ export default async function Manage() {
     <Shell>
       {records.map((record, i) =>
         record ? (
-          <RecordForm key={names[i]} name={names[i]} record={record} />
+          // Per name, not per account: the badge is that name's card. Sits
+          // under its form so the thing you just edited is the thing the
+          // preview shows.
+          <div key={names[i]}>
+            <RecordForm name={names[i]} record={record} />
+            <BadgeZone name={names[i]} />
+          </div>
         ) : null,
       )}
       {/* An indexed name whose file cannot be read is skipped rather than

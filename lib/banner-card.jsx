@@ -10,7 +10,9 @@
  * weight 400 at display sizes.
  */
 
-export const BANNER_SIZE = { width: 1200, height: 630 };
+// Re-exported so existing importers keep working; the number lives in
+// lib/banner-size.js.
+export { BANNER_SIZE } from './banner-size.js';
 
 const THEMES = {
   light: {
