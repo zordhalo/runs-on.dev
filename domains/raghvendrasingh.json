@@ -1,0 +1,21 @@
+{
+  "name": "raghvendrasingh",
+  "owner": {
+    "github": "raghvendrasingh-01"
+  },
+  "claimedAt": "2026-09-17T14:52:55.828Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=raghvendrasingh.runs-on.dev,70dfcaa2b88cdfd35777"
+      ]
+    },
+    "raghvendrasingh": {
+      "CNAME": "72f14130f9f3463f.vercel-dns-017.com"
+    }
+  }
+}

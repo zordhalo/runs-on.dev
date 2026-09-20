@@ -1,0 +1,16 @@
+{
+  "name": "ajardeen",
+  "owner": {
+    "github": "ajardeen"
+  },
+  "claimedAt": "2026-09-17T11:18:22.938Z",
+  "records": {},
+  "country": "IN",
+  "subdomains": {
+    "netlify": {
+      "TXT": [
+        "cf477a38f718fab9402b3bbad79a2b28"
+      ]
+    }
+  }
+}

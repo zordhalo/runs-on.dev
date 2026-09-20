@@ -1,0 +1,23 @@
+{
+  "name": "mohandarwish",
+  "owner": {
+    "github": "mohandamged70m"
+  },
+  "claimedAt": "2026-09-17T23:10:17.436Z",
+  "records": {
+    "TXT": [
+      "vc-domain-verify=mohandarwish.runs-on.dev,fafb67b31e26b59b381a"
+    ]
+  },
+  "country": "EG",
+  "profile": {
+    "name": "mohandamged70m"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=runs-on.dev,f1f75ff082957396e793"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "semyon",
+  "owner": {
+    "github": "WorkNFlow"
+  },
+  "claimedAt": "2026-09-17T17:33:36.565Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "NL",
+  "subdomains": {
+    "semyon": {
+      "CNAME": "8fede0f821bfdcc5.vercel-dns-017.com"
+    }
+  }
+}

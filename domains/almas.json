@@ -1,0 +1,16 @@
+{
+  "name": "almas",
+  "owner": {
+    "github": "alfdmsr"
+  },
+  "claimedAt": "2026-09-19T18:12:59.572Z",
+  "records": {},
+  "country": "ID",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=almas.runs-on.dev,f91ddbdb71abcac18b83"
+      ]
+    }
+  }
+}

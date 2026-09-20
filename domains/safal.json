@@ -1,0 +1,28 @@
+{
+  "name": "safal",
+  "owner": {
+    "github": "safalbuilds"
+  },
+  "claimedAt": "2026-09-17T16:42:28.437Z",
+  "records": {},
+  "country": "NP",
+  "profile": {
+    "name": "SaFal Gautam",
+    "links": [
+      {
+        "label": "My portfolio",
+        "url": "https://safalgautam.com.np"
+      }
+    ]
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=blog.safal.runs-on.dev,4325cecae0f1ed12a3c1"
+      ]
+    },
+    "blog": {
+      "CNAME": "be0d88f3a0741313.vercel-dns-017.com"
+    }
+  }
+}

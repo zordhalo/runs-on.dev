@@ -6,12 +6,5 @@
   "claimedAt": "2026-09-02T18:38:28.441Z",
   "records": {
     "CNAME": "a440011934772a2e.vercel-dns-017.com"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=tahir.runs-on.dev,1187b566aa7012ad5210"
-      ]
-    }
   }
 }

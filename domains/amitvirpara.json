@@ -1,0 +1,19 @@
+{
+  "name": "amitvirpara",
+  "owner": {
+    "github": "Err0R2811"
+  },
+  "claimedAt": "2026-09-18T10:12:38.780Z",
+  "records": {
+    "CNAME": "amitvirpara.netlify.app"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_netlify": {
+      "TXT": [
+        "subdomain-owner-verification",
+        "78b2ac8485aba6382b66e5e072470d40"
+      ]
+    }
+  }
+}

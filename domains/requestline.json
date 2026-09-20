@@ -1,0 +1,16 @@
+{
+  "name": "requestline",
+  "owner": {
+    "github": "aamnscx"
+  },
+  "claimedAt": "2026-09-17T19:46:41.232Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "MA",
+  "subdomains": {
+    "requestline": {
+      "CNAME": "a48c7490b2363714.vercel-dns-017.com"
+    }
+  }
+}

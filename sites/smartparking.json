@@ -1,0 +1,14 @@
+{
+  "name": "smartparking",
+  "owner": "SaiVinoth17",
+  "active": "ae9b0320",
+  "deployments": [
+    {
+      "id": "ae9b0320",
+      "at": "2026-09-18T14:00:58.110Z",
+      "files": 5,
+      "bytes": 798029
+    }
+  ],
+  "updatedAt": "2026-09-18T14:00:58.110Z"
+}

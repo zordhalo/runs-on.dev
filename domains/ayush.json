@@ -7,13 +7,6 @@
   "records": {
     "CNAME": "b0b9f7019e2d4109.vercel-dns-017.com"
   },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=ayush.runs-on.dev,3e4e08c49ef14fe6d975"
-      ]
-    }
-  },
   "profile": {
     "name": "Ayush Soni",
     "bio": "Full Stack Developer"

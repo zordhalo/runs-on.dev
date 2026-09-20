@@ -1,0 +1,25 @@
+{
+  "name": "manish",
+  "owner": {
+    "github": "manishshrestha01"
+  },
+  "claimedAt": "2026-09-17T13:36:42.713Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "NP",
+  "profile": {
+    "name": "Manish Shrestha",
+    "bio": "Full Stack Developer"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=runs-on.dev,2e4260517694679583a3"
+      ]
+    },
+    "manish": {
+      "CNAME": "b79f7d52ad469400.vercel-dns-017.com"
+    }
+  }
+}

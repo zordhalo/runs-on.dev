@@ -18,11 +18,6 @@
     ]
   },
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=zezo.runs-on.dev,c735fbfd5e51a2800fd3"
-      ]
-    },
     "zezo": {
       "CNAME": "386e3904ef50d7a6.vercel-dns-017.com"
     }

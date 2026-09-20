@@ -4,5 +4,7 @@
     "github": "SumeetSharma-tech"
   },
   "claimedAt": "2026-09-02T04:17:40.421Z",
-  "records": {}
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  }
 }

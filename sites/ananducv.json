@@ -1,0 +1,14 @@
+{
+  "name": "ananducv",
+  "owner": "anandude",
+  "active": "2d1e85ad",
+  "deployments": [
+    {
+      "id": "2d1e85ad",
+      "at": "2026-09-19T13:32:12.625Z",
+      "files": 40,
+      "bytes": 985536
+    }
+  ],
+  "updatedAt": "2026-09-19T13:32:12.625Z"
+}

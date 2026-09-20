@@ -1,0 +1,20 @@
+{
+  "name": "praful",
+  "owner": "iamgrootns",
+  "active": "19adf8af",
+  "deployments": [
+    {
+      "id": "9aefe9ca",
+      "at": "2026-09-17T05:03:47.231Z",
+      "files": 22,
+      "bytes": 4757818
+    },
+    {
+      "id": "19adf8af",
+      "at": "2026-09-19T04:33:02.453Z",
+      "files": 22,
+      "bytes": 4757818
+    }
+  ],
+  "updatedAt": "2026-09-19T04:33:02.453Z"
+}

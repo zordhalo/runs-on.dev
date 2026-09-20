@@ -1,0 +1,16 @@
+{
+  "name": "pritambanik",
+  "owner": {
+    "github": "GENESIS-PROKEY"
+  },
+  "claimedAt": "2026-09-18T10:14:40.705Z",
+  "records": {
+    "CNAME": "e721493cd2cb5b9a.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "pritambanik": {
+      "CNAME": "e721493cd2cb5b9a.vercel-dns-017.com"
+    }
+  }
+}

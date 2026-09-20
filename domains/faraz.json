@@ -6,12 +6,5 @@
   "claimedAt": "2026-09-06T14:48:08.599Z",
   "records": {
     "CNAME": "7189bafa2feaf940.vercel-dns-017.com"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=faraz.runs-on.dev,c32d2c503f95ca9418c0"
-      ]
-    }
   }
 }

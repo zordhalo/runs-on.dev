@@ -5,6 +5,11 @@
   },
   "claimedAt": "2026-09-08T21:57:14.312Z",
   "records": {
-    "URL": "https://notes-ai-io.vercel.app/"
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "subdomains": {
+    "syedhassan": {
+      "CNAME": "9282ea2650e5be65.vercel-dns-017.com"
+    }
   }
 }

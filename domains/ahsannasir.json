@@ -6,12 +6,5 @@
   "claimedAt": "2026-09-09T07:15:57.900Z",
   "records": {
     "CNAME": "7d0de90e3fed1dcb.vercel-dns-017.com"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=ahsannasir.runs-on.dev,809c738e58126352ec0b"
-      ]
-    }
   }
 }

@@ -4,11 +4,14 @@ import {
   planDnsChanges,
   planZoneVerificationRecords,
   reconcileZoneVerification,
+  fitZoneVerification,
   reconcileDnsRecords,
+  syncEach,
   listPath,
   createPath,
   removePath,
   formatApiError,
+  planSweep,
 } from '../lib/dns.js';
 
 const base = { name: 'lucas', owner: { github: 'zordhalo' }, claimedAt: '2026-08-30T00:00:00Z' };
@@ -296,4 +299,115 @@ test('a non-JSON error body is still logged, not swallowed', () => {
 test('an empty error body falls back to the bare status', () => {
   assert.equal(formatApiError(500, ''), '500');
   assert.equal(formatApiError(500, '   '), '500');
+});
+
+const txt = (n) => ({ type: 'TXT', name: '_vercel', value: `vc-domain-verify=n${n}.runs-on.dev,x` });
+const held = (n) => Array.from({ length: n }, (_, i) => ({ id: `rec_${i}`, ...txt(1000 + i) }));
+
+test('fit publishes every create while under the cap', () => {
+  const { create, deferred } = fitZoneVerification([txt(1), txt(2)], [], held(10));
+  assert.equal(create.length, 2);
+  assert.deepEqual(deferred, []);
+});
+
+test('fit defers the creates that would push past the cap', () => {
+  const { create, deferred } = fitZoneVerification([txt(1), txt(2), txt(3)], [], held(48));
+  assert.deepEqual(create, [txt(1), txt(2)]);
+  assert.deepEqual(deferred, [txt(3)]);
+});
+
+test('fit counts slots freed by removals in the same run', () => {
+  const actual = held(50);
+  const { create, deferred } = fitZoneVerification([txt(1)], actual.slice(0, 1), actual);
+  assert.deepEqual(create, [txt(1)]);
+  assert.deepEqual(deferred, []);
+});
+
+test('fit defers everything when the zone is already over the cap', () => {
+  const { create, deferred } = fitZoneVerification([txt(1)], [], held(52));
+  assert.deepEqual(create, []);
+  assert.deepEqual(deferred, [txt(1)]);
+});
+
+test('a CNAME Vercel hands back with a trailing dot still matches the record', () => {
+  // Vercel's list API returns CNAMEs fully qualified (`cname.vercel-dns.com.`)
+  // while records hold the bare form. Keyed raw, every sync deleted and
+  // recreated an unchanged CNAME, a DNS gap on every save of that name.
+  const record = { type: 'CNAME', name: 'saiom', value: 'cname.vercel-dns.com' };
+  const existing = [{ id: 'rec_1', ...record, value: 'cname.vercel-dns.com.' }];
+  const { unchanged, remove, create } = reconcileDnsRecords(existing, [record]);
+  assert.deepEqual({ remove, create }, { remove: [], create: [] });
+  assert.equal(unchanged.length, 1);
+});
+
+test('syncEach keeps going past a failed name and reports every failure', async () => {
+  // One record Vercel rejects used to exit the whole run: every name after
+  // it and the zone mirror were skipped until someone fixed that record.
+  const seen = [];
+  const failed = await syncEach(['a', 'bad', 'c', 'boom', 'e'], async (name) => {
+    seen.push(name);
+    if (name === 'boom') throw new Error('network');
+    return name !== 'bad';
+  });
+  assert.deepEqual(seen, ['a', 'bad', 'c', 'boom', 'e']);
+  assert.deepEqual(failed, ['bad', 'boom']);
+});
+
+const claim = (name, records = {}, subdomains) => ({ ...base, name, records, ...(subdomains ? { subdomains } : {}) });
+
+test('sweep finds a claim whose push run was cancelled before it synced', () => {
+  const zone = [{ id: 'a', type: 'CNAME', name: 'lucas', value: 'lucas.vercel.app.' }];
+  const claims = [claim('lucas', { CNAME: 'lucas.vercel.app' }), claim('vishal', { CNAME: 'x.vercel-dns-017.com' })];
+  assert.deepEqual(planSweep(claims, zone).map((d) => d.name), ['vishal']);
+});
+
+test('sweep finds a stale record left behind when the owner removed it', () => {
+  const zone = [{ id: 'a', type: 'CNAME', name: 'vinit', value: 'old.vercel.app.' }];
+  const [drift] = planSweep([claim('vinit', { URL: 'https://example.com/' })], zone);
+  assert.deepEqual(drift, { name: 'vinit', desired: [] });
+});
+
+test('sweep sees subdomain drift as the claim\'s own', () => {
+  const zone = [{ id: 'a', type: 'TXT', name: '_vercel.lucas', value: 'old' }];
+  const claims = [claim('lucas', {}, { _vercel: { TXT: ['new'] } })];
+  assert.deepEqual(planSweep(claims, zone).map((d) => d.name), ['lucas']);
+});
+
+test('an in-sync zone plans no sweep work', () => {
+  const zone = [
+    { id: 'a', type: 'CNAME', name: 'lucas', value: 'lucas.vercel.app.' },
+    { id: 'b', type: 'TXT', name: '_vercel', value: 'vc-domain-verify=lucas.runs-on.dev,abc' },
+  ];
+  assert.deepEqual(planSweep([claim('lucas', { CNAME: 'lucas.vercel.app' })], zone), []);
+});
+
+test('sweep leaves names already synced this run alone', () => {
+  const claims = [claim('vishal', { CNAME: 'x.vercel-dns-017.com' })];
+  assert.deepEqual(planSweep(claims, [], { skip: new Set(['vishal']) }), []);
+});
+
+test('sweep clears a released name that still holds records', () => {
+  const zone = [{ id: 'a', type: 'CNAME', name: 'gone', value: 'x.example.com.' }];
+  assert.deepEqual(planSweep([], zone, { released: new Set(['gone']) }), [{ name: 'gone', desired: [] }]);
+});
+
+test('sweep never touches records for a label that was never a claim', () => {
+  // The operator's Bing verification CNAME, the zone mirror, the wildcard.
+  const zone = [
+    { id: 'a', type: 'CNAME', name: '50aa782de4a596073f9d2a9ff3bd04e6', value: 'verify.bing.com.' },
+    { id: 'b', type: 'TXT', name: '_vercel', value: 'vc-domain-verify=x.runs-on.dev,1' },
+    { id: 'c', type: 'CNAME', name: '*', value: 'cname.vercel-dns.com.' },
+  ];
+  assert.deepEqual(planSweep([], zone, { released: new Set(['old']) }), []);
+});
+
+test('a released name since reclaimed is reconciled as a claim, not cleared', () => {
+  const zone = [{ id: 'a', type: 'CNAME', name: 'back', value: 'mine.vercel.app.' }];
+  const claims = [claim('back', { CNAME: 'mine.vercel.app' })];
+  assert.deepEqual(planSweep(claims, zone, { released: new Set(['back']) }), []);
+});
+
+test('a skipped released name (unreadable claim file) is never cleared', () => {
+  const zone = [{ id: 'a', type: 'CNAME', name: 'broken', value: 'x.example.com.' }];
+  assert.deepEqual(planSweep([], zone, { skip: new Set(['broken']), released: new Set(['broken']) }), []);
 });

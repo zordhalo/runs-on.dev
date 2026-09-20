@@ -1,0 +1,19 @@
+{
+  "name": "officialyyraj",
+  "owner": {
+    "github": "officialyyraj"
+  },
+  "claimedAt": "2026-09-15T03:01:33.242Z",
+  "records": {
+    "CNAME": "467d1488018f7a21.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "officialyyraj": {
+      "CNAME": "467d1488018f7a21.vercel-dns-017.com"
+    }
+  },
+  "profile": {
+    "name": "officiallyraj"
+  }
+}

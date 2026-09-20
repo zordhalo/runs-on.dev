@@ -1,0 +1,18 @@
+{
+  "name": "nassimbellanaya",
+  "owner": {
+    "github": "cNassim"
+  },
+  "claimedAt": "2026-09-17T21:15:15.882Z",
+  "records": {
+    "CNAME": "b60c6e6d160a7ca5.vercel-dns-017.com"
+  },
+  "country": "FR",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "nassimbellanaya.runs-on.dev,b0b3f0f51a2ee917f28a"
+      ]
+    }
+  }
+}

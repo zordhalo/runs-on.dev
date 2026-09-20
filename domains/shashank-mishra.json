@@ -1,0 +1,29 @@
+{
+  "name": "shashank-mishra",
+  "owner": {
+    "github": "darkhuntersudo"
+  },
+  "claimedAt": "2026-09-17T15:42:45.335Z",
+  "records": {
+    "CNAME": "its-shashank-mishra.netlify.app"
+  },
+  "country": "IN",
+  "profile": {
+    "name": "darkhuntersudo",
+    "bio": "I'm not lazy🥱, I'm just conserving energy",
+    "links": [
+      {
+        "label": "My Portfolio",
+        "url": "http://its-shashank-mishra.netlify.app"
+      },
+      {
+        "label": "My Instagram",
+        "url": "https://www.instagram.com/its_shashank.mishra"
+      },
+      {
+        "label": "My GitHub",
+        "url": "https://github.com/darkhuntersudo"
+      }
+    ]
+  }
+}

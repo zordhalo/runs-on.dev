@@ -1,0 +1,18 @@
+{
+  "name": "mohitkumar",
+  "owner": {
+    "github": "mohit-kumar07"
+  },
+  "claimedAt": "2026-09-17T13:26:19.580Z",
+  "records": {
+    "CNAME": "37bbb43dbf40be87.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=mohitkumar.runs-on.dev,85d2ebf0c73b08a03a05"
+      ]
+    }
+  }
+}

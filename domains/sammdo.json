@@ -9,12 +9,5 @@
   },
   "profile": {
     "name": "SammdoDev"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=sammdo.runs-on.dev,554e22c8cfd2b4bc7742"
-      ]
-    }
   }
 }

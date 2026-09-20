@@ -1,0 +1,21 @@
+{
+  "name": "leavebru",
+  "owner": {
+    "github": "Frankk555555"
+  },
+  "claimedAt": "2026-09-18T05:20:25.507Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "TH",
+  "subdomains": {
+    "leavebru": {
+      "CNAME": "3f2c83692ce60fcd.vercel-dns-017.com"
+    },
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=leavebru.runs-on.dev,5c60a1077d9cb3ebb74b"
+      ]
+    }
+  }
+}

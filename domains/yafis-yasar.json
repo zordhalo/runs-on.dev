@@ -5,6 +5,20 @@
   },
   "claimedAt": "2026-09-02T17:02:18.845Z",
   "records": {
-    "URL": "https://yafisyasar.vercel.app"
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "profile": {
+    "name": "yafisyasar",
+    "links": [
+      {
+        "label": "My portfolio",
+        "url": "https://yafisyasar.vercel.app"
+      }
+    ]
+  },
+  "subdomains": {
+    "yafis-yasar": {
+      "CNAME": "e73ff0fdda5347ce.vercel-dns-017.com"
+    }
   }
 }

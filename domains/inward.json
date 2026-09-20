@@ -1,0 +1,16 @@
+{
+  "name": "inward",
+  "owner": {
+    "github": "chinmay29hub"
+  },
+  "claimedAt": "2026-09-19T09:27:53.435Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "inward": {
+      "CNAME": "85ae0c8370b9f017.vercel-dns-017.com"
+    }
+  }
+}

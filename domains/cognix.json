@@ -1,0 +1,16 @@
+{
+  "name": "cognix",
+  "owner": {
+    "github": "officialpriyam"
+  },
+  "claimedAt": "2026-09-18T04:52:31.696Z",
+  "records": {
+    "CNAME": "fddc4e9e245b230d.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "cognix": {
+      "CNAME": "fddc4e9e245b230d.vercel-dns-017.com"
+    }
+  }
+}

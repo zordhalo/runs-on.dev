@@ -1,0 +1,16 @@
+{
+  "name": "ehadziabdic",
+  "owner": {
+    "github": "ehadziabdic"
+  },
+  "claimedAt": "2026-09-18T02:25:19.078Z",
+  "records": {
+    "CNAME": "e3fd8b826bbd634f.vercel-dns-017.com"
+  },
+  "country": "BA",
+  "subdomains": {
+    "ehadziabdic": {
+      "CNAME": "e3fd8b826bbd634f.vercel-dns-017.com"
+    }
+  }
+}

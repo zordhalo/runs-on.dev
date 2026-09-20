@@ -1,0 +1,26 @@
+{
+  "name": "sahilbajaj",
+  "owner": {
+    "github": "sahilbajaj2004"
+  },
+  "claimedAt": "2026-09-17T11:01:44.369Z",
+  "records": {
+    "TXT": [
+      "vc-domain-verify=sahilbajaj.runs-on.dev,c36e5fa55008bb97d0d9"
+    ]
+  },
+  "country": "IN",
+  "profile": {
+    "name": "Sahil bajaj"
+  },
+  "subdomains": {
+    "sahilbajaj": {
+      "CNAME": "6e06c9ab5cfdb4a0.vercel-dns-017.com"
+    },
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=sahilbajaj.runs-on.dev,c36e5fa55008bb97d0d9"
+      ]
+    }
+  }
+}

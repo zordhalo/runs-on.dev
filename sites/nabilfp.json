@@ -1,0 +1,14 @@
+{
+  "name": "nabilfp",
+  "owner": "nabilfp",
+  "active": "db25f097",
+  "deployments": [
+    {
+      "id": "db25f097",
+      "at": "2026-09-18T12:14:42.340Z",
+      "files": 14,
+      "bytes": 3590726
+    }
+  ],
+  "updatedAt": "2026-09-18T12:14:42.340Z"
+}

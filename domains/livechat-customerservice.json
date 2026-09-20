@@ -1,0 +1,18 @@
+{
+  "name": "livechat-customerservice",
+  "owner": {
+    "github": "rajveer0917"
+  },
+  "claimedAt": "2026-09-18T06:28:10.049Z",
+  "records": {},
+  "country": "IN",
+  "subdomains": {
+    "livechat-customerservice": {
+      "CNAME": "one1lottery-full-project.onrender.com"
+    }
+  },
+  "profile": {
+    "name": "rajveer0917",
+    "bio": "https://github.com/rajveer0917"
+  }
+}

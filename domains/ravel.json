@@ -1,0 +1,16 @@
+{
+  "name": "ravel",
+  "owner": {
+    "github": "MithunSidhaarth"
+  },
+  "claimedAt": "2026-09-18T11:08:23.717Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "ravel": {
+      "CNAME": "f6c650fb05adf9ec.vercel-dns-017.com"
+    }
+  }
+}

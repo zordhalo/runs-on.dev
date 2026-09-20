@@ -127,3 +127,65 @@ renders (`app/sites/[name]/page.jsx` and, indirectly, every
 `<name>.runs-on.dev` request). It falls back to `REGISTRY_TOKEN` if unset,
 but setting it means the two workloads draw from different rate-limit
 budgets, so enumerating hostnames can't starve the claim flow.
+
+## Static site hosting: deploy tokens and the Blob store
+
+`/manage`'s "Deploy token" panel and `POST /api/sites/deploy`
+(`app/api/sites/deploy/route.js`) let an owner publish a static site to
+their name without a browser, using a signed bearer token instead of a
+session cookie. Three pieces have to be configured together for this to
+work at all, and as of this writing none of them are covered by
+`.env.example`'s comments beyond naming the variable:
+
+- **`SITE_TOKEN_SECRET`** signs the deploy token itself. `POST /api/tokens`
+  (`app/api/tokens/route.js`) answers `503 not_configured` if it's unset —
+  this is a stateless HMAC secret, not a credential issued by anything
+  external, so it can be generated locally (`openssl rand -hex 32`) and
+  set directly.
+- **Blob storage**, checked by `lib/store.js`'s `storeConfigured()`, is
+  where the uploaded files actually live (`putDeployment`, `deletePrefixes`
+  in the same file). `@vercel/blob`'s `put`/`list`/`del` accept two
+  unrelated auth shapes, and `storeConfigured()` must recognize both:
+  - a legacy static `BLOB_READ_WRITE_TOKEN`, which a **public** Blob store
+    still gets when connected to the project, or
+  - the newer OIDC shape, which needs only `BLOB_STORE_ID` in the
+    project's env — `@vercel/blob` resolves the actual credential itself
+    from the `VERCEL_OIDC_TOKEN` Vercel injects into every invocation, no
+    static secret involved. A store connected this way sets `BLOB_STORE_ID`
+    and `BLOB_WEBHOOK_PUBLIC_KEY` but never `BLOB_READ_WRITE_TOKEN`, so a
+    `storeConfigured()` that only checked the legacy variable read a fully
+    working store as unconfigured and 503'd every deploy
+    (`storage_not_configured`) — the bug fixed in `73c4c89`.
+- **The store's access level is public-or-private, fixed at creation, and
+  there is no CLI or dashboard action to change it afterward** (the
+  Vercel CLI's `blob create-store` takes `--access`; there is no
+  corresponding `update-store`). `putDeployment` uploads with
+  `{ access: 'public' }`, because a hosted site has to be reachable
+  without auth — a **private** store rejects that call outright with
+  `Vercel Blob: Cannot use public access on a private store`, which
+  `putDeployment` previously discarded via `Promise.allSettled` before
+  reporting a bare `storage_error`, with nothing in runtime logs to say
+  why (`330da89` added the `console.error` that surfaces the real reason).
+  If a deploy 503s with `storage_error` after `storeConfigured()` passes,
+  check the store's access level first — recreating it as public (it's
+  fine to delete-and-recreate an empty store; deployed files only start
+  landing in it once a deploy has succeeded) is the fix, not a code change.
+
+None of this touches DNS or the record itself — `applyDeployment`
+(`lib/sites.js`) writes to a separate `sites/<name>.json` history
+(`active` deployment id, pruned to the last five), independent of
+`domains/<name>.json`. A working deploy through this whole chain still
+does not make `<name>.runs-on.dev` serve the uploaded files:
+`app/sites/[name]/page.jsx` (the handler `proxy.js` rewrites every
+wildcard hostname to) only ever reads `domains/<name>.json` and renders a
+redirect, custom-domain notice, or profile card from it — nothing in the
+request path calls `getSite` or reads from Blob storage. The deploy
+endpoints (`deploy`, `deployments`, `rollback`) are fully functional and
+`getSite`/`applyDeployment` correctly track what's "active," but there is
+currently no code path that serves it to a visitor. The runbook text
+embedded in `/manage`'s "hand this to your AI agent" prompt already warns
+that a URL still showing a profile card after a successful deploy doesn't
+mean the deploy failed — the more complete statement is that today it
+never means anything else, for any name, until the render path grows a
+branch that checks `getSite` before falling through to the existing
+record-based dispatch.

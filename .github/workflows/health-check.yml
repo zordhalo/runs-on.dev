@@ -51,6 +51,11 @@ jobs:
   repair:
     needs: check
     if: needs.check.outputs.drifted != ''
+    # sync-dns can call prune-verification, which needs contents: write. A
+    # called workflow can only narrow the caller's permissions, so without
+    # this the whole run is rejected at startup, not just the prune.
+    permissions:
+      contents: write
     uses: ./.github/workflows/sync-dns.yml
     with:
       names: ${{ needs.check.outputs.drifted }}

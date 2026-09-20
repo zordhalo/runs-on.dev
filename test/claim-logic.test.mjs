@@ -59,6 +59,22 @@ test('rejects a claim at the per-account limit', () => {
   assert.deepEqual(out, { ok: false, status: 403, code: 'limit_reached' });
 });
 
+test('a maintainer project name is exempt from the per-account limit', () => {
+  const out = evaluateClaim({ name: 'clatterbox', session, existing: null, now, ownedCount: 1 });
+  assert.equal(out.ok, true);
+});
+
+test('the maintainer exemption is per name and per account', () => {
+  const other = { ...session, login: 'someone-else' };
+  assert.equal(evaluateClaim({ name: 'clatterbox', session: other, existing: null, now, ownedCount: 1 }).code, 'limit_reached');
+  assert.equal(evaluateClaim({ name: 'another', session, existing: null, now, ownedCount: 1 }).code, 'limit_reached');
+});
+
+test('a taken maintainer project name still reports taken', () => {
+  const existing = { name: 'clatterbox', owner: { github: 'someone' } };
+  assert.equal(evaluateClaim({ name: 'clatterbox', session, existing, now, ownedCount: 1 }).code, 'taken');
+});
+
 test('checks the limit after eligibility, so an ineligible account at the limit reports the eligibility reason', () => {
   const fresh = { ...session, createdAt: '2026-08-25T00:00:00Z' };
   const out = evaluateClaim({ name: 'lucas', session: fresh, existing: null, now, ownedCount: 1 });

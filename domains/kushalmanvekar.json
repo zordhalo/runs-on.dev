@@ -1,0 +1,18 @@
+{
+  "name": "kushalmanvekar",
+  "owner": {
+    "github": "Kushalongit-hub"
+  },
+  "claimedAt": "2026-09-17T13:41:09.325Z",
+  "records": {
+    "CNAME": "website1-187a9jaqk-kushalongit-hubs-projects.vercel.app"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=kushalmanvekar.runs-on.dev,d6bcb4eee8e27941c01"
+      ]
+    }
+  }
+}

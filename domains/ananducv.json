@@ -1,0 +1,22 @@
+{
+  "name": "ananducv",
+  "owner": {
+    "github": "anandude"
+  },
+  "claimedAt": "2026-09-19T09:54:58.556Z",
+  "records": {
+    "CNAME": "c419aeba8ff5d1f3.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "profile": {
+    "name": "Anandude",
+    "bio": "Passionately curious"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=ananducv.runs-on.dev,212905fe90cd575ade96"
+      ]
+    }
+  }
+}

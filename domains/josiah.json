@@ -1,0 +1,25 @@
+{
+  "name": "josiah",
+  "owner": {
+    "github": "Jstarzz"
+  },
+  "claimedAt": "2026-09-18T16:52:22.203Z",
+  "records": {
+    "CNAME": "jstarzz.github.io"
+  },
+  "country": "KN",
+  "profile": {
+    "name": "Jstarzz",
+    "bio": "Systems Engineer building AI, infrastructure, and weirdly ambitious systems from St. Kitts.",
+    "links": [
+      {
+        "label": "what i do",
+        "url": "https://josiah.is-a.dev/"
+      },
+      {
+        "label": "what i do x2",
+        "url": "https://itsjosiahdavis.dev/"
+      }
+    ]
+  }
+}

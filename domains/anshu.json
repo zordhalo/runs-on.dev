@@ -1,0 +1,16 @@
+{
+  "name": "anshu",
+  "owner": {
+    "github": "TechWhiz0"
+  },
+  "claimedAt": "2026-09-19T17:02:50.487Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "anshu": {
+      "CNAME": "de1634ddf9d24e72.vercel-dns-017.com"
+    }
+  }
+}
