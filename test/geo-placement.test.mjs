@@ -61,3 +61,25 @@ test('malformed inputs count toward nothing and cannot crash the page', () => {
   assert.equal(resolved, 0);
   assert.equal(total, 1);
 });
+
+test('places owners whose login collides with an Object prototype key', () => {
+  // `constructor`, `toString` and `hasOwnProperty` are all valid, claimable
+  // GitHub usernames. Deduping with `key in points` against a plain object
+  // would report them as already-seen and drop them from the map.
+  const { points, resolved, total } = geoPlacement(
+    [
+      record('a', 'constructor', 'FR'),
+      record('b', 'toString', 'IN'),
+      record('c', 'hasOwnProperty', 'FR'),
+    ],
+    {},
+    centroids,
+  );
+  assert.deepEqual(points, {
+    constructor: [46.6, 2.4],
+    tostring: [22, 79],
+    hasownproperty: [46.6, 2.4],
+  });
+  assert.equal(resolved, 3);
+  assert.equal(total, 3);
+});

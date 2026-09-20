@@ -21,7 +21,27 @@ const STAR_BURST = {
   zIndex: 50,
 };
 
+// globals.css honours prefers-reduced-motion for everything the stylesheet
+// can reach, but these particles are painted into a canvas, where CSS cannot
+// follow. The guard has to live here or the site quietly breaks its own
+// promise for the visitors who asked for it. A single burst still marks the
+// click, so the card keeps its affordance.
+function prefersReducedMotion() {
+  return typeof window !== 'undefined'
+    && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+}
+
 function fireStarWorks(confettiRef) {
+  if (prefersReducedMotion()) {
+    confettiRef.current?.fire({
+      ...STAR_BURST,
+      particleCount: 24,
+      ticks: 60,
+      origin: { x: 0.5, y: 0.5 },
+    });
+    return;
+  }
+
   const duration = 2600;
   const animationEnd = Date.now() + duration;
   const randomInRange = (min, max) => Math.random() * (max - min) + min;

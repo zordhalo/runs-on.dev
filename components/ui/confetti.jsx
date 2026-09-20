@@ -1,4 +1,12 @@
 "use client";
+// Vendored from the Magic UI registry (shadcn CLI), with one local edit: the
+// upstream file also exports a ConfettiButton built on components/ui/button.
+// Nothing here uses it, and that button is styled entirely with shadcn theme
+// tokens (bg-primary, ring-ring, border-input) that this repo's Tailwind
+// theme does not define, so it would render unstyled the moment anyone
+// reached for it. Dropping it also drops cn, radix-ui and
+// class-variance-authority from the dependency tree. If this component is
+// ever re-pulled from the registry, re-apply the edit.
 import React, {
   createContext,
   forwardRef,
@@ -9,8 +17,6 @@ import React, {
   useRef,
 } from "react"
 import confetti from "canvas-confetti"
-
-import { Button } from "@/components/ui/button"
 
 const ConfettiContext = createContext(null)
 
@@ -84,37 +90,3 @@ const ConfettiComponent = forwardRef((props, ref) => {
 ConfettiComponent.displayName = "Confetti"
 
 export const Confetti = ConfettiComponent
-
-export const ConfettiButton = forwardRef(({ options, children, onClick, ...props }, ref) => {
-  const handleClick = async (event) => {
-    try {
-      onClick?.(event)
-      if (event?.defaultPrevented) return
-
-      const target = event?.currentTarget
-      if (target && "getBoundingClientRect" in target) {
-        const rect = target.getBoundingClientRect()
-        const origin = {
-          x: (rect.left + rect.width / 2) / window.innerWidth,
-          y: (rect.top + rect.height / 2) / window.innerHeight,
-        }
-
-        await confetti({
-          zIndex: 9999,
-          ...options,
-          origin,
-        })
-      }
-    } catch (error) {
-      console.error("Confetti button error:", error)
-    }
-  }
-
-  return (
-    <Button ref={ref} type="button" onClick={handleClick} {...props}>
-      {children}
-    </Button>
-  )
-})
-
-ConfettiButton.displayName = "ConfettiButton"
