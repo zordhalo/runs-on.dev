@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPost, publishedPosts, postSerial, formatSerial } from '../../../lib/blog.js';
+import PostToolbar from './post-toolbar.jsx';
 
 export const dynamic = 'force-static';
 
@@ -66,9 +67,31 @@ export default async function BlogPost({ params }) {
 
   const serial = postSerial(slug);
 
+  // Post-to-post navigation for the toolbar arrows, following the serial
+  // numbers: back (←) is the lower number, forward (→) the higher. The
+  // newest post is № 001, so it starts with back disabled and everything to
+  // explore going forward.
+  const posts = publishedPosts();
+  const idx = posts.findIndex((p) => p.slug === slug);
+  const toRef = (p) => (p ? { slug: p.slug, title: p.title } : null);
+  const back = toRef(idx > 0 ? posts[idx - 1] : null);
+  const forward = toRef(posts[idx + 1] ?? null);
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <div className="mb-8">
+        <PostToolbar
+          slug={post.slug}
+          title={post.title}
+          description={post.description}
+          markdown={post.markdown}
+          headings={post.headings}
+          back={back}
+          forward={forward}
+        />
+      </div>
 
       <p className="meta">
         <span className="text-(--color-blue)">№ {formatSerial(serial)}</span>
