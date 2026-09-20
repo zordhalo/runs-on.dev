@@ -38,6 +38,8 @@ name, so it can't be used to take any other name. Current entries:
 
 - `clatterbox` (@zordhalo): [Clatterbox](https://github.com/zordhalo/clatterbox),
   an open-source keyboard-sound app.
+- `ninebrains` (@zordhalo): [Ninebrains](https://github.com/Advance-Labs/ninebrains),
+  an open-source desktop workbench for running coding agents in parallel.
 
 ## Who is responsible
 
