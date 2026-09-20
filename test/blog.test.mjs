@@ -51,3 +51,20 @@ test('serial numbers count newest-first from 1', () => {
   assert.equal(postSerial(posts[posts.length - 1].slug), posts.length, 'oldest post has the highest serial');
   assert.equal(postSerial('no-such-post'), null);
 });
+
+// The .md twin (served at /blog/<slug>.md and copied by the post toolbar)
+// must round-trip: gray-matter parses it back into the same fields.
+test('markdownTwin rebuilds a parseable markdown file', async () => {
+  const { default: matter } = await import('gray-matter');
+  const { markdownTwin } = await import('../lib/blog.js');
+  const post = getPost('2026-09-12-a-new-look-for-runs-on-dev');
+  const twin = markdownTwin(post);
+  const { data, content } = matter(twin);
+  assert.equal(data.title, post.title);
+  assert.equal(data.date, post.date);
+  assert.equal(data.category, post.category);
+  assert.ok(content.includes('darker, quieter'), 'body content rides along');
+  for (const post of publishedPosts()) {
+    assert.ok(post.markdown.length > 0, `${post.slug} carries markdown`);
+  }
+});

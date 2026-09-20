@@ -50,6 +50,10 @@ function loadPosts() {
       image: d.image ?? null,
       video: d.video ?? null,
       html: marked.parse(content.trim(), { async: false, gfm: true }),
+      // Raw markdown rides along for the copy-page menu and the .md twin;
+      // frontmatter is deliberately excluded, the twin route rebuilds it
+      // from the fields so there is one source of truth per field.
+      markdown: content.trim(),
     });
   }
   return posts.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug.localeCompare(b.slug)));

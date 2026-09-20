@@ -15,12 +15,22 @@ export const config = {
 export function proxy(request) {
   const host = (request.headers.get('host') ?? '').split(':')[0];
 
+  // Blog markdown twin: /blog/<slug>.md serves the post's raw markdown for
+  // agents and the post page's "view as markdown" menu item. A distinct URL
+  // with its own content type from the route, so no Vary negotiation games.
+  // Checked before the Accept rewrite below: a markdown-preferring agent
+  // asking for a post's .md wants THAT post, not the site-wide index.
+  const apexLike =
+    host === ROOT || host === `www.${ROOT}` || host.endsWith('.vercel.app') || host === 'localhost';
+  const md = request.nextUrl.pathname.match(/^\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/);
+  if (md && apexLike) {
+    return NextResponse.rewrite(new URL(`/blog/${md[1]}/llms-md`, request.url));
+  }
+
   // Content negotiation for agents: a request that asks for text/markdown
   // gets the agent index (the llms.txt content, served as text/markdown
   // with the correct content-type) instead of HTML, on any page of the
   // apex site. Claimed-subdomain hosts are untouched below.
-  const apexLike =
-    host === ROOT || host === `www.${ROOT}` || host.endsWith('.vercel.app') || host === 'localhost';
   if (prefersMarkdown(request) && apexLike) {
     return NextResponse.rewrite(new URL('/llms-md', request.url));
   }

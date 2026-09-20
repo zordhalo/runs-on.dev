@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPost, publishedPosts, postSerial, formatSerial } from '../../../lib/blog.js';
+import PostToolbar from './post-toolbar.jsx';
 
 export const dynamic = 'force-static';
 
@@ -69,6 +70,10 @@ export default async function BlogPost({ params }) {
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <div className="mb-8">
+        <PostToolbar slug={post.slug} title={post.title} description={post.description} markdown={post.markdown} />
+      </div>
 
       <p className="meta">
         <span className="text-(--color-blue)">№ {formatSerial(serial)}</span>
