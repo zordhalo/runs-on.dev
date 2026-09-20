@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { menuFocusTarget } from '../../../lib/menu-keyboard.js';
 
 // The blog post toolbar, the chanhdai.com pattern rebuilt in this repo's
 // language: post-to-post back/forward, a split copy-page button (label
@@ -181,15 +182,32 @@ export default function PostToolbar({ slug, title, description, markdown, headin
   const copyRef = useRef(null);
   const tocRef = useRef(null);
 
-  // Close whichever menu is open on outside click and Escape.
+  // Keep the ARIA menu contract honest: focus enters on open, arrow keys move
+  // within the composite widget, and Escape returns to the trigger.
   useEffect(() => {
     if (!openMenu) return;
+    const ref = openMenu === 'copy' ? copyRef : tocRef;
+    const menu = ref.current?.querySelector('[role="menu"]');
+    const trigger = ref.current?.querySelector('[aria-haspopup="menu"]');
+    const items = menu?.querySelectorAll('[role="menuitem"]') ?? [];
+    items[0]?.focus();
+
     const onPointerDown = (e) => {
-      const ref = openMenu === 'copy' ? copyRef : tocRef;
       if (ref.current && !ref.current.contains(e.target)) setOpenMenu(null);
     };
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') setOpenMenu(null);
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setOpenMenu(null);
+        trigger?.focus();
+        return;
+      }
+      if (!menu?.contains(document.activeElement)) return;
+      const target = menuFocusTarget(items, document.activeElement, e.key);
+      if (target) {
+        e.preventDefault();
+        target.focus();
+      }
     };
     document.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
@@ -315,6 +333,7 @@ export default function PostToolbar({ slug, title, description, markdown, headin
                   <a
                     key={h.id}
                     role="menuitem"
+                    tabIndex={-1}
                     href={`#${h.id}`}
                     className={`${menuItem} ${h.level === 3 ? 'pl-6' : ''}`}
                     onClick={(e) => {
@@ -366,6 +385,7 @@ export default function PostToolbar({ slug, title, description, markdown, headin
               <button
                 type="button"
                 role="menuitem"
+                tabIndex={-1}
                 className={menuItem}
                 onClick={async () => copyFromMenu('page', markdown)}
               >
@@ -374,18 +394,27 @@ export default function PostToolbar({ slug, title, description, markdown, headin
               <button
                 type="button"
                 role="menuitem"
+                tabIndex={-1}
                 className={menuItem}
                 onClick={async () => copyFromMenu('text', markdownToText(markdown))}
               >
                 {itemContent('text', 'Copy as plain text', <FileTextIcon size={15} />)}
               </button>
-              <a role="menuitem" target="_blank" rel="noopener" href={`/blog/${slug}.md`} className={menuItem}>
+              <a
+                role="menuitem"
+                tabIndex={-1}
+                target="_blank"
+                rel="noopener"
+                href={`/blog/${slug}.md`}
+                className={menuItem}
+              >
                 <FileTextIcon size={15} />
                 View as markdown
               </a>
               <button
                 type="button"
                 role="menuitem"
+                tabIndex={-1}
                 className={menuItem}
                 onClick={async () => copyFromMenu('link', url)}
               >
@@ -398,6 +427,7 @@ export default function PostToolbar({ slug, title, description, markdown, headin
                 <a
                   key={agent.label}
                   role="menuitem"
+                  tabIndex={-1}
                   target="_blank"
                   rel="noopener"
                   href={agent.build(url)}
