@@ -4,5 +4,16 @@
     "github": "SamridhVikhasS"
   },
   "claimedAt": "2026-09-03T03:47:02.869Z",
-  "records": {}
+  "records": {
+    "CNAME": "b60117cf5602f892.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "records": {
+        "TXT": [
+          "vc-domain-verify=samridhvikhas.runs-on.dev,976092a560550c7a7960"
+        ]
+      }
+    }
+  }
 }
