@@ -202,6 +202,13 @@ export default function PostToolbar({ slug, title, description, markdown, headin
         trigger?.focus();
         return;
       }
+      // Tab leaves a menu. The items sit outside the Tab order, so focus moves
+      // on to the page by itself; close behind it rather than leaving an open
+      // menu that no longer holds focus.
+      if (e.key === 'Tab') {
+        setOpenMenu(null);
+        return;
+      }
       if (!menu?.contains(document.activeElement)) return;
       const target = menuFocusTarget(items, document.activeElement, e.key);
       if (target) {
