@@ -7,6 +7,11 @@
   "records": {
     "CNAME": "cname.vercel-dns.com"
   },
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=khushal-neekhra.runs-on.dev,83b1565a4390f66ea776"]
+    }
+  },
   "country": "IN",
   "profile": {
     "name": "volt-l18",
