@@ -11,12 +11,5 @@
     "name": "mvvarmora",
     "bio": "tech driven profile  , innovator"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=speakupai.runs-on.dev,bed1d632d03cb87bf37d"
-      ]
-    }
-  }
+  "country": "IN"
 }

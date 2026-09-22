@@ -11,12 +11,5 @@
   "profile": {
     "name": "Manish Shrestha",
     "bio": "Full Stack Developer"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=manish.runs-on.dev,ad6a701ec19e545a8f11"
-      ]
-    }
   }
 }

@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-09-18T09:27:28.755Z",
   "records": {},
-  "country": "SE"
+  "country": "SE",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=ridetolearn.runs-on.dev,459e1141f11a47e8c3ec"
+      ]
+    }
+  }
 }

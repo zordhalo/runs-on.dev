@@ -1,0 +1,18 @@
+{
+  "name": "moonlight-auto-clicker",
+  "owner": {
+    "github": "MOA-Creator"
+  },
+  "claimedAt": "2026-09-21T16:34:59.815Z",
+  "records": {
+    "CNAME": "moa-creator.github.io"
+  },
+  "country": "IL",
+  "subdomains": {
+    "_github-pages-challenge-moa-creator.moonlight-auto-clicker": {
+      "TXT": [
+        "ed4d3fe6c7f6634cb05ad3427b5230"
+      ]
+    }
+  }
+}

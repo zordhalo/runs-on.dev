@@ -5,40 +5,16 @@
   },
   "claimedAt": "2026-09-19T17:05:20.698Z",
   "records": {
-    "CNAME": "faro-7nuo.onrender.com"
+    "CNAME": "f3eb841c65ad6bc8.vercel-dns-017.com"
   },
   "country": "IT",
   "profile": {
     "name": "mattia494"
   },
   "subdomains": {
-    "send": {
-      "MX": [
-        {
-          "priority": 10,
-          "value": "feedback-smtp.eu-west-1.amazonses.com"
-        }
-      ],
+    "_vercel": {
       "TXT": [
-        "v=spf1 include:amazonses.com ~all"
-      ]
-    },
-    "_dmarc": {
-      "TXT": [
-        "v=DMARC1; p=none;"
-      ]
-    },
-    "resend": {
-      "TXT": [
-        "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDsQU57bCPaQjpiorAoNKtNZGDXN4FE5qwCIZEyZkgl1zGuI5n9M04wxSoLKvYf5yVczudqxqlJYUvjBYc7MCeVtD9JvPH40G6lOH0kiKEV5IUIJ9Sd1YeXZHHbqzsiNn0Eg95ChLHCZOsA7oo/jbyZLBsAamMDNbXrY7tzPmHCWwIDAQAB"
-      ]
-    },
-    "faro": {
-      "MX": [
-        {
-          "priority": 10,
-          "value": "inbound-smtp.eu-west-1.amazonaws.com"
-        }
+        "vc-domain-verify=faro.runs-on.dev,76731bd76da16fa0f07d"
       ]
     }
   }

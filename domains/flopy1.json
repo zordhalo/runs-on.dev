@@ -13,11 +13,6 @@
     "bio": "flopy1"
   },
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=flopy1.runs-on.dev,f33b62026e35d0536b7e"
-      ]
-    },
     "flopy1": {
       "CNAME": "41438dc49b5c44d7.vercel-dns-017.com"
     }

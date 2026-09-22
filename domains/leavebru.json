@@ -11,11 +11,6 @@
   "subdomains": {
     "leavebru": {
       "CNAME": "3f2c83692ce60fcd.vercel-dns-017.com"
-    },
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=leavebru.runs-on.dev,5c60a1077d9cb3ebb74b"
-      ]
     }
   }
 }

@@ -5,6 +5,13 @@
   },
   "claimedAt": "2026-09-12T20:30:52.057Z",
   "records": {
-    "CNAME": "7cf809aa0f269b0a.vercel-dns-017.com"
+    "CNAME": "992b7ef19973193c.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=kite.runs-on.dev,2676834e04d8e9f08589"
+      ]
+    }
   }
 }

@@ -7,13 +7,6 @@
   "records": {
     "CNAME": "43c445da6762222b.vercel-dns-017.com"
   },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=thenityant.runs-on.dev,7dd6b726e49a94f30ddd"
-      ]
-    }
-  },
   "country": "IN",
   "profile": {
     "name": "TheNityant"

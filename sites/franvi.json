@@ -1,0 +1,14 @@
+{
+  "name": "franvi",
+  "owner": "Haplee",
+  "active": "0aa1e369",
+  "deployments": [
+    {
+      "id": "0aa1e369",
+      "at": "2026-09-21T15:04:29.155Z",
+      "files": 13,
+      "bytes": 1117931
+    }
+  ],
+  "updatedAt": "2026-09-21T15:08:23.063Z"
+}

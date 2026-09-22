@@ -9,12 +9,5 @@
   },
   "profile": {
     "name": "Sohan"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=maestro.runs-on.dev,2727d9c9712cb71558b7"
-      ]
-    }
   }
 }

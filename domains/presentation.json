@@ -1,0 +1,24 @@
+{
+  "name": "presentation",
+  "owner": {
+    "github": "ackerlex"
+  },
+  "claimedAt": "2026-09-21T19:10:47.167Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "subdomains": {
+    "presentation": {
+      "CNAME": "df6f2136671ce258.vercel-dns-017.com"
+    },
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=presentation.runs-on.dev,a84f42d683e0bd292ecc"
+      ]
+    }
+  },
+  "profile": {
+    "name": "English"
+  },
+  "country": "MA"
+}

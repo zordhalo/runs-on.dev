@@ -1,0 +1,28 @@
+{
+  "name": "vishalgupta",
+  "owner": {
+    "github": "VishalGCode"
+  },
+  "claimedAt": "2026-09-21T13:27:22.687Z",
+  "records": {
+    "CNAME": "vishalgupta.vercel-dns.com"
+  },
+  "country": "IN",
+  "profile": {
+    "name": "VISHAL GUPTA",
+    "bio": "Full-Stack Developer | Building web applications with React, Next.js & Node.js 🚀\n\n🌐 Portfolio: vishalgupta.runs-on.dev",
+    "links": [
+      {
+        "label": "My Portfolio",
+        "url": "https://vishalgdev.vercel.app/"
+      }
+    ]
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=vishalgupta.runs-on.dev,c75ea8453cd17cddb073"
+      ]
+    }
+  }
+}

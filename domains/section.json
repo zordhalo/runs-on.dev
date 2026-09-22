@@ -5,10 +5,17 @@
   },
   "claimedAt": "2026-09-17T13:16:36.984Z",
   "records": {
-    "CNAME": "yusf-id.vercel.app"
+    "CNAME": "cname.vercel-dns.com"
   },
   "country": "IQ",
   "profile": {
-    "name": "SECT19M"
+    "name": "SECT19N"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=section.runs-on.dev,da219b943b812206a711"
+      ]
+    }
   }
 }
