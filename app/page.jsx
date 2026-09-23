@@ -48,6 +48,18 @@ const websiteJsonLd = {
       ],
       address: { '@type': 'PostalAddress', addressCountry: 'IN' },
     },
+    {
+      '@type': 'WebApplication',
+      '@id': 'https://advancelabs.dev/lab/runs-on#software',
+      name: 'runs-on.dev',
+      url: 'https://runs-on.dev',
+      applicationCategory: 'DeveloperApplication',
+      license: 'https://spdx.org/licenses/AGPL-3.0-only.html',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      creator: { '@id': 'https://advancelabs.dev/#organization' },
+      publisher: { '@id': 'https://advancelabs.dev/#organization' },
+      sameAs: ['https://github.com/zordhalo/runs-on.dev', 'https://advancelabs.dev/lab/runs-on'],
+    },
   ],
 };
 

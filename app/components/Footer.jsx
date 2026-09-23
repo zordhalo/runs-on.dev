@@ -24,7 +24,7 @@ export default async function Footer() {
           <div>
             <p className="text-[14px] text-(--color-ink)">
               runs-on.dev, a free subdomain registry by{' '}
-              <a className="text-(--color-ink) underline" href="https://advancelabs.dev">
+              <a className="text-(--color-ink) underline" href="https://advancelabs.dev/lab/runs-on">
                 Advance Labs
               </a>
             </p>

@@ -293,6 +293,6 @@ new; credit to [is-a.dev](https://www.is-a.dev) for the prior art, and to
 
 ---
 
-Operated by [Advance Labs](https://advancelabs.dev), which registered
+Built and operated by [Advance Labs](https://advancelabs.dev), which registered
 `runs-on.dev` and is the party responsible for what runs under it. See
-[POLICY.md](./POLICY.md).
+[POLICY.md](./POLICY.md) · [All Advance Labs products](https://advancelabs.dev/lab).
