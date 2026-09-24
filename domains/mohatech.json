@@ -4,6 +4,8 @@
     "github": "CodHard845"
   },
   "claimedAt": "2026-09-24T04:55:00.803Z",
-  "records": {},
+  "records": {
+    "CNAME": "darkentropy.pages.dev"
+  },
   "country": "TN"
 }
