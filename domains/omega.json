@@ -14,5 +14,9 @@
         "vc-domain-verify=omega.runs-on.dev,edbf05aaa732535a7fa4"
       ]
     }
+  },
+  "profile": {
+    "name": "Omega-127",
+    "bio": "Learning. Building. Scaling"
   }
 }
