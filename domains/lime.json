@@ -10,7 +10,7 @@
   "country": "IN",
   "subdomains": {
     "lime": {
-      "CNAME": "lime-aboutme.pages.dev"
+      "CNAME": "lime-font.pages.dev"
     }
   }
 }
