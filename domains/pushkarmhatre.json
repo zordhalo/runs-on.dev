@@ -7,5 +7,15 @@
   "records": {
     "CNAME": "cname.vercel-dns.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "pushkarmhatre": {
+      "CNAME": "f12ee0011545e83c.vercel-dns-017.com"
+    },
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=pushkarmhatre.runs-on.dev,bea705ac1e88861d4dd3"
+      ]
+    }
+  }
 }
