@@ -21,6 +21,9 @@
     },
     "vanta": {
       "CNAME": "1d1e77e77e6a51cc.vercel-dns-017.com"
+    },
+    "waiting-game": {
+      "CNAME": "e9ebd1b2b7578dd9.vercel-dns-017.com"
     }
   }
 }
