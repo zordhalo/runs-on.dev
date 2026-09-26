@@ -4,6 +4,8 @@
     "github": "CowsAreAmazing1"
   },
   "claimedAt": "2026-09-26T18:04:48.353Z",
-  "records": {},
+  "records": {
+    "CNAME": "cowsareamazing1.github.io"
+  },
   "country": "GB"
 }
