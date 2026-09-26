@@ -4,6 +4,8 @@
     "github": "pwd-taly"
   },
   "claimedAt": "2026-09-26T18:37:48.491Z",
-  "records": {},
+  "records": {
+    "CNAME": "pwd-taly.github.io"
+  },
   "country": "TR"
 }
