@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "cname.vercel-dns.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=sahil-chhatbar.runs-on.dev,ed1f314c5b5d1c671d9b"
-      ]
-    }
-  }
+  "country": "IN"
 }

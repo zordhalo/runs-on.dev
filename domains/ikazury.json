@@ -9,11 +9,6 @@
   },
   "country": "ID",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=ikazury.runs-on.dev,4727a885d157173ae4d2"
-      ]
-    },
     "_discord": {
       "TXT": [
         "dh=b3dee25d4247c2048f9cee0b217b873b65e2453c"

@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "b7f40305bf9216a8.vercel-dns-017.com"
   },
-  "country": "JO",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=omar.runs-on.dev,29258e3855a261974373"
-      ]
-    }
-  }
+  "country": "JO"
 }
