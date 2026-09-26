@@ -18,6 +18,9 @@
       "TXT": [
         "vc-domain-verify=ziuus.runs-on.dev,1dbec7c99e175a1a5142"
       ]
+    },
+    "vanta": {
+      "CNAME": "1d1e77e77e6a51cc.vercel-dns-017.com"
     }
   }
 }
