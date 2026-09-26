@@ -4,6 +4,8 @@
     "github": "Gracy769"
   },
   "claimedAt": "2026-09-26T17:33:42.028Z",
-  "records": {},
+  "records": {
+    "CNAME": "web-production-e12b38.up.railway.app"
+  },
   "country": "IN"
 }
