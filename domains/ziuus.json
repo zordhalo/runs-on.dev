@@ -16,7 +16,9 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=waiting-game.ziuus.runs-on.dev,1d188cd123c874364d77"
+        "vc-domain-verify=ziuus.runs-on.dev,1dbec7c99e175a1a5142",
+        "vc-domain-verify=waiting-game.ziuus.runs-on.dev,1d188cd123c874364d77",
+        "vc-domain-verify=vanta.ziuus.runs-on.dev,acac521ba9588f11f8db"
       ]
     },
     "vanta": {
