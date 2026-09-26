@@ -14,9 +14,9 @@
   },
   "country": "IN",
   "subdomains": {
-    "vanta": {
+    "_vercel": {
       "TXT": [
-        "vc-domain-verify=vanta.ziuus.runs-on.dev,acac521ba9588f11f8db"
+        "vc-domain-verify=ziuus.runs-on.dev,1dbec7c99e175a1a5142"
       ]
     }
   }
