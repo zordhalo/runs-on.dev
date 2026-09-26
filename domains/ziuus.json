@@ -19,7 +19,7 @@
         "vc-domain-verify=ziuus.runs-on.dev,acac521ba9588f1f8db"
       ]
     },
-    "vanta": {
+    "_vercel.vanta": {
       "CNAME": "1d1e77e77e6a51cc.vercel-dns-017.com"
     },
     "waiting-game": {
