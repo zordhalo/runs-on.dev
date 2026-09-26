@@ -181,7 +181,24 @@ every domain; the [records](./records.md#fields) doc also shows
 `A` and `TXT` at the same name, so this is safe to add even if
 `you.runs-on.dev` already points at a site. Add `you.runs-on.dev` as a
 domain at your forwarding provider and set up an alias before opening the
-pull request. Full walkthrough: [`/docs/guides/email-forwarding`](https://runs-on.dev/docs/guides/email-forwarding).
+pull request.
+
+If your provider also signs outgoing mail with DKIM, it asks for one more
+TXT at a selector hostname — Zoho Mail uses `zmail._domainkey`, Google
+Workspace uses `google._domainkey`. The selector is the provider's
+choice, so publish it under `subdomains` with the
+`<selector>._domainkey` label form:
+
+```json
+"subdomains": {
+  "zmail._domainkey": { "TXT": ["v=DKIM1; k=rsa; p=YOUR-PROVIDERS-KEY"] }
+}
+```
+
+The part before `._domainkey` is the selector your provider's DKIM page
+shows you, written in the same grammar as a name. A `TXT` on a subdomain
+coexists with the `MX` forwarding records above. Full walkthrough:
+[`/docs/guides/email-forwarding`](https://runs-on.dev/docs/guides/email-forwarding).
 
 ## Bluesky handle
 

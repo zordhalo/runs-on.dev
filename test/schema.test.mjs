@@ -267,6 +267,37 @@ test('rejects two-label without the underscore-first order', () => {
   assert.equal(validateRecord({ ...valid, subdomains: { 'a._b': { TXT: ['hi'] } } }).ok, false);
 });
 
+test('DKIM selector form is anchored to the _domainkey service label', () => {
+  // Only `._domainkey` is open to selectors — arbitrary second labels stay
+  // rejected, in either order, and an underscored selector stays rejected.
+  const cases = [
+    ['google._domainkey', true],
+    ['s1._domainkey', true],
+    ['selector-1._domainkey', true],
+    ['zmail._domaincon', false], // a different service label
+    ['zmail.domainkey', false], // missing the underscore
+    ['_zmail._domainkey', false], // underscored selector
+    ['a.b._domainkey', false], // three labels
+    ['_domainkey.zmail.txt', false],
+  ];
+  for (const [label, expected] of cases) {
+    const out = validateRecord({ ...valid, subdomains: { [label]: { TXT: ['hi'] } } });
+    assert.equal(out.ok, expected, `${label}: ${JSON.stringify(out.errors)}`);
+  }
+});
+
+test('DKIM selector subdomains round-trip through planDnsChanges', async () => {
+  const { planDnsChanges } = await import('../lib/dns.js');
+  const record = {
+    ...valid,
+    subdomains: { 'zmail._domainkey': { TXT: ['v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQ'] } },
+  };
+  const changes = planDnsChanges(record);
+  assert.deepEqual(changes, [
+    { type: 'TXT', name: 'zmail._domainkey.lucas', value: 'v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQ' },
+  ]);
+});
+
 test('two-label subdomains round-trip through planDnsChanges', async () => {
   const { planDnsChanges } = await import('../lib/dns.js');
   const record = {
@@ -277,6 +308,21 @@ test('two-label subdomains round-trip through planDnsChanges', async () => {
   assert.deepEqual(changes, [
     { type: 'TXT', name: '_vercel.recruitment.lucas', value: 'vc-domain-verify=recruitment.lucas.runs-on.dev,abc123' },
   ]);
+});
+
+// --- DKIM selector subdomains (zmail._domainkey) ---
+// DKIM publishes the public key at `<selector>._domainkey.<domain>` and the
+// selector is the mail provider's choice (Zoho: `zmail`, Google: `google`),
+// so the one-label form `_domainkey` cannot name the host DKIM reads. A real
+// owner hit this: their Zoho DKIM TXT sat in the record and validation
+// rejected `zmail._domainkey` as failing the label grammar.
+
+test('accepts a DKIM selector subdomain like zmail._domainkey', () => {
+  const out = validateRecord({
+    ...valid,
+    subdomains: { 'zmail._domainkey': { TXT: ['v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQ'] } },
+  });
+  assert.deepEqual(out, { ok: true, errors: [] });
 });
 
 test('the JSON Schema mirror allows the two-label form', () => {
@@ -449,6 +495,26 @@ test('the guard applies at the root too, not only under subdomains', () => {
   });
   assert.equal(out.ok, false);
   assert.ok(out.errors.some((e) => e.includes('truncated Vercel verification token')));
+});
+
+test('the JSON Schema mirror allows the DKIM selector form', () => {
+  // Same drift contract as the two-label form: the published schema must not
+  // promise less (or more) than the validator CI actually runs.
+  const patterns = mirror.properties.subdomains.propertyNames.anyOf.map((alt) => new RegExp(alt.pattern));
+  const cases = [
+    ['zmail._domainkey', true],
+    ['s1._domainkey', true],
+    ['_zmail._domainkey', false], // underscored selector stays rejected
+    ['_domainkey.zmail', true], // already accepted by the nested form (underscore-first)
+    ['zmail._domaincon', false],
+  ];
+  for (const [label, expected] of cases) {
+    assert.equal(
+      patterns.some((re) => re.test(label)),
+      expected,
+      `schema/record.schema.json disagrees on ${JSON.stringify(label)}`,
+    );
+  }
 });
 
 test('the JSON Schema mirror declares profile with the same field set', () => {

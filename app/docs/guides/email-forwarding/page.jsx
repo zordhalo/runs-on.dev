@@ -44,6 +44,22 @@ export default function EmailForwardingGuide() {
         </ol>
       </Section>
 
+      <Section title="DKIM signing">
+        <p className="text-sm leading-relaxed sm:text-base">
+          Providers that sign outgoing mail — Zoho Mail, Google Workspace — ask for one more
+          TXT record at a selector hostname, which DKIM verification reads. The selector is the
+          provider&apos;s choice (Zoho uses <C>zmail</C>, Google uses <C>google</C>), so the
+          registry accepts any selector in the <C>&lt;selector&gt;._domainkey</C> label form,
+          published under <C>subdomains</C>:
+        </p>
+        <Record path="domains/you.json">{"\"subdomains\": {\n  \"zmail._domainkey\": { \"TXT\": [\"v=DKIM1; k=rsa; p=YOUR-PROVIDERS-KEY\"] }\n}"}</Record>
+        <p className="text-sm leading-relaxed sm:text-base">
+          Copy the selector and key exactly from your provider&apos;s DKIM page. A <C>TXT</C> on a
+          subdomain coexists with the <C>MX</C> records above, so signing and forwarding work on
+          the same name.
+        </p>
+      </Section>
+
       <Section title="How to tell it worked">
         <p className="text-sm leading-relaxed sm:text-base">
           ImprovMX&apos;s dashboard shows the domain as verified once it can see both MX records.

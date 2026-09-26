@@ -80,6 +80,12 @@ verification.
   subdomain of a claim (e.g. `recruitment.you.runs-on.dev`) needs its TXT
   at `_vercel.recruitment.you.runs-on.dev`. Only underscore-first is
   allowed; a bare `a.b` is still rejected.
+- A DKIM selector form `<selector>._domainkey` is also accepted, because
+  DKIM publishes its public key at `<selector>._domainkey.<domain>` and
+  the selector is chosen by the mail provider: Zoho uses `zmail`, Google
+  uses `google`, so the bare label `_domainkey` cannot express the host
+  DKIM verification actually reads. The selector follows the same grammar
+  as `name`, and the form is still exactly two labels deep.
 - Each value holds `A`, `TXT`, `CNAME`, or `MX` under the same coexistence
   rules as the root `records` object. `URL` is not allowed on a
   subdomain. The app only ever looks up the claimed name itself, so a
