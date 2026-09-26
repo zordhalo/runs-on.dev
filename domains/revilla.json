@@ -26,7 +26,7 @@
   },
   "country": "IE",
   "subdomains": {
-    "_domainkey": {
+    "zmail._domainkey": {
       "TXT": [
         "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdzTQCgt4V6wxFx0BUfY+0VyahCmT0VUIjp8Q6YxsFO+/i58KbUa7vjjLntLkqRvO2AK0mP3uGHDua7VjCc0eh0+By4p6U5axOuvuaJNGMJpwFzABjese+ScFyfIc38L/4Ud2C+9bqU5xbFvqVZ6jjG7YPqBf4JAL2p6LRuL/1pwIDAQAB"
       ]
