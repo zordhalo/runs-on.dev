@@ -11,7 +11,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=omega.runs-on.dev,cb8c1bc6a001ef7cb8fb"
+        "omega.runs-on.dev,cb8c1bc6a001ef7cb8fb"
       ]
     }
   },
