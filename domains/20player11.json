@@ -9,9 +9,9 @@
   },
   "country": "CZ",
   "subdomains": {
-    "studyos": {
+    "_vercel": {
       "TXT": [
-        "vc-domain-verify=studyos.20player11.runs-on.dev,ef6afdeec618e9fc9344"
+        "vc-domain-verify=20player11.runs-on.dev,6ae90251545675b1738c"
       ]
     }
   },
