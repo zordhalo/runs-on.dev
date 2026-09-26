@@ -14,5 +14,8 @@
         "vc-domain-verify=studyos.20player11.runs-on.dev,ef6afdeec618e9fc9344"
       ]
     }
+  },
+  "profile": {
+    "name": "20player11"
   }
 }
