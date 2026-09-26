@@ -4,6 +4,15 @@
     "github": "nichehlikes15"
   },
   "claimedAt": "2026-09-25T22:42:37.680Z",
-  "records": {},
-  "country": "GB"
+  "records": {
+    "CNAME": "0537352aac3206c2.vercel-dns-017.com"
+  },
+  "country": "GB",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=tap.runs-on.dev,e705984042dc81e18aa9"
+      ]
+    }
+  }
 }
