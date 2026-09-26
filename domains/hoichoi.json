@@ -5,7 +5,9 @@
   },
   "claimedAt": "2026-09-26T07:35:39.973Z",
   "records": {
-    "URL": "https://3-7-70-69.sslip.io/"
+    "A": [
+      "3.7.70.69"
+    ]
   },
   "country": "IN"
 }
