@@ -5,7 +5,9 @@
   },
   "claimedAt": "2026-09-26T18:12:55.578Z",
   "records": {
-    "CNAME": "bfcffce532993f8d.vercel-dns-017.com"
+    "TXT": [
+      "vc-domain-verify=adnanefahsi.runs-on.dev,46238f48bc9c2126de27"
+    ]
   },
   "country": "MA"
 }
