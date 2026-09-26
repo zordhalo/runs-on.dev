@@ -28,7 +28,7 @@
   "subdomains": {
     "zmail._domainkey": {
       "TXT": [
-        "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdzTQCgt4V6wxFx0BUfY+0VyahCmT0VUIjp8Q6YxsFO+/i58KbUa7vjjLntLkqRvO2AK0mP3uGHDua7VjCc0eh0+By4p6U5axOuvuaJNGMJpwFzABjese+ScFyfIc38L/4Ud2C+9bqU5xbFvqVZ6jjG7YPqBf4JAL2p6LRuL/1pwIDAQAB"
+        "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCNW/a7ugxnt0YJz2vaMridZBIPaskl2Wbn9eSabCJXtL005x3rRA5CeAeniic3boKjK11hl9NejW7PhUiZVoYYejr84qojc6DGKELTd7IH9weOjbUP8Iqmr/BnXM2hq6XJIto/liylyCbH1rel0JtdUunkgGAD2YCO1I6yFqb7OwIDAQAB"
       ]
     }
   }
