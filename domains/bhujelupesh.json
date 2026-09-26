@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "vermillion-gnome-481205.netlify.app"
   },
+  "subdomains": {
+    "subdomain-owner-verification": {
+      "TXT": ["c524e6d1e8a7aeedd55200544a0c3835"]
+    }
+  },
   "country": "NP"
 }
