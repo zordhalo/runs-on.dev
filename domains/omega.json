@@ -10,7 +10,9 @@
   "country": "IN",
   "subdomains": {
     "_vercel": {
-      "CNAME": "7dfd29d5e5990668.vercel-dns-017.com"
+      "TXT": [
+        "vc-domain-verify=omega.runs-on.dev,cb8c1bc6a001ef7cb8fb"
+      ]
     }
   },
   "profile": {
