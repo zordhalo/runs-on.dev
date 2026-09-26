@@ -17,7 +17,8 @@
     "_vercel": {
       "TXT": [
         "vc-domain-verify=ziuus.runs-on.dev,acac521ba9588f1f8db",
-        "vc-domain-verify=vanta.ziuus.runs-on.dev,acac521ba9588f11f8db"
+        "vc-domain-verify=vanta.ziuus.runs-on.dev,acac521ba9588f11f8db",
+        "vc-domain-verify=waiting-game.ziuus.runs-on.dev,1d188cd123c874364d77"
       ]
     },
     "_vercel.vanta": {
@@ -27,6 +28,9 @@
     },
     "vanta": {
       "CNAME": "1d1e77e77e6a51cc.vercel-dns-017.com"
+    },
+    "waiting-game": {
+      "CNAME": "e9ebd1b2b7578dd9.vercel-dns-017.com"
     }
   }
 }
