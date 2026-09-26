@@ -10,9 +10,7 @@
   "country": "IN",
   "subdomains": {
     "_vercel": {
-      "TXT": [
-        "7dfd29d5e5990668.vercel-dns-017.com."
-      ]
+      "CNAME": "7dfd29d5e5990668.vercel-dns-017.com"
     }
   },
   "profile": {
