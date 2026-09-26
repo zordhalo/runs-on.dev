@@ -29,6 +29,11 @@
       "TXT": [
         "vc-domain-verify=waiting-game.ziuus.runs-on.dev,1d188cd123c874364d77"
       ]
+    },
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=vanta.ziuus.runs-on.dev,acac521ba9588f11f8db"
+      ]
     }
   }
 }
