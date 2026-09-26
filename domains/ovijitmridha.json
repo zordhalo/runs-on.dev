@@ -4,6 +4,8 @@
     "github": "s21omh"
   },
   "claimedAt": "2026-09-26T16:58:36.562Z",
-  "records": {},
+  "records": {
+    "CNAME": "204f235a11e4741a.vercel-dns-017.com"
+  },
   "country": "BD"
 }
