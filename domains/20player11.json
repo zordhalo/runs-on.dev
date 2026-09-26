@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-09-26T10:22:28.407Z",
   "records": {},
-  "country": "CZ"
+  "country": "CZ",
+  "subdomains": {
+    "studyos": {
+      "TXT": [
+        "vc-domain-verify=studyos.20player11.runs-on.dev,1b2f23e2075bb7dec111"
+      ]
+    }
+  }
 }
