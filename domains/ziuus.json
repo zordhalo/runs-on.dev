@@ -24,6 +24,11 @@
     },
     "waiting-game": {
       "CNAME": "e9ebd1b2b7578dd9.vercel-dns-017.com"
+    },
+    "_vercel.waiting-game": {
+      "TXT": [
+        "vc-domain-verify=waiting-game.ziuus.runs-on.dev,1d188cd123c874364d77"
+      ]
     }
   }
 }
