@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "204f235a11e4741a.vercel-dns-017.com"
   },
-  "country": "BD"
+  "country": "BD",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=ovijitmridha.runs-on.dev,31096a5d05a67cddd775"
+      ]
+    }
+  }
 }
