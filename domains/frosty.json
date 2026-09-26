@@ -4,6 +4,8 @@
     "github": "frost-guy-2006"
   },
   "claimedAt": "2026-09-17T14:22:20.985Z",
-  "records": {},
+  "records": {
+    "CNAME": "vego.vercel-dns.com"
+  },
   "country": "IN"
 }
