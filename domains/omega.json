@@ -7,5 +7,12 @@
   "records": {
     "URL": "https://primetime-iota.vercel.app/"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=omega.runs-on.dev,edbf05aaa732535a7fa4"
+      ]
+    }
+  }
 }
