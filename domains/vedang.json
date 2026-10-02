@@ -4,5 +4,12 @@
     "github": "VedangP57"
   },
   "claimedAt": "2026-09-03T14:17:21.996Z",
-  "records": {}
+  "records": {
+    "CNAME": "a88851c3162dcadc.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=vedang.runs-on.dev,6d832e799023e9ed2af7"]
+    }
+  }
 }
