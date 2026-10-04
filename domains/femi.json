@@ -1,9 +1,720 @@
-{
-  "name": "femi",
-  "owner": {
-    "github": "frost35"
-  },
-  "claimedAt": "2026-09-24T18:20:34.192Z",
-  "records": {},
-  "country": "NG"
+import Link from "next/link";
+import {
+  ArrowRight,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  DollarSign,
+  Mail,
+  MessageSquare,
+  Package,
+  ShoppingCart,
+  Users,
+  XCircle,
+} from "lucide-react";
+
+import { prisma } from "@/lib/prisma";
+import { getDashboardStats } from "@/lib/services/dashboard.service";
+
+import PageHeader from "@/components/admin/ui/PageHeader";
+import AdminCard from "@/components/admin/ui/AdminCard";
+import AdminBadge from "@/components/admin/ui/AdminBadge";
+
+function formatDate(date) {
+  if (!date) return "—";
+
+  return new Date(date).toLocaleString("en-NG", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function formatAppointmentDate(date) {
+  if (!date) return "No appointment date";
+
+  return new Date(date).toLocaleString("en-NG", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function bookingStatusClass(status) {
+  switch (String(status).toUpperCase()) {
+    case "APPROVED":
+      return "bg-green-100 text-green-700";
+
+    case "COMPLETED":
+      return "bg-blue-100 text-blue-700";
+
+    case "REJECTED":
+    case "CANCELLED":
+      return "bg-red-100 text-red-700";
+
+    default:
+      return "bg-yellow-100 text-yellow-700";
+  }
+}
+
+function messageStatusClass(status) {
+  switch (String(status).toUpperCase()) {
+    case "COMPLETED":
+      return "bg-green-100 text-green-700";
+
+    case "IN_PROGRESS":
+      return "bg-yellow-100 text-yellow-700";
+
+    case "DENIED":
+      return "bg-red-100 text-red-700";
+
+    default:
+      return "bg-blue-100 text-blue-700";
+  }
+}
+
+export default async function AdminDashboard() {
+  const dashboardStats = await getDashboardStats();
+
+  const now = new Date();
+
+  const [
+    bridalPendingCount,
+    bespokePendingCount,
+    newMessageCount,
+    recentMessages,
+    upcomingBridalBookings,
+    upcomingBespokeBookings,
+  ] = await Promise.all([
+    prisma.bridalBooking.count({
+      where: {
+        status: "PENDING",
+      },
+    }),
+
+    prisma.bespokeBooking.count({
+      where: {
+        status: "PENDING",
+      },
+    }),
+
+    prisma.contactMessage.count({
+      where: {
+        status: "NEW",
+      },
+    }),
+
+    prisma.contactMessage.findMany({
+      take: 5,
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        subject: true,
+        status: true,
+        createdAt: true,
+      },
+    }),
+
+    prisma.bridalBooking.findMany({
+      where: {
+        appointmentDate: {
+          gte: now,
+        },
+        status: {
+          notIn: ["REJECTED", "CANCELLED", "COMPLETED"],
+        },
+      },
+      take: 5,
+      orderBy: {
+        appointmentDate: "asc",
+      },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        appointmentDate: true,
+        appointmentType: true,
+        status: true,
+      },
+    }),
+
+    prisma.bespokeBooking.findMany({
+      where: {
+        appointmentDate: {
+          gte: now,
+        },
+        status: {
+          notIn: ["REJECTED", "CANCELLED", "COMPLETED"],
+        },
+      },
+      take: 5,
+      orderBy: {
+        appointmentDate: "asc",
+      },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        appointmentDate: true,
+        appointmentType: true,
+        status: true,
+      },
+    }),
+  ]);
+
+  const {
+    productCount,
+    customerCount,
+    orderCount,
+    failedOrderCount,
+    revenue,
+    monthlyRevenue,
+    recentOrders,
+    lowStockProducts,
+  } = dashboardStats;
+
+  const stats = [
+    {
+      title: "Monthly Revenue",
+      value: `₦${monthlyRevenue.toLocaleString()}`,
+      subtitle: "Paid orders this month",
+      icon: DollarSign,
+    },
+    {
+      title: "Total Orders",
+      value: orderCount,
+      subtitle: "All orders",
+      icon: ShoppingCart,
+    },
+    {
+      title: "Failed Orders",
+      value: failedOrderCount,
+      subtitle: "Failed payments",
+      icon: XCircle,
+    },
+    {
+      title: "Customers",
+      value: customerCount,
+      subtitle: "Registered customers",
+      icon: Users,
+    },
+    {
+      title: "Products",
+      value: productCount,
+      subtitle: "Products in store",
+      icon: Package,
+    },
+  ];
+
+  const pendingBookings =
+    bridalPendingCount + bespokePendingCount;
+
+  const upcomingAppointments = [
+    ...upcomingBridalBookings.map((booking) => ({
+      id: `bridal-${booking.id}`,
+      type: "BRIDAL",
+      name: booking.name,
+      phone: booking.phone,
+      appointmentDate: booking.appointmentDate,
+      appointmentType: booking.appointmentType,
+      status: booking.status,
+    })),
+
+    ...upcomingBespokeBookings.map((booking) => ({
+      id: `bespoke-${booking.id}`,
+      type: "BESPOKE",
+      name: booking.name,
+      phone: booking.phone,
+      appointmentDate: booking.appointmentDate,
+      appointmentType: booking.appointmentType,
+      status: booking.status,
+    })),
+  ]
+    .sort(
+      (a, b) =>
+        new Date(a.appointmentDate).getTime() -
+        new Date(b.appointmentDate).getTime()
+    )
+    .slice(0, 6);
+
+  return (
+    <div className="space-y-8">
+      <PageHeader
+        title="Dashboard"
+        description="Overview of your BMG Women store."
+      />
+
+      {/* Main Statistics */}
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-5">
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+
+          return (
+            <AdminCard key={stat.title}>
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-zinc-500">
+                    {stat.title}
+                  </p>
+
+                  <p className="mt-2 text-2xl font-bold text-zinc-900">
+                    {stat.value}
+                  </p>
+
+                  <p className="mt-1 text-xs text-zinc-500">
+                    {stat.subtitle}
+                  </p>
+                </div>
+
+                <div className="rounded-xl bg-zinc-100 p-3">
+                  <Icon size={20} />
+                </div>
+              </div>
+            </AdminCard>
+          );
+        })}
+      </div>
+
+      {/* Action Overview */}
+      <div className="grid gap-5 md:grid-cols-3">
+        <Link href="/admin/bookings">
+          <AdminCard>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-zinc-500">
+                  Pending Bookings
+                </p>
+
+                <p className="mt-2 text-3xl font-bold text-zinc-900">
+                  {pendingBookings}
+                </p>
+
+                <p className="mt-1 text-xs text-zinc-500">
+                  Bridal: {bridalPendingCount} · Bespoke:{" "}
+                  {bespokePendingCount}
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-zinc-100 p-3">
+                <CalendarDays size={20} />
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center gap-1 text-sm font-medium text-zinc-900">
+              Manage bookings
+              <ArrowRight size={15} />
+            </div>
+          </AdminCard>
+        </Link>
+
+        <Link href="/admin/messages">
+          <AdminCard>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-zinc-500">
+                  New Messages
+                </p>
+
+                <p className="mt-2 text-3xl font-bold text-zinc-900">
+                  {newMessageCount}
+                </p>
+
+                <p className="mt-1 text-xs text-zinc-500">
+                  Customer messages awaiting action
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-zinc-100 p-3">
+                <MessageSquare size={20} />
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center gap-1 text-sm font-medium text-zinc-900">
+              View messages
+              <ArrowRight size={15} />
+            </div>
+          </AdminCard>
+        </Link>
+
+        <Link href="/admin/orders">
+          <AdminCard>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-zinc-500">
+                  Order Management
+                </p>
+
+                <p className="mt-2 text-3xl font-bold text-zinc-900">
+                  {orderCount}
+                </p>
+
+                <p className="mt-1 text-xs text-zinc-500">
+                  Orders currently in the system
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-zinc-100 p-3">
+                <ShoppingCart size={20} />
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center gap-1 text-sm font-medium text-zinc-900">
+              Manage orders
+              <ArrowRight size={15} />
+            </div>
+          </AdminCard>
+        </Link>
+      </div>
+
+      {/* Upcoming Appointments */}
+      <AdminCard>
+        <div className="mb-5 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-zinc-900">
+              Upcoming Appointments
+            </h2>
+
+            <p className="text-sm text-zinc-500">
+              Your next bridal and bespoke appointments.
+            </p>
+          </div>
+
+          <Link
+            href="/admin/bookings"
+            className="hidden items-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:flex"
+          >
+            View all
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+
+        {upcomingAppointments.length === 0 ? (
+          <div className="py-10 text-center">
+            <CalendarDays className="mx-auto h-8 w-8 text-zinc-300" />
+
+            <p className="mt-3 text-sm text-zinc-500">
+              No upcoming appointments.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {upcomingAppointments.map((appointment) => (
+              <div
+                key={appointment.id}
+                className="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="rounded-lg bg-zinc-100 p-2.5">
+                    <CalendarDays
+                      size={18}
+                      className="text-zinc-700"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-semibold text-zinc-900">
+                        {appointment.name}
+                      </p>
+
+                      <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-[10px] font-semibold text-zinc-600">
+                        {appointment.type}
+                      </span>
+                    </div>
+
+                    <p className="mt-1 text-sm text-zinc-500">
+                      {appointment.appointmentType ||
+                        "Consultation"}
+                    </p>
+
+                    <p className="mt-1 text-xs text-zinc-400">
+                      {appointment.phone}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 sm:text-right">
+                  <div>
+                    <p className="text-sm font-medium text-zinc-900">
+                      {formatAppointmentDate(
+                        appointment.appointmentDate
+                      )}
+                    </p>
+
+                    <span
+                      className={`mt-1 inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${bookingStatusClass(
+                        appointment.status
+                      )}`}
+                    >
+                      {appointment.status}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <Link
+          href="/admin/bookings"
+          className="mt-4 flex items-center justify-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:hidden"
+        >
+          View all bookings
+          <ArrowRight size={15} />
+        </Link>
+      </AdminCard>
+
+      {/* Recent Orders + Recent Messages */}
+      <div className="grid gap-8 xl:grid-cols-2">
+        <AdminCard>
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-zinc-900">
+                Recent Orders
+              </h2>
+
+              <p className="text-sm text-zinc-500">
+                Latest orders placed in your store.
+              </p>
+            </div>
+
+            <Link
+              href="/admin/orders"
+              className="hidden items-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:flex"
+            >
+              View all
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          {recentOrders.length === 0 ? (
+            <p className="py-8 text-center text-sm text-zinc-500">
+              No orders yet.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-150 text-sm">
+                <thead>
+                  <tr className="border-b text-left text-zinc-500">
+                    <th className="px-4 py-3 font-medium">
+                      Order
+                    </th>
+
+                    <th className="px-4 py-3 font-medium">
+                      Customer
+                    </th>
+
+                    <th className="px-4 py-3 font-medium">
+                      Total
+                    </th>
+
+                    <th className="px-4 py-3 font-medium">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {recentOrders.map((order) => (
+                    <tr
+                      key={order.id}
+                      className="border-b last:border-0"
+                    >
+                      <td className="px-4 py-4 font-medium text-zinc-900">
+                        #{order.id}
+                      </td>
+
+                      <td className="px-4 py-4">
+                        <p className="font-medium text-zinc-900">
+                          {order.customerName}
+                        </p>
+
+                        <p className="text-xs text-zinc-500">
+                          {order.email}
+                        </p>
+                      </td>
+
+                      <td className="px-4 py-4 font-medium text-zinc-700">
+                        ₦{order.total.toLocaleString()}
+                      </td>
+
+                      <td className="px-4 py-4">
+                        <AdminBadge>
+                          {order.orderStatus}
+                        </AdminBadge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <Link
+            href="/admin/orders"
+            className="mt-4 flex items-center justify-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:hidden"
+          >
+            View all orders
+            <ArrowRight size={15} />
+          </Link>
+        </AdminCard>
+
+        <AdminCard>
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-zinc-900">
+                Recent Messages
+              </h2>
+
+              <p className="text-sm text-zinc-500">
+                Latest customer enquiries.
+              </p>
+            </div>
+
+            <Link
+              href="/admin/messages"
+              className="hidden items-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:flex"
+            >
+              View all
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          {recentMessages.length === 0 ? (
+            <div className="py-8 text-center">
+              <Mail className="mx-auto h-8 w-8 text-zinc-300" />
+
+              <p className="mt-3 text-sm text-zinc-500">
+                No messages yet.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {recentMessages.map((message) => (
+                <Link
+                  key={message.id}
+                  href="/admin/messages"
+                  className="block rounded-xl border border-zinc-200 p-4 transition hover:border-zinc-400 hover:bg-zinc-50"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-zinc-900">
+                        {message.name}
+                      </p>
+
+                      <p className="mt-1 truncate text-sm font-medium text-zinc-700">
+                        {message.subject}
+                      </p>
+
+                      <p className="mt-1 text-xs text-zinc-400">
+                        {message.email}
+                      </p>
+                    </div>
+
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium ${messageStatusClass(
+                        message.status
+                      )}`}
+                    >
+                      {message.status.replace("_", " ")}
+                    </span>
+                  </div>
+
+                  <p className="mt-3 text-xs text-zinc-400">
+                    {formatDate(message.createdAt)}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          <Link
+            href="/admin/messages"
+            className="mt-4 flex items-center justify-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:hidden"
+          >
+            View all messages
+            <ArrowRight size={15} />
+          </Link>
+        </AdminCard>
+      </div>
+
+      {/* Low Stock */}
+      <AdminCard>
+        <div className="mb-5 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-zinc-900">
+              Low Stock
+            </h2>
+
+            <p className="text-sm text-zinc-500">
+              Products that need attention.
+            </p>
+          </div>
+
+          <Link
+            href="/admin/products"
+            className="hidden items-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:flex"
+          >
+            Manage products
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+
+        {lowStockProducts.length === 0 ? (
+          <p className="py-8 text-center text-sm text-zinc-500">
+            No low-stock products.
+          </p>
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2">
+            {lowStockProducts.map((product) => (
+              <div
+                key={product.id}
+                className="flex items-center justify-between rounded-xl border p-4"
+              >
+                <span className="font-medium text-zinc-900">
+                  {product.name}
+                </span>
+
+                <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
+                  {product.stock} left
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <Link
+          href="/admin/products"
+          className="mt-4 flex items-center justify-center gap-1 text-sm font-medium text-zinc-900 hover:underline sm:hidden"
+        >
+          Manage products
+          <ArrowRight size={15} />
+        </Link>
+      </AdminCard>
+
+      {/* Revenue Summary */}
+      <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white px-5 py-4">
+        <div>
+          <p className="text-sm text-zinc-500">
+            Total paid revenue
+          </p>
+
+          <p className="mt-1 text-xl font-bold text-zinc-900">
+            ₦{revenue.toLocaleString()}
+          </p>
+        </div>
+
+        <CheckCircle2 className="text-green-600" size={22} />
+      </div>
+    </div>
+  );
 }
