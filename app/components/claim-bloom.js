@@ -8,8 +8,8 @@
 // They drifted once already; importing the numbers from here is what keeps
 // them honest.
 //
-// The stats page's DotMap (app/components/ui.jsx) deliberately draws a
-// different, intensity-scaled bloom and does not read these.
+// The stats page renders this same HomeMap, so every claim bloom on the
+// site comes from these numbers.
 export const PITCH = 10;
 export const DOT_R = 2.2;
 

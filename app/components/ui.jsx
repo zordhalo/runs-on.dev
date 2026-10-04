@@ -7,12 +7,6 @@ export function Divider({ className = '' }) {
   return <hr aria-hidden="true" className={`slit-h ${className}`} />;
 }
 
-// Dot-matrix world map: white circular dots on the obsidian canvas, continents
-// defined by density alone. Atmospheric proof of reach, not photography.
-// Generated data (see scripts/generate-dotmap.mjs); decorative by design.
-const PITCH = 10;
-const DOT_R = 2.2;
-
 // Continent bucketing for the claim map: rough lat/lon boxes, checked in an
 // order that settles the overlaps (Europe before Asia and Africa, Oceania
 // before Asia, North before South America). Crude on purpose; the caption on
@@ -31,84 +25,6 @@ export function continentOf([lat, lon]) {
     if (lon >= lonMin && lon <= lonMax && lat >= latMin && lat <= latMax) return name;
   }
   return null;
-}
-
-export function DotMap({ points, filter, className = '' }) {
-  const { cols, rows } = DOTMAP;
-  const w = cols * PITCH;
-  const h = rows.length * PITCH;
-
-  // Cell centre back to lat/lon, for continent bucketing when a filter is
-  // active. The same projection the generator used, run in reverse.
-  const cellContinent = (c, r) =>
-    continentOf([
-      84 - ((r + 0.5) / rows.length) * 140,
-      ((c + 0.5) / cols) * 360 - 180,
-    ]);
-
-  const dots = [];
-  rows.forEach((line, r) => {
-    for (let c = 0; c < cols; c++) {
-      if (line[c] !== '1') continue;
-      // With a continent selected, its dots hold at half brightness while
-      // the rest of the world drops to a ghost; unfiltered stays as-is.
-      const op = filter
-        ? cellContinent(c, r) === filter ? 0.55 : 0.06
-        : points?.length ? 0.3 : 0.8;
-      dots.push(
-        <circle
-          key={`${c}-${r}`}
-          cx={c * PITCH + PITCH / 2}
-          cy={r * PITCH + PITCH / 2}
-          r={DOT_R}
-          fillOpacity={op}
-        />,
-      );
-    }
-  });
-
-  // Heat mode: claim locations ([lat, lon]) bucketed into the same grid as
-  // the map. A cell with claims renders one dot whose size and brightness
-  // scale with how many landed there, city lights on the dot-matrix world.
-  let heat = null;
-  if (points?.length) {
-    const counts = new Map();
-    for (const [lat, lon] of points) {
-      const c = Math.min(cols - 1, Math.max(0, Math.floor(((lon + 180) / 360) * cols)));
-      const r = Math.min(rows.length - 1, Math.max(0, Math.floor(((84 - lat) / 140) * rows.length)));
-      const key = `${c}:${r}`;
-      counts.set(key, (counts.get(key) ?? 0) + 1);
-    }
-    heat = [...counts.entries()].map(([key, count]) => {
-      const [c, r] = key.split(':').map(Number);
-      const intensity = Math.min(count, 6);
-      const dimmed = filter && cellContinent(c, r) !== filter;
-      return (
-        <circle
-          key={`h-${key}`}
-          cx={c * PITCH + PITCH / 2}
-          cy={r * PITCH + PITCH / 2}
-          r={DOT_R + 1 + intensity * 0.8}
-          fillOpacity={dimmed ? 0.05 : Math.min(0.35 + intensity * 0.11, 0.95)}
-        />
-      );
-    });
-  }
-
-  return (
-    <svg
-      viewBox={`0 0 ${w} ${h}`}
-      className={className}
-      aria-hidden="true"
-      focusable="false"
-      role="presentation"
-    >
-      <g fill="#f3f3f3">
-        {dots}
-      </g>
-      {heat && <g fill="var(--blue)">{heat}</g>}
-    </svg>
-  );
 }
 
 // Continent-wise claim counts beneath the map: cells in a wrapping,

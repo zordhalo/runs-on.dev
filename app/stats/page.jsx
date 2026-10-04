@@ -8,7 +8,7 @@ import { CLAIM_GEO } from '../components/claim-geo.js';
 import countryCentroids from '../../scripts/country-centroids.json';
 import { GrowthChart } from './growth-chart.jsx';
 import ConfettiStat from './confetti-stat.jsx';
-import ClaimMap from '../components/claim-map.jsx';
+import HomeMap from '../components/home-map.jsx';
 
 export const metadata = {
   title: 'Stats',
@@ -91,7 +91,7 @@ export default function Stats() {
 
       {placement.resolved > 0 && (
         <Section title="Where claims come from">
-          <ClaimMap points={Object.values(placement.points)} total={placement.total} />
+          <HomeMap points={placement.points} resolved={placement.resolved} total={placement.total} />
           <p className="text-xs leading-relaxed text-(--color-muted)">
             {placement.resolved} of {placement.total} owners resolved: coordinates come from the
             country captured at claim time and the public location field on GitHub profiles,
