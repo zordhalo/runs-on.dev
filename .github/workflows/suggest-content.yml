@@ -8,8 +8,15 @@ on:
     - cron: '15 6 * * 1'
   workflow_dispatch: {}
 
+# contents: write to push the suggestion branch; pull-requests: write to open
+# the review PR. main is ruleset-protected (PRs required + the "test" check),
+# so a direct `git push` to main here is rejected with GH013 and the run goes
+# red — which is what it did on every run. The suggestions are a review queue
+# that "never publishes anything", so a PR is their natural destination anyway:
+# a human merges the ones worth keeping.
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: suggest-content
@@ -32,14 +39,35 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: node scripts/suggest-content.mjs
 
-      - name: Commit suggestions for human review
+      - name: Open a PR with the new suggestions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if git diff --quiet content/suggestions; then
             echo "no new suggestions"
             exit 0
           fi
-          git config user.name "runs-on.dev content bot"
+
+          # One branch per run so each weekly batch is its own reviewable PR and
+          # concurrent/manual runs never collide on a shared branch name.
+          branch="content/suggestions-$(date -u +%Y%m%d)-${GITHUB_RUN_ID}"
+          git config user.name  "runs-on.dev content bot"
           git config user.email "content@runs-on.dev"
+          git checkout -b "$branch"
           git add content/suggestions
           git commit -m "content: new post suggestions for review"
-          git push
+          # Push the branch only — the ruleset targets main, so a new branch is
+          # unrestricted. actions/checkout persists the token, so this just works.
+          git push origin "$branch"
+
+          # gh pr create needs "Allow GitHub Actions to create and approve pull
+          # requests" (Settings > Actions > General). If that is off it 403s; the
+          # branch is already pushed, so rather than fail the run we surface the
+          # compare link and the exact setting to flip, and keep the job green.
+          if ! gh pr create \
+              --base main \
+              --head "$branch" \
+              --title "content: new post suggestions for review" \
+              --body "Automated suggestions from the weekly content bot. These are drafts for human review — merge the ones worth keeping, close the rest. Nothing here is published until a post is created from it." ; then
+            echo "::warning::could not open the PR automatically (enable 'Allow GitHub Actions to create and approve pull requests' in Settings > Actions > General). The suggestions are pushed to branch '$branch'; open a PR from ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...$branch"
+          fi
