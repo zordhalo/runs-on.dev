@@ -533,13 +533,16 @@ test('rejects TXT values Vercel reads as empty', () => {
   // Vercel 400s a TXT value made only of braces and whitespace ("needs to be
   // at least 1 printable character"). One slipped in when an owner pasted the
   // docs' JSON example into /manage a line at a time, and every sync of the
-  // name failed on it.
-  for (const bad of ['', ' ', '{', '}', ' } ']) {
+  // name failed on it. A lone `#` collapses the same way: domains/pipeline.json
+  // held "#" and failed every health-check repair for weeks before this guard.
+  for (const bad of ['', ' ', '{', '}', ' } ', '#', ' # ', '##']) {
     const out = validateRecord({ ...valid, subdomains: { _vercel: { TXT: ['ok', bad] } } });
     assert.equal(out.ok, false, JSON.stringify(bad));
     assert.ok(out.errors.some((e) => e.includes('TXT')));
   }
+  // A `#` alongside real text is a normal value Vercel stores, so it stays valid.
   assert.equal(validateRecord({ ...valid, records: { TXT: ['a{b'] } }).ok, true);
+  assert.equal(validateRecord({ ...valid, records: { TXT: ['id#42'] } }).ok, true);
 });
 
 test('rejects a CNAME pointing at the claim\'s own hostname', () => {
