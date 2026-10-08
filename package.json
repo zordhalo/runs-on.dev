@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "test": "node --test \"test/**/*.test.mjs\"",
-    "prebuild": "node scripts/generate-claim-map-svg.mjs"
+    "prebuild": "node scripts/generate-claim-map-svg.mjs && node scripts/generate-blog-content.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

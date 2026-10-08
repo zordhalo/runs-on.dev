@@ -4,6 +4,10 @@
 // prerendering hermetic (page-render workers do not share the build
 // process's working directory).
 //
+// Runs before every build so new posts and generator fields cannot be left
+// out of a deploy by a stale committed module. Keep committing the output:
+// tests run without a build and check the committed content too.
+//
 // Run after writing or editing a post:
 //   node scripts/generate-blog-content.mjs
 import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
