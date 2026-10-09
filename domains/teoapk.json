@@ -4,6 +4,8 @@
     "github": "teotlumac-prog"
   },
   "claimedAt": "2026-10-09T19:59:36.241Z",
-  "records": {},
+  "records": {
+    "CNAME": "teotlumac-prog.github.io"
+  },
   "country": "SK"
 }
