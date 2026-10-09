@@ -4,6 +4,10 @@
     "github": "shameeralinaushad-hash"
   },
   "claimedAt": "2026-10-09T20:26:34.119Z",
-  "records": {},
+  "records": {
+    "A": [
+      "13.62.191.96"
+    ]
+  },
   "country": "PK"
 }
