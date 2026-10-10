@@ -4,6 +4,8 @@
     "github": "devpgaurav-code"
   },
   "claimedAt": "2026-10-10T18:54:39.185Z",
-  "records": {},
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
   "country": "IN"
 }
