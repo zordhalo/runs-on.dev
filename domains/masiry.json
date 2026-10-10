@@ -4,7 +4,9 @@
     "github": "arsanygeniusmina-star"
   },
   "claimedAt": "2026-10-10T11:24:53.723Z",
-  "records": {},
+  "records": {
+    "CNAME": "2c2fbb360de80238.vercel-dns-017.com"
+  },
   "country": "EG",
   "subdomains": {
     "_vercel": {
