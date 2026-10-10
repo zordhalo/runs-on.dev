@@ -5,6 +5,8 @@
   },
   "claimedAt": "2026-09-02T17:32:42.330Z",
   "records": {
-    "CNAME": "peace-full.github.io"
+    "TXT": [
+      "_github-pages-challenge-Peace-full.peace"
+    ]
   }
 }
