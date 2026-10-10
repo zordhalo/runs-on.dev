@@ -4,5 +4,7 @@
     "github": "Peace-full"
   },
   "claimedAt": "2026-09-02T17:32:42.330Z",
-  "records": {}
+  "records": {
+    "CNAME": "peace-full.github.io"
+  }
 }
