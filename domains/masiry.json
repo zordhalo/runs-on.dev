@@ -9,7 +9,7 @@
   },
   "country": "EG",
   "subdomains": {
-    "_vercel": {
+    "txt": {
       "TXT": [
         "vc-domain-verify=masiry.runs-on.dev,f55098af68f403dff8bd"
       ]
