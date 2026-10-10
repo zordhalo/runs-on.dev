@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "inf-laboratory.play.minekube.net"
   },
-  "country": "TH"
+  "country": "TH",
+  "subdomains": {
+    "play": {
+      "CNAME": "inf-laboratory.play.minekube.net"
+    }
+  }
 }
