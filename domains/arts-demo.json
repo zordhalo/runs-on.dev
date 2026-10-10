@@ -4,6 +4,10 @@
     "github": "muhd-sinan-m"
   },
   "claimedAt": "2026-10-10T06:08:39.715Z",
-  "records": {},
+  "records": {
+    "A": [
+      "65.2.4.183"
+    ]
+  },
   "country": "IN"
 }
