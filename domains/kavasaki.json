@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "62f9638ef25c46e5.vercel-dns-017.com"
   },
-  "country": "DE"
+  "country": "DE",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=kavasaki.runs-on.dev,280f9a17debeec2ffce6"
+      ]
+    }
+  }
 }
