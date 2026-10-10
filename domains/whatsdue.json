@@ -1,0 +1,11 @@
+{
+  "name": "whatsdue",
+  "owner": {
+    "github": "zordhalo"
+  },
+  "claimedAt": "2026-10-09T05:45:55.115Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "CA"
+}
