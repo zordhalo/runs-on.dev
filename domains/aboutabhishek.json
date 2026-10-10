@@ -4,6 +4,8 @@
     "github": "helloabhishek2004"
   },
   "claimedAt": "2026-10-10T07:54:42.133Z",
-  "records": {},
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
   "country": "IN"
 }
