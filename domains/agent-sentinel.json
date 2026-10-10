@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "a3a57cf159633d42.vercel-dns-017.com"
   },
-  "country": "IT",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=agent-sentinel.runs-on.dev,8bce6efbd4691c63eda7"
-      ]
-    }
-  }
+  "country": "IT"
 }

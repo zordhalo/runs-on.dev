@@ -4,13 +4,8 @@
     "github": "chihebrouigui51-commits"
   },
   "claimedAt": "2026-10-06T17:36:25.905Z",
-  "records": { "CNAME": "cname.vercel-dns.com" },
-  "country": "DZ",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=runs-on.dev,e95d2d4fec9f0dd94630"
-      ]
-    }
-  }
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "DZ"
 }
