@@ -4,6 +4,8 @@
     "github": "meetkhedekardev-ops"
   },
   "claimedAt": "2026-10-10T08:42:49.874Z",
-  "records": {},
+  "records": {
+    "CNAME": "meetkhedekardev-ops.github.io"
+  },
   "country": "IN"
 }
