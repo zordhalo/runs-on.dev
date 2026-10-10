@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-10-10T11:24:53.723Z",
   "records": {},
-  "country": "EG"
+  "country": "EG",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=masiry.runs-on.dev,f55098af68f403dff8bd"
+      ]
+    }
+  }
 }
