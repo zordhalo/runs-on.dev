@@ -1,0 +1,26 @@
+{
+  "name": "nepxroleplay",
+  "owner": {
+    "github": "tenzero0"
+  },
+  "claimedAt": "2026-10-15T11:16:06.302Z",
+  "records": {},
+  "country": "NP",
+  "profile": {
+    "name": "Nepx Roleplay",
+    "bio": "We are here to Roleplay!! Stay in your character else Arena is free for all",
+    "links": [
+      {
+        "label": "Discord Invite Link",
+        "url": "https://discord.com/invite/CEnBu46ZUY"
+      }
+    ]
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=nepxroleplay.runs-on.dev,cde75afb99884b1a86ef"
+      ]
+    }
+  }
+}

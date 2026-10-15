@@ -1,0 +1,16 @@
+{
+  "name": "arpitsharma",
+  "owner": {
+    "github": "iamarpitsharma"
+  },
+  "claimedAt": "2026-10-15T03:13:09.682Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "arpitsharma": {
+      "CNAME": "d0452114b2881a30.vercel-dns-017.com"
+    }
+  }
+}

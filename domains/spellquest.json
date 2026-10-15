@@ -1,0 +1,16 @@
+{
+  "name": "spellquest",
+  "owner": {
+    "github": "DavidAroh"
+  },
+  "claimedAt": "2026-10-15T10:17:46.120Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "NG",
+  "subdomains": {
+    "spellquest": {
+      "CNAME": "793e15f3120abc13.vercel-dns-017.com"
+    }
+  }
+}

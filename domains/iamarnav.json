@@ -1,0 +1,21 @@
+{
+  "name": "iamarnav",
+  "owner": {
+    "github": "arnavprajapati"
+  },
+  "claimedAt": "2026-10-15T17:33:05.575Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=iamarnav.runs-on.dev,45539165b43abd39a762"
+      ]
+    },
+    "iamarnav": {
+      "CNAME": "8551f1af7b5dafb8.vercel-dns-017.com"
+    }
+  }
+}

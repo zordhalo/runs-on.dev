@@ -1,0 +1,21 @@
+{
+  "name": "madhup",
+  "owner": {
+    "github": "madhupbhardwaj"
+  },
+  "claimedAt": "2026-10-15T00:25:36.713Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "profile": {
+    "name": "Madhup"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=madhup.runs-on.dev,89e5b9759d4df7dad7bb"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "creative-harshit",
+  "owner": {
+    "github": "Creativeharshit"
+  },
+  "claimedAt": "2026-10-14T18:44:25.446Z",
+  "records": {
+    "URL": "https://Creative-harshit.vercel.app"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "CNAME": "creative-harshit.dev"
+    }
+  }
+}

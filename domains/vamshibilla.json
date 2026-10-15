@@ -1,0 +1,16 @@
+{
+  "name": "vamshibilla",
+  "owner": {
+    "github": "VamshiBilla07"
+  },
+  "claimedAt": "2026-10-15T16:49:15.319Z",
+  "records": {},
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=vamshibilla.runs-on.dev,6227726316419c584f3c"
+      ]
+    }
+  }
+}

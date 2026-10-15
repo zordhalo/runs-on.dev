@@ -1,0 +1,21 @@
+{
+  "name": "elyvora",
+  "owner": {
+    "github": "SarthakMawale"
+  },
+  "claimedAt": "2026-10-15T15:39:10.105Z",
+  "records": {
+    "CNAME": "elyvora-development.vercel.app"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=elyvora.runs-on.dev,43f72e45ae72fd4dc155"
+      ]
+    },
+    "elyvora": {
+      "CNAME": "ef1bd08de916e4b9.vercel-dns-017.com"
+    }
+  }
+}

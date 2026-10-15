@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "amroot141.github.io"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "mc": {
+      "A": [
+        "150.129.120.177"
+      ]
+    }
+  }
 }

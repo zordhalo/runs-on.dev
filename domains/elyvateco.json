@@ -1,0 +1,18 @@
+{
+  "name": "elyvateco",
+  "owner": {
+    "github": "elyvate-website"
+  },
+  "claimedAt": "2026-10-15T17:01:16.532Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "BD",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=elyvateco.runs-on.dev,b23fb92374b63aadb862"
+      ]
+    }
+  }
+}

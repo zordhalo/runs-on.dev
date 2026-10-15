@@ -1,0 +1,21 @@
+{
+  "name": "swayam",
+  "owner": {
+    "github": "swayam-rajput"
+  },
+  "claimedAt": "2026-10-15T15:45:57.777Z",
+  "records": {
+    "CNAME": "fe751c458b9c6661.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "profile": {
+    "name": "https://github.com/swayam-rajput"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=swayam.runs-on.dev,35b57abda183eecc4117"
+      ]
+    }
+  }
+}

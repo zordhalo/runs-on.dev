@@ -5,7 +5,12 @@
   },
   "claimedAt": "2026-09-30T20:07:28.729Z",
   "records": {
-    "URL": "https://github.com/Deizuu/"
+    "URL": "https://msg.lleyn-coho.ts.net"
   },
-  "country": "FR"
+  "country": "FR",
+  "subdomains": {
+    "msg": {
+      "CNAME": "msg.lleyn-coho.ts.net"
+    }
+  }
 }

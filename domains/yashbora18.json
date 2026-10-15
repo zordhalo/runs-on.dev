@@ -1,0 +1,25 @@
+{
+  "name": "yashbora18",
+  "owner": {
+    "github": "yashbora18"
+  },
+  "claimedAt": "2026-10-15T03:30:56.794Z",
+  "records": {
+    "CNAME": "29403c70f51c705b.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "profile": {
+    "name": "Yash Bora",
+    "bio": "Python Developer | B.Tech CSE Graduate | Building AI apps and full-stack projects | Python, FastAPI, React & SQL",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yashbora18"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://linkedin.com/in/yash-bora-92b305258"
+      }
+    ]
+  }
+}

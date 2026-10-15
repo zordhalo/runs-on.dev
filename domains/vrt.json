@@ -25,5 +25,10 @@
       }
     ]
   },
-  "country": "IT"
+  "country": "IT",
+  "subdomains": {
+    "kvapi": {
+      "CNAME": "zda5eftivxouzkto.l.tunwg.com"
+    }
+  }
 }

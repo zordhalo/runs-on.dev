@@ -560,3 +560,70 @@ test('rejects a subdomain CNAME pointing at its own hostname', () => {
 test('a CNAME to another runs-on.dev name is still allowed', () => {
   assert.equal(validateRecord({ ...valid, records: { CNAME: 'someone-else.runs-on.dev' } }).ok, true);
 });
+
+// --- values Vercel cannot store ---
+//
+// Both of these validated cleanly, merged to main, and then failed at the
+// Vercel API on every sync afterwards: likhora with a 400 that failed the
+// whole run, charlz with a 409 the sweep retried forever. The registry's
+// grammar was satisfied in both cases; the provider's storage rules were not.
+
+test('rejects a record value carrying an invisible character', () => {
+  const out = validateRecord({
+    ...valid,
+    // Two U+200B ZERO WIDTH SPACE, exactly as domains/likhora.json held them.
+    records: { TXT: ['v=spf1 include:spf.​improvmx.​com ~all'] },
+  });
+  assert.equal(out.ok, false);
+  assert.match(out.errors.join(' '), /non-ASCII/);
+  // The message has to show the character, since quoting the value as-is
+  // prints something that looks identical to the correct one.
+  assert.match(out.errors.join(' '), /U\+200B/);
+});
+
+test('accepts the same TXT value once the invisible characters are gone', () => {
+  const out = validateRecord({
+    ...valid,
+    records: { TXT: ['v=spf1 include:spf.improvmx.com ~all'] },
+  });
+  assert.equal(out.ok, true);
+});
+
+test('checks every record value, not just TXT, and reaches subdomains', () => {
+  const out = validateRecord({
+    ...valid,
+    records: { TXT: ['ok'] },
+    subdomains: { mail: { TXT: ['tok​en'] } },
+  });
+  assert.equal(out.ok, false);
+  assert.match(out.errors.join(' '), /subdomains\.mail\.TXT/);
+});
+
+test('rejects the same MX host listed twice, whatever the priorities', () => {
+  // domains/charlz.json: mx1.larksuite.com at 1 and at 5. Vercel keys MX
+  // uniqueness on (name, type, host), so the second create 409s forever.
+  const out = validateRecord({
+    ...valid,
+    records: {
+      MX: [
+        { priority: 1, value: 'mx1.larksuite.com' },
+        { priority: 5, value: 'mx1.larksuite.com' },
+      ],
+    },
+  });
+  assert.equal(out.ok, false);
+  assert.match(out.errors.join(' '), /mx1\.larksuite\.com 2 times/);
+});
+
+test('allows distinct MX hosts at distinct priorities', () => {
+  const out = validateRecord({
+    ...valid,
+    records: {
+      MX: [
+        { priority: 1, value: 'mx1.larksuite.com' },
+        { priority: 10, value: 'mx3.larksuite.com' },
+      ],
+    },
+  });
+  assert.equal(out.ok, true);
+});

@@ -1,0 +1,16 @@
+{
+  "name": "krushang004",
+  "owner": {
+    "github": "Krushang004"
+  },
+  "claimedAt": "2026-10-15T09:23:23.468Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "krushang004": {
+      "CNAME": "4b6c2c88270c9ce1.vercel-dns-017.com"
+    }
+  }
+}

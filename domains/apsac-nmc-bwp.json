@@ -1,0 +1,21 @@
+{
+  "name": "apsac-nmc-bwp",
+  "owner": {
+    "github": "meet-muhammad-mateen"
+  },
+  "claimedAt": "2026-10-14T19:08:53.769Z",
+  "records": {
+    "CNAME": "769697b5a70148b8.vercel-dns-017.com"
+  },
+  "country": "PK",
+  "profile": {
+    "name": "Muhammad Mateen Sajid",
+    "bio": "I am a Full-Stack Developer & AI Automation Engineer dedicated to delivering resilient, production-grade digital solutions.",
+    "links": [
+      {
+        "label": "My Portfolio",
+        "url": "https://mmateenn.vercel.app/"
+      }
+    ]
+  }
+}

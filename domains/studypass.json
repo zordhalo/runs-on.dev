@@ -1,0 +1,18 @@
+{
+  "name": "studypass",
+  "owner": {
+    "github": "saahiyo"
+  },
+  "claimedAt": "2026-10-15T12:17:50.011Z",
+  "records": {
+    "CNAME": "studypass-9nf.pages.dev"
+  },
+  "country": "IN",
+  "subdomains": {
+    "studypass": {
+      "TXT": [
+        "studypass-9nf.pages.dev"
+      ]
+    }
+  }
+}

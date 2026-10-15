@@ -1,0 +1,18 @@
+{
+  "name": "veena",
+  "owner": {
+    "github": "veena694"
+  },
+  "claimedAt": "2026-10-15T12:00:12.299Z",
+  "records": {
+    "CNAME": "bc912a43d2569d51.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=veena.runs-on.dev,1a1a25a1c819e3ee8226"
+      ]
+    }
+  }
+}

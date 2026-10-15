@@ -1,0 +1,23 @@
+{
+  "name": "erp",
+  "owner": {
+    "github": "suryanarayan1"
+  },
+  "claimedAt": "2026-10-15T14:16:36.689Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=runs-on.dev,e51d09ded4000e00fcf0"
+      ]
+    },
+    "erp": {
+      "TXT": [
+        "c75f068d6a916749.vercel-dns-017.com."
+      ]
+    }
+  }
+}

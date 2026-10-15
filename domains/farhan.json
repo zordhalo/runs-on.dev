@@ -4,5 +4,14 @@
     "github": "farhanKhan4"
   },
   "claimedAt": "2026-09-03T13:27:54.540Z",
-  "records": {}
+  "records": {
+    "CNAME": "70ro.netlify.app"
+  },
+  "subdomains": {
+    "subdomain-owner-verification": {
+      "TXT": [
+        "f16a2ee427a51bcd517605eaff8e73f7"
+      ]
+    }
+  }
 }

@@ -1,0 +1,27 @@
+{
+  "name": "yuvraj",
+  "owner": {
+    "github": "chopra-yuvraj"
+  },
+  "claimedAt": "2026-10-15T19:41:19.639Z",
+  "records": {
+    "CNAME": "98a7e59f5bb56114.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=yuvraj.runs-on.dev,8515294f49ac8ec529df"
+      ]
+    }
+  },
+  "profile": {
+    "name": "chopra-yuvraj",
+    "links": [
+      {
+        "label": "My Portfolio",
+        "url": "https://yuvraj.runs-on.dev/"
+      }
+    ]
+  }
+}

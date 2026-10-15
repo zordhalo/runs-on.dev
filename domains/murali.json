@@ -1,0 +1,16 @@
+{
+  "name": "murali",
+  "owner": {
+    "github": "Itz-Murali"
+  },
+  "claimedAt": "2026-10-15T09:24:33.747Z",
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "murali": {
+      "CNAME": "955e0d623bcbda1a.vercel-dns-017.com"
+    }
+  }
+}

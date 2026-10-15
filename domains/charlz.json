@@ -1,0 +1,35 @@
+{
+  "name": "charlz",
+  "owner": {
+    "github": "charlzthegtagdev"
+  },
+  "claimedAt": "2026-10-14T18:06:40.462Z",
+  "records": {
+    "TXT": [
+      "v=spf1 +include:spf.onlarksuite.com -all",
+      "verification-code-site-App_lark=3lZBwXpgHbGSh6elDqMm"
+    ],
+    "MX": [
+      {
+        "priority": 1,
+        "value": "mx1.larksuite.com"
+      },
+      {
+        "priority": 5,
+        "value": "mx1.larksuite.com"
+      },
+      {
+        "priority": 10,
+        "value": "mx3.larksuite.com"
+      }
+    ]
+  },
+  "country": "GB",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=charlz.runs-on.dev,b22d3fc658285bec89b0"
+      ]
+    }
+  }
+}

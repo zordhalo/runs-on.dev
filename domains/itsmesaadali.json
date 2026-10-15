@@ -1,0 +1,24 @@
+{
+  "name": "itsmesaadali",
+  "owner": {
+    "github": "itsmesaadali"
+  },
+  "claimedAt": "2026-10-15T07:06:49.447Z",
+  "records": {
+    "CNAME": "20329435815aae41.vercel-dns-017.com"
+  },
+  "country": "PK",
+  "subdomains": {
+    "payment": {
+      "CNAME": "0x1saad.github.io"
+    },
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=itsmesaadali.runs-on.dev,d015c3966e34a01a113b"
+      ]
+    }
+  },
+  "profile": {
+    "name": "itsmesaadali"
+  }
+}
