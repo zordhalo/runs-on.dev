@@ -130,7 +130,13 @@
           "items": {
             "type": "string",
             "maxLength": 255,
-            "pattern": "[^\\s{}]"
+            "pattern": "[^\\s{}]",
+            "allOf": [
+              {
+                "pattern": "^[\\x20-\\x7E]*$",
+                "description": "ASCII only. Vercel 400s a value carrying any other character, and the culprit is usually invisible (a U+200B zero-width space surviving a paste). lib/schema.js applies this to every record value, not just TXT."
+              }
+            ]
           }
         },
         "MX": {
@@ -155,7 +161,8 @@
                 "pattern": "^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}$"
               }
             }
-          }
+          },
+          "description": "Vercel keys MX uniqueness on (name, type, host) and ignores priority, so the same host listed twice is rejected however the priorities differ. lib/schema.js enforces that; JSON Schema cannot express it, because uniqueItems compares whole items and {1,h} differs from {5,h}."
         },
         "URL": {
           "type": "string",

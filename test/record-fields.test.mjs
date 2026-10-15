@@ -252,3 +252,31 @@ test('TXT values are never lowercased or stripped', () => {
   const v = 'vc-domain-verify=amanworks.runs-on.dev,81E73fdea1b7f9058ffa';
   assert.deepEqual(buildSubdomains([{ label: '_vercel', type: 'TXT', value: v }]), { _vercel: { TXT: [v] } });
 });
+
+// The form half of the invisible-character fix. schema.js rejects a value
+// that reaches it carrying one; this keeps the form from producing one in the
+// first place, which is the only half the person pasting ever sees.
+test('strips zero-width characters out of form values', () => {
+  assert.deepEqual(
+    buildRecords('advanced', { txt: 'v=spf1 include:spf.​improvmx.​com ~all' }),
+    { TXT: ['v=spf1 include:spf.improvmx.com ~all'] },
+  );
+  assert.deepEqual(
+    buildRecords('cname', { cname: 'ad4ea92dbf7ef906.vercel-dns-017﻿.com' }),
+    { CNAME: 'ad4ea92dbf7ef906.vercel-dns-017.com' },
+  );
+  assert.deepEqual(
+    buildRecords('advanced', { mx: '10 mx1.improvmx​.com' }),
+    { MX: [{ priority: 10, value: 'mx1.improvmx.com' }] },
+  );
+});
+
+test('a stripped value passes the validation that rejected it', () => {
+  const built = buildRecords('advanced', { txt: 'v=spf1 include:spf.​improvmx.​com ~all' });
+  assert.equal(validateRecord({
+    name: 'likhora',
+    owner: { github: 'rabindra45-coder' },
+    claimedAt: '2026-10-15T14:32:38.826Z',
+    records: built,
+  }).ok, true);
+});
