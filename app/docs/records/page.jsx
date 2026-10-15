@@ -83,7 +83,7 @@ export default function Records() {
               <Row cells={[<C key="t">CNAME</C>, 'A single hostname string.', 'Cannot appear with A, TXT, MX, or URL.']} />
               <Row cells={[<C key="t">A</C>, 'A non-empty array of IPv4 addresses.', 'May coexist with TXT and MX. Not with CNAME or URL.']} />
               <Row cells={[<C key="t">TXT</C>, 'A non-empty array of strings, each up to 255 characters.', 'May coexist with A and MX. Not with CNAME or URL.']} />
-              <Row cells={[<C key="t">MX</C>, <>1 to 5 entries: <C key="mx">{'{ priority: 0-65535, value: hostname }'}</C></>, 'May coexist with A and TXT. Not with CNAME or URL.']} />
+              <Row cells={[<C key="t">MX</C>, <>1 to 5 entries: <C key="mx">{'{ priority: 0-65535, value: hostname }'}</C></>, 'May coexist with A and TXT. Not with CNAME or URL. One entry per host.']} />
               <Row cells={[<C key="t">URL</C>, 'A single absolute http:// or https:// string.', 'Must be the only key in records. No DNS record is created; see below.']} />
             </tbody>
           </table>
@@ -91,6 +91,23 @@ export default function Records() {
         <p className="text-sm leading-relaxed sm:text-base">
           These rules come straight from <C>lib/schema.js</C>. If anything on this page ever
           disagrees with that file, the file is correct.
+        </p>
+        <p className="text-sm leading-relaxed sm:text-base">
+          Two more constraints come from Vercel, which serves this zone, rather than from DNS.
+          <strong className="font-semibold"> Record values must be ASCII</strong>: anything else
+          is refused with <C>400 The specified value contains non ASCII characters</C>, and the
+          character responsible is usually invisible — a zero-width space picked up by copying a
+          value out of a rendered setup page instead of typing it. It survives a trim, renders as
+          nothing in an editor and as nothing in a diff, so the record looks identical to a correct
+          one. <a className="text-(--color-signal) underline" href="/manage">The record form</a>
+          {' '}strips those on save; a value that reaches validation still carrying one is rejected
+          with its code point named.
+        </p>
+        <p className="text-sm leading-relaxed sm:text-base">
+          And <strong className="font-semibold">an MX host may appear only once per name</strong>.
+          Vercel keys MX uniqueness on name, type and host while ignoring priority, so the same
+          host listed at two priorities has the second one refused — forever, since nothing about
+          the attempt changes between retries.
         </p>
       </Section>
 

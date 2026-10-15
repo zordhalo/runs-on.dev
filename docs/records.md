@@ -55,8 +55,30 @@ serves the built-in profile card instead of pointing anywhere else.
 | `CNAME` | a single hostname string | Cannot appear alongside `A`, `TXT`, or `MX`. |
 | `A` | a non-empty array of IPv4 addresses | One DNS record is created per address. |
 | `TXT` | a non-empty array of strings, each up to 255 characters | One DNS record per string. |
-| `MX` | a non-empty array (max 5) of `{ "priority": 0-65535, "value": "<hostname>" }` | Cannot appear alongside `CNAME`; may coexist with `A` and `TXT`. |
+| `MX` | a non-empty array (max 5) of `{ "priority": 0-65535, "value": "<hostname>" }` | Cannot appear alongside `CNAME`; may coexist with `A` and `TXT`. The same host may appear only once, whatever its priority. |
 | `URL` | a single absolute `http://` or `https://` string | Cannot appear alongside any other record type. No DNS record is created; see [URL redirects](#url-redirects) below. |
+
+#### Values the DNS provider will not store
+
+Two constraints come from Vercel, which serves this zone, rather than from
+DNS itself. Both are enforced by `lib/schema.js`, because a record that
+satisfies the rules above and still cannot be stored merges cleanly and then
+fails on every sync afterwards, where nobody is watching.
+
+**Record values must be ASCII.** Vercel answers anything else with `400 The
+specified value contains non ASCII characters`. The character responsible is
+usually invisible — a zero-width space picked up by copying a value out of a
+rendered setup page rather than typing it. It survives `trim()`, shows as
+nothing in an editor, and shows as nothing in a diff, so a record carrying one
+looks identical to a correct one. The `/manage` form strips zero-width
+characters on save; a value that reaches validation with one is rejected with
+its code point and position named.
+
+**An MX host may appear only once per name.** Vercel keys MX uniqueness on
+`(name, type, host)` and ignores priority, so listing `mx1.example.com` at
+both priority 1 and priority 5 gets the second one refused with a 409 — and
+since nothing about it changes between attempts, it is retried forever without
+ever converging. Keep one entry per host.
 
 ### `subdomains`
 
