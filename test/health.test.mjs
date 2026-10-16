@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   classifyClaim, issueName, planIssueClosures, planOrphanClosures, planIssueOpens, diagnoseStuck, stuckIssueBody,
+  STUCK_LABEL,
   normalizeAnswer, findDrift,
   HELD_LABEL, classifyAbsentName, planHeldIssues, planHeldClosures, heldIssueBody, heldClaimWarning,
 } from '../lib/health.js';
@@ -351,7 +352,11 @@ test('a failed probe of an absent name is gone, not held', () => {
 });
 
 const heldIssues = [
-  { number: 250, title: 'dexi.runs-on.dev is unclaimed but still serving someone else\'s site' },
+  {
+    number: 250,
+    title: 'dexi.runs-on.dev is unclaimed but still serving someone else\'s site',
+    labels: [{ name: HELD_LABEL }],
+  },
   { number: 9, title: 'Add a dark mode toggle' },
 ];
 
@@ -399,6 +404,40 @@ test('an unprobed held name keeps its issue open', () => {
 test('a still-held name keeps its issue open', () => {
   assert.deepEqual(
     planHeldClosures(heldIssues, { registryNames: [], probedNames: ['dexi'], heldNames: ['dexi'] }),
+    [],
+  );
+});
+
+// The caller hands this the held label list PLUS every open issue regardless
+// of label, because deduping a new held-name issue has to see a hand-opened
+// one. Closures must not read that widened list the same way: a dns-stuck
+// nudge shares the `<name>.runs-on.dev ...` title grammar, and its name is
+// always in the registry, so it matched the 'claimed' branch and was closed
+// one daily run after it was filed -- 37 of the first 40, every one of them
+// told "has been claimed again" about a name that was never re-claimed.
+test('a dns-stuck nudge is never closed by the held-name reconciler', () => {
+  const nudge = {
+    number: 335,
+    title: 'kartiklangwan.runs-on.dev is not serving your site yet',
+    labels: [{ name: STUCK_LABEL }],
+  };
+  // `registryNames` holds the name, which is true of every nudge by
+  // definition -- that is exactly the state that used to close it.
+  assert.deepEqual(
+    planHeldClosures([nudge], { registryNames: ['kartiklangwan'], probedNames: ['kartiklangwan'], heldNames: [] }),
+    [],
+  );
+  // Nor via the 'released' branch.
+  assert.deepEqual(
+    planHeldClosures([nudge], { registryNames: [], probedNames: ['kartiklangwan'], heldNames: [] }),
+    [],
+  );
+});
+
+test('an unlabelled issue naming a claimed name is left alone', () => {
+  const byHand = { number: 9, title: 'dexi.runs-on.dev looks wrong to me' };
+  assert.deepEqual(
+    planHeldClosures([byHand], { registryNames: ['dexi'], probedNames: ['dexi'], heldNames: [] }),
     [],
   );
 });
