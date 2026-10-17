@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-10-12T15:31:58.692Z",
+  "title": "Await authorization before listing deployments",
+  "summary": "Covers fix: await authorization before listing deployments (#316), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 316,
+      "title": "fix: await authorization before listing deployments",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/316"
+    }
+  ],
+  "category": "fix",
+  "tags": [
+    "Bug fix",
+    "await"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: lib/site-access.js, test/site-access.test.mjs)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "await authorization before listing deployments"
+  ],
+  "links": [
+    {
+      "label": "PR #316: fix: await authorization before listing deployments",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/316"
+    }
+  ],
+  "seo": {
+    "title": "Await authorization before listing deployments · runs-on.dev",
+    "metaDescription": "Covers fix: await authorization before listing deployments (#316), merged into the registry."
+  },
+  "coveredPrs": [
+    316
+  ],
+  "suggestedSlugBase": "await-authorization-before-listing-deployments"
+}
