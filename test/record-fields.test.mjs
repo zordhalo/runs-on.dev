@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   modeOf, linesToList, parseMx, mxToLines, buildRecords,
-  buildSubdomains, subdomainsToRows, buildProfile, profileToRows,
+  buildSubdomains, subdomainsToRows, subdomainRowProblems, buildProfile, profileToRows,
 } from '../lib/record-fields.js';
 import { validateRecord } from '../lib/schema.js';
 
@@ -103,6 +103,35 @@ test('half-filled and unlabelled rows are skipped, not written as empty', () => 
     { label: '_vercel', type: 'TXT', value: '   ' },
     { label: '_atproto', type: 'TXT', value: 'did=x' },
   ]), { _atproto: { TXT: ['did=x'] } });
+});
+
+test('subdomainRowProblems ignores empty rows and passes complete ones', () => {
+  assert.deepEqual(subdomainRowProblems([
+    { label: '', type: 'TXT', value: '' },
+    { label: '_vercel', type: 'TXT', value: 'vc-domain-verify=you.runs-on.dev,abc123' },
+  ]), []);
+});
+
+test('subdomainRowProblems names a row with a label but no value', () => {
+  const problems = subdomainRowProblems([{ label: '_vercel', type: 'TXT', value: '  ' }]);
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /^row 1: the value box is empty/);
+});
+
+test('subdomainRowProblems names a row with a value but no label', () => {
+  const problems = subdomainRowProblems([{ label: '', type: 'TXT', value: 'did=x' }]);
+  assert.match(problems[0], /^row 1: add the name/);
+});
+
+// The report that prompted this: the whole verification string pasted into
+// the label field, value box left empty. The save used to say "no changes".
+test('subdomainRowProblems spots a value pasted into the label field', () => {
+  const problems = subdomainRowProblems([
+    { label: 'vc-domain-verify=moha.runs-on.dev,1641c8f9189a84422dfc', type: 'TXT', value: '' },
+  ]);
+  assert.match(problems[0], /looks like the record's value/);
+  // A real label with an empty value is not mistaken for a paste.
+  assert.doesNotMatch(subdomainRowProblems([{ label: '_vercel', type: 'TXT', value: '' }])[0], /looks like/);
 });
 
 test('labels are lowercased, since DNS labels are not case sensitive', () => {
