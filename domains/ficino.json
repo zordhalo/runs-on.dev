@@ -1,11 +1,18 @@
 {
-  "name": "ficino",
-  "owner": {
-    "github": "mafaq-aziz"
-  },
-  "claimedAt": "2026-10-17T12:27:42.886Z",
-  "records": {
-    "CNAME": "67e1f36935527c31.vercel-dns-017.com"
-  },
-  "country": "PK"
+    "name":  "ficino",
+    "owner":  {
+                  "github":  "mafaq-aziz"
+              },
+    "claimedAt":  "2026-10-17T12:27:42.886Z",
+    "records":  {
+                    "CNAME":  "67e1f36935527c31.vercel-dns-017.com"
+                },
+    "country":  "PK",
+    "subdomains":  {
+                       "_vercel":  {
+                                       "TXT":  [
+                                                   "vc-domain-verify=ficino.runs-on.dev,7c87ceab5d772c12bde5"
+                                               ]
+                                   }
+                   }
 }
