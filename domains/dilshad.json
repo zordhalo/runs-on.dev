@@ -6,5 +6,23 @@
   "claimedAt": "2026-09-03T17:27:28.012Z",
   "records": {
     "CNAME": "43ee1be576cf0996.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "resend._domainkey": {
+      "TXT": [
+        "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqAxe80KoUmAVdW+sxCtB086E+joZclcmHLvNWfmzhu6nhx9rj4V9Nw8WO9AhRbeMcKYUJV/IBY1LhPz6yVkv+UUYzBenUL36f4IwfN65LqsAzk3x3FfrZmsZIHy+943z+ywot3VLGk/TaoQ5hJpci+/QHWKN2RJxLex9qSIu+AwIDAQAB"
+      ]
+    },
+    "_dmarc": {
+      "TXT": [
+        "v=DMARC1; p=none;"
+      ]
+    },
+    "send": {
+      "CNAME": "send.forge.rmta.net"
+    },
+    "rsend": {
+      "CNAME": "rsend-apne1.forge.rmta.net"
+    }
   }
 }
