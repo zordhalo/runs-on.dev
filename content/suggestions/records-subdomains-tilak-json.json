@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-10-19T13:22:51.355Z",
+  "title": "Add DNS records and subdomains for tilak.json",
+  "summary": "Covers Add DNS records and subdomains for tilak.json (#337), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 337,
+      "title": "Add DNS records and subdomains for tilak.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/337"
+    }
+  ],
+  "category": "feature",
+  "tags": [
+    "Feature",
+    "records"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: domains/tilak.json)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "Add DNS records and subdomains for tilak.json"
+  ],
+  "links": [
+    {
+      "label": "PR #337: Add DNS records and subdomains for tilak.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/337"
+    }
+  ],
+  "seo": {
+    "title": "Add DNS records and subdomains for tilak.json · runs-on.dev",
+    "metaDescription": "Covers Add DNS records and subdomains for tilak.json (#337), merged into the registry."
+  },
+  "coveredPrs": [
+    337
+  ],
+  "suggestedSlugBase": "records-subdomains-tilak-json"
+}
