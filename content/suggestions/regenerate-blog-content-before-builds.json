@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-10-12T15:31:58.692Z",
+  "title": "Regenerate blog content before builds",
+  "summary": "Covers fix: regenerate blog content before builds (#315), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 315,
+      "title": "fix: regenerate blog content before builds",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/315"
+    }
+  ],
+  "category": "fix",
+  "tags": [
+    "Bug fix",
+    "regenerate"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: package.json, scripts/generate-blog-content.mjs)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "regenerate blog content before builds"
+  ],
+  "links": [
+    {
+      "label": "PR #315: fix: regenerate blog content before builds",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/315"
+    }
+  ],
+  "seo": {
+    "title": "Regenerate blog content before builds · runs-on.dev",
+    "metaDescription": "Covers fix: regenerate blog content before builds (#315), merged into the registry."
+  },
+  "coveredPrs": [
+    315
+  ],
+  "suggestedSlugBase": "regenerate-blog-content-before-builds"
+}
