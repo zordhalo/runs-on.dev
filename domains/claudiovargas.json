@@ -49,6 +49,11 @@
       "TXT": [
         "254406e5-585d-42ef-a6be-a6cfc904ea16"
       ]
+    },
+    "zmail._domainkey": {
+      "TXT": [
+        "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChUUFwhtH3kG6AmwDooz/mSbl6pcUILd/FUJzy/QAYjgfc/xwTmh68iWDlx76u5dDeJab59V8QDeuEY5wJOAkSG3NSSMEmo4ieNcKpv2p9J1bR4WSwaLHMeU/KVu9nB/I/45IVH6ZabDfMCwrIKMA7QlMaZDotESBZLpgLfKK5qwIDAQAB"
+      ]
     }
   }
 }
