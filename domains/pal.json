@@ -4,10 +4,11 @@
     "github": "PalDPathak404"
   },
   "claimedAt": "2026-10-23T16:55:51.748Z",
-  "records": {
-    "TXT": [
-      "vc-domain-verify=pal.runs-on.dev,d231e1541c9b13e7e6ca"
-    ]
-  },
+  "records": { "CNAME": "9a189c4ac6567c87.vercel-dns-017.com." },
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=you.runs-on.dev,PASTE-YOUR-TOKEN"]
+    }
+  }
   "country": "IN"
 }
