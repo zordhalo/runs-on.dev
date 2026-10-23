@@ -4,6 +4,20 @@
     "github": "AbdulkarimSSS"
   },
   "claimedAt": "2026-09-29T12:07:22.560Z",
-  "records": {},
+  "records": {
+    "MX": [
+      {
+        "priority": 0,
+        "value": "mx1.forwardemail.net"
+      },
+      {
+        "priority": 0,
+        "value": "mx2.forwardemail.net"
+      }
+    ],
+    "TXT": [
+      "forward-email=eng.abdulkarimelhaj@gmail.com"
+    ]
+  },
   "country": "SA"
 }
