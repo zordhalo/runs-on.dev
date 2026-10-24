@@ -4,6 +4,15 @@
     "github": "abbasahamed"
   },
   "claimedAt": "2026-10-24T23:30:52.551Z",
-  "records": {},
+  "records": {
+    "CNAME": "99a1a3f14567f532.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=abbas.runs-on.dev,16227285e1e571d185ec"
+      ]
+    }
+  },
   "country": "IN"
 }
