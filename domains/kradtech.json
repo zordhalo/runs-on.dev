@@ -1,9 +1,15 @@
 {
-  "name": "kradtech",
   "owner": {
     "github": "daniy-al110"
   },
   "claimedAt": "2026-10-26T17:49:49.926Z",
-  "records": {},
-  "country": "PK"
+  "country": "PK",
+  "records": {
+    "CNAME": "ca338ba08eb905ea.vercel-dns-017.com",
+    "subdomains": {
+      "_vercel": {
+        "TXT": ["vc-domain-verify=kradtech.runs-on.dev,282ce19f5b7abbd2b72d"]
+      }
+    }
+  }
 }
