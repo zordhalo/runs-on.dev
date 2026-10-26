@@ -4,6 +4,8 @@
     "github": "daniy-al110"
   },
   "claimedAt": "2026-10-26T17:49:49.926Z",
-  "records": {},
-  "country": "PK"
+  "records": {
+    "CNAME": "ca338ba08eb905ea.vercel-dns-017.com.",
+    "TXT": "vc-domain-verify=kradtech.runs-on.dev,282ce19f5b7abbd2b72d"
+  }
 }
