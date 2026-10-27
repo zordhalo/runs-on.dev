@@ -4,13 +4,13 @@
     "github": "syncingspark-dev"
   },
   "claimedAt": "2026-10-27T13:23:45.954Z",
-  "records": {},
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
   "country": "IN",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=zero-to-ship.syncing-spark.runs-on.dev,89c1a7b79b55f814e0a1"
-      ]
+    "zero-to-ship": {
+      "CNAME":"cname.vercel-dns.com"
     }
   }
 }
