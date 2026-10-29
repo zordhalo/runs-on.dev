@@ -37,14 +37,14 @@ button.go{background:#f3f3f3;color:#101010;border-color:#f3f3f3}.warn{color:#ffb
 <body>${inner}</body></html>`, { status, headers: PAGE_HEADERS });
 }
 
-function errorPage(error) {
+function errorPage(error, description) {
   const why = {
     invalid_client: 'This app is not registered with runs-on.dev, or its registration was altered.',
     invalid_redirect_uri: 'This app asked to send you back to an address it did not register.',
     not_configured: 'Sign-in for apps is not configured on this deployment.',
     expired: 'This approval page expired. Start the login from your app again.',
   }[error] ?? 'The request could not be understood.';
-  return page('Cannot authorize', `<h1>Cannot authorize this app</h1><p>${esc(why)}</p><p><code>${esc(error)}</code></p>`, 400);
+  return page('Cannot authorize', `<h1>Cannot authorize this app</h1><p>${esc(why)}</p><p><code>${esc(error)}</code>${description ? ` · ${esc(description)}` : ''}</p>`, 400);
 }
 
 export async function GET(request) {
@@ -56,7 +56,7 @@ export async function GET(request) {
   const checked = checkAuthorizeRequest(params, secret);
   const issuer = issuerFor(request);
   if (!checked.ok) {
-    if (!checked.redirect) return errorPage(checked.error);
+    if (!checked.redirect) return errorPage(checked.error, checked.description);
     return Response.redirect(clientRedirect(checked.redirectUri, {
       error: checked.error, error_description: checked.description, state: checked.state,
     }, issuer), 302);

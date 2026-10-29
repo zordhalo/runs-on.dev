@@ -113,6 +113,17 @@ test('authorize: bad client or redirect never redirects; the rest go back with e
   }
 });
 
+test('errors for an https client never auto-redirect (no open redirect off runs-on.dev)', () => {
+  const { clientId } = registerClient({ redirect_uris: ['https://evil.example/cb'] }, secret);
+  const out = checkAuthorizeRequest(
+    authorizeParams(clientId, pkce().challenge, { redirect_uri: 'https://evil.example/cb', response_type: 'bad' }),
+    secret,
+  );
+  assert.equal(out.ok, false);
+  assert.equal(out.redirect, false);
+  assert.equal(out.error, 'unsupported_response_type');
+});
+
 test('loopback redirects may change port; nothing else may change', () => {
   assert.ok(redirectUriMatches(REDIRECT, 'http://localhost:51234/callback'));
   assert.ok(!redirectUriMatches(REDIRECT, 'http://localhost:51234/other'));
