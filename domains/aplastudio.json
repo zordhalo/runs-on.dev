@@ -1,0 +1,17 @@
+{
+  "name": "aplastudio",
+  "owner": {
+    "github": "admaneraju999-code"
+  },
+  "claimedAt": "2026-10-29T18:16:09.640Z",
+  "records": {
+    "CNAME": "a03e59382bc9b42d.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=aplastudio.runs-on.dev,33729100e8080393690f"
+      ]
+    }
+  }
+}
