@@ -4,6 +4,8 @@
     "github": "Murtaza515"
   },
   "claimedAt": "2026-10-29T18:18:15.510Z",
-  "records": {},
+  "records": {
+    "CNAME": "portmurtaza.netlify.app"
+  },
   "country": "PK"
 }
