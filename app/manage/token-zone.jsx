@@ -118,6 +118,9 @@ export default function TokenZone({ login }) {
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [errorCode, setErrorCode] = useState(null);
   const [durationDays, setDurationDays] = useState(30);
+  // Opt-in: a manage token can also edit DNS through the MCP server. Off by
+  // default so the common case (a CI deploy key) stays deploy-only.
+  const [manage, setManage] = useState(false);
 
   // The key list: what the registry holds for this login right now.
   const [keys, setKeys] = useState(null); // null = not loaded yet
@@ -174,7 +177,7 @@ export default function TokenZone({ login }) {
       const res = await fetch('/api/tokens', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ durationDays }),
+        body: JSON.stringify({ durationDays, scope: manage ? 'manage' : 'sites' }),
       });
       const body = await res.json().catch(() => ({}));
       if (res.ok && body.token) {
@@ -223,7 +226,7 @@ export default function TokenZone({ login }) {
     <section className="slit-frame rounded-lg">
       <div className="slit-bottom px-6 py-5 sm:px-8">
         <p className="font-(family-name:--font-mono) text-xs text-(--color-muted)">@{login}</p>
-        <h2 className="mt-1.5 text-[23px] leading-[1.07] font-normal tracking-[-0.004em] text-(--color-ink)">Deploy token</h2>
+        <h2 className="mt-1.5 text-[23px] leading-[1.07] font-normal tracking-[-0.004em] text-(--color-ink)">Deploy &amp; agent token</h2>
       </div>
 
       <div className="px-6 py-6 sm:px-8">
@@ -235,6 +238,15 @@ export default function TokenZone({ login }) {
 {`curl -X POST https://runs-on.dev/api/sites/deploy \\
   -H "Authorization: Bearer <token>" \\
   -F "site=@dist.zip"`}
+        </pre>
+        <p className="mt-4 max-w-[540px] text-sm leading-relaxed text-(--color-muted)">
+          Or connect an agent (Claude Code, Codex, Cursor) to the MCP server and let it deploy,
+          and with a manage token, edit your DNS. <a href="/docs/mcp" className="underline hover:text-(--color-ink)">MCP guide</a>
+        </p>
+        <pre className="slit-frame mt-3 rounded-lg bg-(--color-card) px-3 py-2.5 font-(family-name:--font-mono) text-xs leading-relaxed whitespace-pre-wrap [overflow-wrap:break-word] text-(--color-ash)">
+{`claude mcp add --transport http runs-on \\
+  https://runs-on.dev/.well-known/mcp \\
+  --header "Authorization: Bearer <token>"`}
         </pre>
 
         {state !== 'minted' && (
@@ -276,6 +288,15 @@ export default function TokenZone({ login }) {
                 </div>
               )}
             </div>
+            <label className="flex cursor-pointer items-center gap-2 font-(family-name:--font-mono) text-xs text-(--color-muted)">
+              <input
+                type="checkbox"
+                checked={manage}
+                onChange={(e) => setManage(e.target.checked)}
+                className="accent-(--color-ink)"
+              />
+              also edit DNS (manage)
+            </label>
             <button
               type="button"
               onClick={mint}
@@ -311,7 +332,7 @@ export default function TokenZone({ login }) {
             </div>
             <p className="max-w-[540px] text-xs leading-relaxed text-(--color-muted)">
               Expires {expiresAt ? fmtDate(expiresAt) : 'soon'}.
-              Treat it like a password: it can publish to your name and nothing else.
+              Treat it like a password: it can publish to your name{manage ? ' and repoint its DNS' : ''}, nothing else.
               Delete it below any time, or let it age out on its own.
             </p>
             <button type="button" onClick={mint} className={MINI}>
@@ -337,6 +358,7 @@ export default function TokenZone({ login }) {
               {keys.map((key) => (
                 <li key={key.id} className="slit-frame flex flex-wrap items-center gap-x-4 gap-y-1 rounded-[4px] px-3 py-2 font-(family-name:--font-mono) text-xs">
                   <span className="text-(--color-ink)">#{key.id.slice(0, 8)}</span>
+                  <span className="text-(--color-muted)">{key.scope === 'manage' ? 'manage' : 'deploy'}</span>
                   <span className="text-(--color-muted)">created {fmtDate(key.createdAt)}</span>
                   <span className="text-(--color-muted)">expires {fmtDate(key.expiresAt)}</span>
                   <button

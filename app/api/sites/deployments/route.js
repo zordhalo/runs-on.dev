@@ -1,8 +1,6 @@
 import { authorizeSiteAction } from '../../../../lib/site-access.js';
 import { createRateLimiter } from '../../../../lib/throttle.js';
-import { getSite } from '../../../../lib/sites.js';
-
-const TOKEN = () => process.env.REGISTRY_TOKEN;
+import { listDeployments, toResponse } from '../../../../lib/site-actions.js';
 
 // Reads cost the registry two GitHub requests (owner index, site file), so
 // they are capped too — looser than deploys, since listing is what an agent
@@ -19,21 +17,5 @@ export async function GET(request) {
   });
   if (auth.response) return auth.response;
 
-  let site;
-  try {
-    site = await getSite(auth.name, { token: TOKEN() });
-  } catch {
-    return Response.json({ error: 'busy' }, { status: 503, headers: { 'Retry-After': '4' } });
-  }
-
-  if (!site) {
-    return Response.json({ name: auth.name, active: null, deployments: [] });
-  }
-
-  return Response.json({
-    name: site.data.name,
-    active: site.data.active,
-    deployments: site.data.deployments,
-    updatedAt: site.data.updatedAt,
-  });
+  return toResponse(await listDeployments(auth));
 }

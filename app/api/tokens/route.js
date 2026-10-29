@@ -1,4 +1,4 @@
-import { signSiteToken, SITE_TOKEN_SCOPE } from '../../../lib/tokens.js';
+import { signSiteToken, SITE_TOKEN_SCOPE, MANAGE_TOKEN_SCOPE } from '../../../lib/tokens.js';
 import { normalizeDuration, recordToken, listTokens, revokeToken, tokenId } from '../../../lib/token-registry.js';
 import { sessionFromRequest } from '../../../lib/session.js';
 import { createRateLimiter, rateLimitHeaders } from '../../../lib/throttle.js';
@@ -28,8 +28,10 @@ export async function GET(request) {
   try {
     const listed = await listTokens(session.login, { token: process.env.REGISTRY_TOKEN });
     return Response.json({
-      tokens: (listed?.tokens ?? []).map(({ id, createdAt, exp }) => ({
+      tokens: (listed?.tokens ?? []).map(({ id, createdAt, exp, scope }) => ({
         id,
+        // Entries minted before scopes existed are all deploy tokens.
+        scope: scope ?? SITE_TOKEN_SCOPE,
         createdAt: createdAt ?? null,
         expiresAt: new Date(exp).toISOString(),
       })),
@@ -71,11 +73,13 @@ export async function POST(request) {
   // off the menu falls back to the default rather than trusting the client.
   const body = await request.json().catch(() => ({}));
   const days = normalizeDuration(body.durationDays);
+  // Same rule as the duration: only the exact opt-in word widens the token.
+  const scope = body.scope === MANAGE_TOKEN_SCOPE ? MANAGE_TOKEN_SCOPE : SITE_TOKEN_SCOPE;
 
   const now = Date.now();
   const ttlMs = days * 24 * 60 * 60 * 1000;
   const token = signSiteToken(
-    { login: session.login, scope: SITE_TOKEN_SCOPE },
+    { login: session.login, scope },
     secret,
     { now, ttlMs },
   );
@@ -85,6 +89,7 @@ export async function POST(request) {
   // that cannot be recorded must not succeed.
   const recorded = await recordToken(session.login, {
     id: tokenId(token),
+    scope,
     createdAt: now,
     exp: now + ttlMs,
   }, { token: process.env.REGISTRY_TOKEN });
@@ -97,7 +102,7 @@ export async function POST(request) {
 
   return Response.json({
     token,
-    scope: SITE_TOKEN_SCOPE,
+    scope,
     durationDays: days,
     expiresAt: new Date(now + ttlMs).toISOString(),
   });
