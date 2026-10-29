@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "portmurtaza.netlify.app"
   },
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "subdomain-owner-verification": {
+      "TXT": [
+        "42c19551b007ed7cca952d795452b473"
+      ]
+    }
+  }
 }
