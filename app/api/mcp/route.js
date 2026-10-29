@@ -6,6 +6,7 @@ import { editRecord } from '../../../lib/record-edit.js';
 import { publishSite, listDeployments, rollbackSite } from '../../../lib/site-actions.js';
 import { storeConfigured } from '../../../lib/store.js';
 import { createRateLimiter } from '../../../lib/throttle.js';
+import { issuerFor, MCP_RESOURCE_METADATA_PATH } from '../../../lib/oauth.js';
 
 // MCP over Streamable HTTP, mounted at /.well-known/mcp via a rewrite. All
 // requests are answered statelessly with a single JSON response (no SSE
@@ -44,12 +45,33 @@ function limited(take, action) {
   };
 }
 
-function depsFor(request) {
+// The OAuth challenge (MCP authorization spec): a 401 for a missing or dead
+// token, a 403 insufficient_scope for a deploy-only token asked to edit DNS.
+// Either one carries resource_metadata, which is how a client finds the
+// authorization server and starts the browser login. Public tools never
+// trigger it, so anonymous check_name keeps working.
+function challengeResponse(request, payload, failure) {
+  const issuer = issuerFor(request);
+  const parts = [`resource_metadata="${issuer}${MCP_RESOURCE_METADATA_PATH}"`];
+  if (failure.status === 403) {
+    parts.push('error="insufficient_scope"', `scope="${failure.scope}"`);
+  } else {
+    if (failure.error && failure.error !== 'auth_required') parts.push('error="invalid_token"');
+    parts.push('scope="sites:publish records:write"');
+  }
+  return Response.json(payload, {
+    status: failure.status,
+    headers: { 'WWW-Authenticate': `Bearer ${parts.join(', ')}` },
+  });
+}
+
+function depsFor(request, onAuthFailure) {
   // Authenticate lazily and once per HTTP request: initialize and
   // tools/list never touch the token registry, and a batch shares one check.
   let account;
   const hasBearer = /^Bearer\s+\S/i.test(request.headers.get('authorization') ?? '');
   return {
+    onAuthFailure,
     getRecord: (name) => getRecord(name, {}),
     account: () => {
       if (!hasBearer) return { status: 401, body: { error: 'auth_required' } };
@@ -91,8 +113,9 @@ export async function POST(request) {
   }
 
   if (Array.isArray(body)) {
-    const replies = await handleBatch(body, depsFor(request));
-    return Response.json(replies);
+    let failure = null;
+    const replies = await handleBatch(body, depsFor(request, (f) => { failure ??= f; }));
+    return failure ? challengeResponse(request, replies, failure) : Response.json(replies);
   }
 
   // Notifications (no id) expect no response body, just acceptance.
@@ -113,8 +136,9 @@ export async function POST(request) {
     );
   }
 
-  const out = await handleRpc(body, depsFor(request));
-  return Response.json(out);
+  let failure = null;
+  const out = await handleRpc(body, depsFor(request, (f) => { failure ??= f; }));
+  return failure ? challengeResponse(request, out, failure) : Response.json(out);
 }
 
 // No SSE stream: this server is stateless request/response only.
@@ -134,13 +158,13 @@ h1{font-weight:400;font-size:22px}code{color:#98ff38}a{color:#f3f3f3}hr{border:0
 <p>public tools:</p>
 <p>· <code>check_name</code> — is a subdomain available to claim?</p>
 <p>· <code>get_record</code> — fetch a claimed name's public registry record</p>
-<p>owner tools (Authorization: Bearer rod1… from <a href="/manage">/manage</a>):</p>
+<p>owner tools (sign in via your client's OAuth login, or Authorization: Bearer rod1… from <a href="/manage">/manage</a>):</p>
 <p>· <code>whoami</code> — token login, scope, owned names</p>
 <p>· <code>update_records</code> — DNS, subdomains, profile (manage scope)</p>
 <p>· <code>deploy_site</code> · <code>list_deployments</code> · <code>rollback_site</code> — static hosting</p>
 <hr>
 <p>connect:</p>
-<p><code>claude mcp add --transport http runs-on https://runs-on.dev/.well-known/mcp --header "Authorization: Bearer rod1…"</code></p>
+<p><code>claude mcp add --transport http runs-on https://runs-on.dev/.well-known/mcp</code> then <code>/mcp</code> → Authenticate</p>
 <p>guide: <a href="/docs/mcp">/docs/mcp</a></p>
 <p>full spec: <a href="/openapi.json">/openapi.json</a> · agent index: <a href="/llms.txt">/llms.txt</a></p>
 </body></html>`;

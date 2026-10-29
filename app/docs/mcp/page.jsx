@@ -26,39 +26,38 @@ export default function Mcp() {
       <DocTitle>Manage your name from an agent</DocTitle>
       <Lede>
         runs-on.dev runs a Model Context Protocol server at <C>https://runs-on.dev/.well-known/mcp</C>.
-        Connect Claude Code, Codex, Cursor, or any MCP client, and your agent can point your DNS,
-        publish a site, and roll it back, all on the name you own.
+        Connect Claude Code, Codex, Cursor, or any MCP client, sign in once in the browser, and
+        your agent can point your DNS, publish a site, and roll it back, all on the name you own.
       </Lede>
 
-      <Section title="1. Mint a token">
+      <Section title="1. Add the server">
+        <p className="text-sm leading-relaxed sm:text-base">Claude Code:</p>
+        <Code>{`claude mcp add --transport http runs-on https://runs-on.dev/.well-known/mcp`}</Code>
+        <p className="text-sm leading-relaxed sm:text-base">Codex:</p>
+        <Code>{`codex mcp add runs-on --url https://runs-on.dev/.well-known/mcp`}</Code>
         <p className="text-sm leading-relaxed sm:text-base">
-          Sign in at <a className="text-(--color-ink) underline" href="/manage">runs-on.dev/manage</a>,
-          pick a lifetime, and generate a token. Tick <C>also edit DNS (manage)</C> if the agent
-          should be able to change records. Leave it off for a deploy-only key. The token is shown
-          once, so copy it right away.
+          Any other client: a Streamable HTTP server at that URL. No token yet, and that is fine:
+          the two public tools work right away.
         </p>
-        <Warning>
-          A manage token can repoint your name anywhere. Give it the shortest lifetime that works,
-          keep it out of git, and delete it from /manage when you are done. Deleting takes effect
-          immediately.
-        </Warning>
       </Section>
 
-      <Section title="2. Connect your agent">
-        <p className="text-sm leading-relaxed sm:text-base">Claude Code:</p>
-        <Code>{`claude mcp add --transport http runs-on \\
-  https://runs-on.dev/.well-known/mcp \\
-  --header "Authorization: Bearer rod1.YOUR_TOKEN"`}</Code>
+      <Section title="2. Sign in">
         <p className="text-sm leading-relaxed sm:text-base">
-          Codex reads the token from an environment variable, so it never lands in a config file:
+          In Claude Code, run <C>/mcp</C>, pick <C>runs-on</C>, and choose Authenticate. In Codex,
+          run <C>codex mcp login runs-on</C>. If you skip this, the first owner tool you use asks
+          you to sign in.
         </p>
-        <Code>{`export RUNS_ON_TOKEN=rod1.YOUR_TOKEN
-codex mcp add runs-on --url https://runs-on.dev/.well-known/mcp \\
-  --bearer-token-env-var RUNS_ON_TOKEN`}</Code>
         <p className="text-sm leading-relaxed sm:text-base">
-          Any other client: a Streamable HTTP server at the URL above, with an{' '}
-          <C>Authorization: Bearer</C> header. Without a token you still get the two public tools.
+          A browser opens on runs-on.dev. Sign in with GitHub as usual, then approve. You choose
+          what the agent gets: deploys only, or deploys plus editing your DNS. The agent stores the
+          resulting token itself, and it lasts 30 days.
         </p>
+        <Warning>
+          Check that the address shown on the approval page matches your agent (usually{' '}
+          <C>localhost</C>). Every login appears as a key under Deploy &amp; agent token on{' '}
+          <a className="underline" href="/manage">/manage</a>, and deleting it there cuts the agent
+          off immediately.
+        </Warning>
       </Section>
 
       <Section title="3. Ask for what you want">
@@ -104,6 +103,22 @@ The last deploy broke the homepage. Roll back to the one before it.`}</Code>
           <C>{'{ path, content, encoding }'}</C> files with <C>index.html</C> at the root, which suits
           small sites. For anything over a few MB, use the zip upload at <C>POST /api/sites/deploy</C>.
         </p>
+      </Section>
+
+      <Section title="CI and scripts: use a token instead">
+        <p className="text-sm leading-relaxed sm:text-base">
+          Where no browser is available, generate a token on{' '}
+          <a className="text-(--color-ink) underline" href="/manage">/manage</a> (tick{' '}
+          <C>also edit DNS</C> for <C>update_records</C>) and send it as a header:
+        </p>
+        <Code>{`claude mcp add --transport http runs-on \\
+  https://runs-on.dev/.well-known/mcp \\
+  --header "Authorization: Bearer rod1.YOUR_TOKEN"
+
+# Codex reads it from the environment
+export RUNS_ON_TOKEN=rod1.YOUR_TOKEN
+codex mcp add runs-on --url https://runs-on.dev/.well-known/mcp \\
+  --bearer-token-env-var RUNS_ON_TOKEN`}</Code>
       </Section>
 
       <Section title="What it cannot do">

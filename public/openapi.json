@@ -68,6 +68,20 @@
             }
           }
         }
+      },
+      "mcpOAuth": {
+        "type": "oauth2",
+        "description": "OAuth 2.1 for MCP clients (authorization code + PKCE S256, public clients via RFC 7591 dynamic registration at /api/oauth/register). Metadata: /.well-known/oauth-authorization-server; the MCP endpoint's resource metadata: /.well-known/oauth-protected-resource/.well-known/mcp. Sign-in is the site's GitHub session; the access token issued is a 30-day rod1 token, listed and revocable at /manage.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://runs-on.dev/api/oauth/authorize",
+            "tokenUrl": "https://runs-on.dev/api/oauth/token",
+            "scopes": {
+              "sites:publish": "Deploy, list, and roll back static site deployments",
+              "records:write": "Edit DNS records, subdomains, and the profile of names the account owns"
+            }
+          }
+        }
       }
     },
     "schemas": {
@@ -1491,12 +1505,17 @@
       "post": {
         "operationId": "mcpJsonRpc",
         "summary": "MCP endpoint (Streamable HTTP JSON-RPC)",
-        "description": "Model Context Protocol server, stateless. Initialize with { \"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"initialize\", \"params\": {} }, then tools/list and tools/call. Public tools (no auth): check_name, get_record. Owner tools (Authorization: Bearer rod1 token): whoami, deploy_site, list_deployments, rollback_site (any token, sites:publish) and update_records (manage token, records:write). A missing or under-scoped token comes back as an isError tool result naming the problem, not an HTTP 401, because the public tools share the endpoint. Notifications answer 202; unknown methods answer -32601. Guide: https://runs-on.dev/docs/mcp",
+        "description": "Model Context Protocol server, stateless. Initialize with { \"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"initialize\", \"params\": {} }, then tools/list and tools/call. Public tools (no auth): check_name, get_record. Owner tools (an OAuth access token from the mcpOAuth flow, or a rod1 token from /manage): whoami, deploy_site, list_deployments, rollback_site (any token, sites:publish) and update_records (manage token, records:write). A missing or dead token on an owner tool answers HTTP 401 with WWW-Authenticate resource_metadata (which starts the client's OAuth login); a deploy-only token calling update_records answers 403 error=\"insufficient_scope\". Public tools never challenge. Notifications answer 202; unknown methods answer -32601. Guide: https://runs-on.dev/docs/mcp",
         "tags": [
           "diagnostics"
         ],
         "security": [
           {},
+          {
+            "mcpOAuth": [
+              "sites:publish"
+            ]
+          },
           {
             "siteToken": []
           }

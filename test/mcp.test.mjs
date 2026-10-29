@@ -196,3 +196,18 @@ test('batches answer each request and skip notifications', async () => {
   assert.ok(replies[0].result.tools);
   assert.equal(replies[1].error.code, -32600);
 });
+
+test('owner tools report auth failures to the HTTP layer; public tools never do', async () => {
+  const seen = [];
+  const noToken = { ...ownerDeps({ account: { status: 401, body: { error: 'auth_required' } } }), onAuthFailure: (f) => seen.push(f) };
+  await call('check_name', { name: 'some-open-name' }, noToken);
+  assert.deepEqual(seen, []);
+  await call('whoami', {}, noToken);
+  assert.deepEqual(seen, [{ status: 401, error: 'auth_required' }]);
+
+  const narrow = { ...ownerDeps({ scope: 'sites' }), onAuthFailure: (f) => seen.push(f) };
+  await call('update_records', { records: {} }, narrow);
+  assert.equal(seen[1].status, 403);
+  assert.equal(seen[1].error, 'insufficient_scope');
+  assert.match(seen[1].scope, /records:write/);
+});

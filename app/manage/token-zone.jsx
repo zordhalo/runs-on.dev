@@ -240,13 +240,12 @@ export default function TokenZone({ login }) {
   -F "site=@dist.zip"`}
         </pre>
         <p className="mt-4 max-w-[540px] text-sm leading-relaxed text-(--color-muted)">
-          Or connect an agent (Claude Code, Codex, Cursor) to the MCP server and let it deploy,
-          and with a manage token, edit your DNS. <a href="/docs/mcp" className="underline hover:text-(--color-ink)">MCP guide</a>
+          Or connect an agent (Claude Code, Codex, Cursor) to the MCP server, sign in when it asks,
+          and let it deploy and edit your DNS. No token needed: agent logins show up in the list
+          below. <a href="/docs/mcp" className="underline hover:text-(--color-ink)">MCP guide</a>
         </p>
         <pre className="slit-frame mt-3 rounded-lg bg-(--color-card) px-3 py-2.5 font-(family-name:--font-mono) text-xs leading-relaxed whitespace-pre-wrap [overflow-wrap:break-word] text-(--color-ash)">
-{`claude mcp add --transport http runs-on \\
-  https://runs-on.dev/.well-known/mcp \\
-  --header "Authorization: Bearer <token>"`}
+{`claude mcp add --transport http runs-on https://runs-on.dev/.well-known/mcp`}
         </pre>
 
         {state !== 'minted' && (

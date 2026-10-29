@@ -1,4 +1,4 @@
-import { SESSION_TTL_MS, signSession } from '../../../../../lib/session.js';
+import { SESSION_TTL_MS, signSession, safeSigninReturn } from '../../../../../lib/session.js';
 import { validateName } from '../../../../../lib/name.js';
 
 export async function GET(request) {
@@ -63,9 +63,18 @@ export async function GET(request) {
     decodedClaim = '';
   }
   const claimName = validateName(decodedClaim).ok ? encodeURIComponent(decodedClaim) : '';
-  const redirectUrl = claimName
+  // A sign-in started by an OAuth consent page goes back to it. Re-checked
+  // here, not just at the start route, because the cookie is plantable.
+  let next = null;
+  try {
+    const rawNext = cookie.match(/(?:^|;\s*)oauth_next=([^;]+)/)?.[1];
+    next = rawNext ? safeSigninReturn(decodeURIComponent(rawNext)) : null;
+  } catch {
+    next = null;
+  }
+  const redirectUrl = next ?? (claimName
     ? `/?signed-in=1&claim=${claimName}`
-    : '/?signed-in=1';
+    : '/?signed-in=1');
   headersOut.append('Location', redirectUrl);
   // Max-Age from the same constant the payload's exp uses, so the browser
   // stops sending the cookie exactly when the server stops honouring it.
@@ -75,6 +84,7 @@ export async function GET(request) {
     `session=${session}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`,
   );
   headersOut.append('Set-Cookie', 'oauth_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
+  if (next) headersOut.append('Set-Cookie', 'oauth_next=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
 
   return new Response(null, { status: 302, headers: headersOut });
 }
