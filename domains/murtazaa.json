@@ -9,9 +9,9 @@
   },
   "country": "PK",
   "subdomains": {
-    "subdomain-owner-verification": {
+    "_vercel": {
       "TXT": [
-        "42c19551b007ed7cca952d795452b473"
+        "vc-domain-verify=murtazaa.runs-on.dev,dc6a24e04fbfcd4fec16"
       ]
     }
   }
