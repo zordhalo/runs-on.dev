@@ -24,6 +24,7 @@ export default function Docs() {
             { href: '/docs/quickstart', label: 'Quickstart', note: 'claim a name and get it working, end to end' },
             { href: '/docs/records', label: 'Record reference', note: 'every field, every record type, the rules' },
             { href: '/docs/guides', label: 'Guides', note: 'copy-paste walkthroughs for hosts, email, and verification' },
+            { href: '/docs/mcp', label: 'MCP server', note: 'let Claude Code or Codex manage DNS and deploys' },
             { href: '/docs/seo', label: 'SEO', note: 'how search engines treat a name, and what is per host' },
             { href: '/docs/resources', label: 'Resources', note: 'the repo, the schema, abuse reporting, the policy' },
           ]}

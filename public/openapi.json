@@ -48,7 +48,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "rod1",
-        "description": "Deploy token minted at /manage or POST /api/tokens. HMAC-signed, shown exactly once, 30-day TTL. Single scope: sites:publish — it can deploy, list, and roll back static deployments for the owning account's name only. No other capability. Scope: sites:publish (machine list in components.securitySchemes.registryOAuth.flows.authorizationCode.scopes and /.well-known/oauth-protected-resource)."
+        "description": "Bearer token minted at /manage or POST /api/tokens. HMAC-signed, shown exactly once, 1 to 90-day TTL. Two variants, chosen at mint: scope 'sites' (sites:publish only: deploy, list, and roll back static deployments for the owning account's name) and scope 'manage' (sites:publish plus records:write, exercised through the MCP server at /.well-known/mcp). No other capability. Scopes: sites:publish, records:write (machine list in components.securitySchemes.registryOAuth.flows.authorizationCode.scopes and /.well-known/oauth-protected-resource)."
       },
       "registryOAuth": {
         "type": "oauth2",
@@ -63,8 +63,22 @@
               "records:write": "Edit DNS records, subdomains, and the profile of names the account owns",
               "names:release": "Release the owned name back to the available pool",
               "names:swap": "Trade the owned name for a different one",
-              "tokens:mint": "Mint 30-day sites:publish deploy tokens",
+              "tokens:mint": "Mint rod1 bearer tokens: deploy-only (sites:publish) or manage (sites:publish + records:write over MCP)",
               "sites:publish": "Deploy, list, and roll back static site deployments (exercised with the rod1 bearer token from tokens:mint)"
+            }
+          }
+        }
+      },
+      "mcpOAuth": {
+        "type": "oauth2",
+        "description": "OAuth 2.1 for MCP clients (authorization code + PKCE S256, public clients via RFC 7591 dynamic registration at /api/oauth/register). Metadata: /.well-known/oauth-authorization-server; the MCP endpoint's resource metadata: /.well-known/oauth-protected-resource/.well-known/mcp. Sign-in is the site's GitHub session; the access token issued is a 30-day rod1 token, listed and revocable at /manage.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://runs-on.dev/api/oauth/authorize",
+            "tokenUrl": "https://runs-on.dev/api/oauth/token",
+            "scopes": {
+              "sites:publish": "Deploy, list, and roll back static site deployments",
+              "records:write": "Edit DNS records, subdomains, and the profile of names the account owns"
             }
           }
         }
@@ -1164,7 +1178,39 @@
           {
             "$ref": "#/components/parameters/ApiVersionHeader"
           }
-        ]
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "durationDays": {
+                    "type": "integer",
+                    "enum": [
+                      1,
+                      7,
+                      30,
+                      90
+                    ],
+                    "default": 30,
+                    "description": "Token lifetime. Anything off the menu falls back to 30."
+                  },
+                  "scope": {
+                    "type": "string",
+                    "enum": [
+                      "sites",
+                      "manage"
+                    ],
+                    "default": "sites",
+                    "description": "sites: deploy only. manage: also edit records through the MCP server."
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/sites/deploy": {
@@ -1459,11 +1505,21 @@
       "post": {
         "operationId": "mcpJsonRpc",
         "summary": "MCP endpoint (Streamable HTTP JSON-RPC)",
-        "description": "Model Context Protocol server, stateless. Initialize with { \"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"initialize\", \"params\": {} }, then tools/list and tools/call. Tools: check_name (availability), get_record (public registry record). Notifications answer 202; unknown methods answer -32601. No auth: every tool reads public data only.",
+        "description": "Model Context Protocol server, stateless. Initialize with { \"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"initialize\", \"params\": {} }, then tools/list and tools/call. Public tools (no auth): check_name, get_record. Owner tools (an OAuth access token from the mcpOAuth flow, or a rod1 token from /manage): whoami, deploy_site, list_deployments, rollback_site (any token, sites:publish) and update_records (manage token, records:write). A missing or dead token on an owner tool answers HTTP 401 with WWW-Authenticate resource_metadata (which starts the client's OAuth login); a deploy-only token calling update_records answers 403 error=\"insufficient_scope\". Public tools never challenge. Notifications answer 202; unknown methods answer -32601. Guide: https://runs-on.dev/docs/mcp",
         "tags": [
           "diagnostics"
         ],
-        "security": [],
+        "security": [
+          {},
+          {
+            "mcpOAuth": [
+              "sites:publish"
+            ]
+          },
+          {
+            "siteToken": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {

@@ -1,7 +1,7 @@
 {
   "resource": "https://runs-on.dev",
   "authorization_servers": [
-    "https://github.com"
+    "https://runs-on.dev"
   ],
   "scopes_supported": [
     "names:claim",

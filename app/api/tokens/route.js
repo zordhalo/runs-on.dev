@@ -1,5 +1,5 @@
-import { signSiteToken, SITE_TOKEN_SCOPE } from '../../../lib/tokens.js';
-import { normalizeDuration, recordToken, listTokens, revokeToken, tokenId } from '../../../lib/token-registry.js';
+import { SITE_TOKEN_SCOPE, MANAGE_TOKEN_SCOPE } from '../../../lib/tokens.js';
+import { normalizeDuration, mintRecordedToken, listTokens, revokeToken } from '../../../lib/token-registry.js';
 import { sessionFromRequest } from '../../../lib/session.js';
 import { createRateLimiter, rateLimitHeaders } from '../../../lib/throttle.js';
 
@@ -28,8 +28,10 @@ export async function GET(request) {
   try {
     const listed = await listTokens(session.login, { token: process.env.REGISTRY_TOKEN });
     return Response.json({
-      tokens: (listed?.tokens ?? []).map(({ id, createdAt, exp }) => ({
+      tokens: (listed?.tokens ?? []).map(({ id, createdAt, exp, scope }) => ({
         id,
+        // Entries minted before scopes existed are all deploy tokens.
+        scope: scope ?? SITE_TOKEN_SCOPE,
         createdAt: createdAt ?? null,
         expiresAt: new Date(exp).toISOString(),
       })),
@@ -71,35 +73,28 @@ export async function POST(request) {
   // off the menu falls back to the default rather than trusting the client.
   const body = await request.json().catch(() => ({}));
   const days = normalizeDuration(body.durationDays);
+  // Same rule as the duration: only the exact opt-in word widens the token.
+  const scope = body.scope === MANAGE_TOKEN_SCOPE ? MANAGE_TOKEN_SCOPE : SITE_TOKEN_SCOPE;
 
-  const now = Date.now();
-  const ttlMs = days * 24 * 60 * 60 * 1000;
-  const token = signSiteToken(
-    { login: session.login, scope: SITE_TOKEN_SCOPE },
+  const minted = await mintRecordedToken({
+    login: session.login,
+    scope,
+    days,
     secret,
-    { now, ttlMs },
-  );
-
-  // Record before answering: once tracking exists for this login, an
-  // unrecorded token would fail the front door's membership check, so a mint
-  // that cannot be recorded must not succeed.
-  const recorded = await recordToken(session.login, {
-    id: tokenId(token),
-    createdAt: now,
-    exp: now + ttlMs,
-  }, { token: process.env.REGISTRY_TOKEN });
-  if (!recorded.ok) {
+    registryToken: process.env.REGISTRY_TOKEN,
+  });
+  if (!minted.ok) {
     return Response.json(
-      { error: recorded.reason === 'ratelimited' ? 'busy' : 'server_error' },
-      { status: recorded.reason === 'ratelimited' ? 503 : 500 },
+      { error: minted.reason === 'ratelimited' ? 'busy' : 'server_error' },
+      { status: minted.reason === 'ratelimited' ? 503 : 500 },
     );
   }
 
   return Response.json({
-    token,
-    scope: SITE_TOKEN_SCOPE,
+    token: minted.token,
+    scope,
     durationDays: days,
-    expiresAt: new Date(now + ttlMs).toISOString(),
+    expiresAt: new Date(minted.expiresAt).toISOString(),
   });
 }
 

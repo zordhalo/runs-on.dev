@@ -33,6 +33,11 @@ export default {
       // convention; app-router folders cannot start with a dot, so the
       // handler lives at /api/mcp and this rewrite mounts it there.
       { source: '/.well-known/mcp', destination: '/api/mcp' },
+      // OAuth discovery for MCP clients (lib/oauth.js): the authorization
+      // server metadata, and the MCP endpoint's own resource metadata at the
+      // path-suffixed well-known URI (RFC 9728 3.1).
+      { source: '/.well-known/oauth-authorization-server', destination: '/api/oauth/metadata' },
+      { source: '/.well-known/oauth-protected-resource/.well-known/mcp', destination: '/api/oauth/resource' },
     ];
   },
 };

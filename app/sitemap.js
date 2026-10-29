@@ -7,7 +7,7 @@ export default function sitemap() {
   const now = new Date();
   const routes = [
     '', '/about', '/blog', '/contact', '/faq', '/policy', '/privacy', '/stats',
-    '/docs', '/docs/quickstart', '/docs/records', '/docs/seo', '/docs/resources',
+    '/docs', '/docs/quickstart', '/docs/records', '/docs/seo', '/docs/mcp', '/docs/resources',
     '/docs/guides',
     '/docs/guides/url-redirect',
     '/docs/guides/vercel',

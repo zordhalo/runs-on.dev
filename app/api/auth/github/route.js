@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { safeSigninReturn } from '../../../../lib/session.js';
 
 export async function GET(request) {
   const state = randomBytes(16).toString('hex');
@@ -15,11 +16,17 @@ export async function GET(request) {
   // ONE comma-joined Set-Cookie header, which never sets oauth_claim and
   // corrupts oauth_state's Max-Age into a value browsers discard.
   const claim = new URL(request.url).searchParams.get('claim') ?? '';
+  // An OAuth consent request that needed a sign-in first: come back to it.
+  const next = safeSigninReturn(new URL(request.url).searchParams.get('next'));
 
   const headers = new Headers({ Location: url.toString() });
   headers.append('Set-Cookie', `oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
   if (claim) {
     headers.append('Set-Cookie', `oauth_claim=${encodeURIComponent(claim)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
+  }
+
+  if (next) {
+    headers.append('Set-Cookie', `oauth_next=${encodeURIComponent(next)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
   }
 
   return new Response(null, { status: 302, headers });

@@ -51,7 +51,7 @@ export default function Resources() {
         <DocList
           items={[
             { href: '/openapi.json', label: '/openapi.json', note: 'the full API spec: every endpoint, typed, with auth scopes' },
-            { href: '/.well-known/mcp', label: '/.well-known/mcp', note: 'MCP server (JSON-RPC): check_name, get_record' },
+            { href: '/.well-known/mcp', label: '/.well-known/mcp', note: 'MCP server: public lookups, plus DNS and deploys with a token (guide: /docs/mcp)' },
             { href: '/llms.txt', label: '/llms.txt', note: 'agent index: when to use this site, how to claim and deploy' },
             { href: '/sitemap.xml', label: '/sitemap.xml', note: 'every page' },
             { href: '/docs/records', label: '/docs/records', note: 'the record format the API writes' },
