@@ -5,5 +5,23 @@
   },
   "claimedAt": "2026-10-28T21:47:03.420Z",
   "records": {},
-  "country": "US"
+  "country": "US",
+  "subdomains": {
+    "_brevo-code": {
+      "TXT": [
+        "brevo-code:a56e12bfeb47d5714cd69b7d452c2c8a"
+      ]
+    },
+    "brevo1._domainkey": {
+      "CNAME": "b1.apexbld-runs-on-dev.dkim.brevo.com"
+    },
+    "brevo2._domainkey": {
+      "CNAME": "b2.apexbld-runs-on-dev.dkim.brevo.com"
+    },
+    "_dmarc": {
+      "TXT": [
+        "v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com"
+      ]
+    }
+  }
 }
