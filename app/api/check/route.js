@@ -18,12 +18,17 @@ const CHECK_WINDOW_MS = 60 * 1000;
 const CHECK_MAX = 10;
 const takeCheck = createRateLimiter({ windowMs: CHECK_WINDOW_MS, max: CHECK_MAX });
 
+// Any site may ask whether a name is free from the browser (advancelabs.dev's homepage demo does).
+// Safe to open: a public, read-only GET with no cookies or credentials, already in openapi.json,
+// and the per-name limiter above caps it the same for every caller.
+const CORS = { 'Access-Control-Allow-Origin': '*' };
+
 export async function GET(request) {
   const name = (new URL(request.url).searchParams.get('name') ?? '').trim().toLowerCase();
 
   const grammar = validateName(name);
-  if (!grammar.ok) return Response.json({ available: false, code: `invalid_${grammar.reason}` });
-  if (isReserved(name).reserved) return Response.json({ available: false, code: 'reserved' });
+  if (!grammar.ok) return Response.json({ available: false, code: `invalid_${grammar.reason}` }, { headers: CORS });
+  if (isReserved(name).reserved) return Response.json({ available: false, code: 'reserved' }, { headers: CORS });
 
   // Rate limit before the read: a request that costs no GitHub quota still
   // costs a slot, and gating only the read would let a loop spend the
@@ -34,7 +39,7 @@ export async function GET(request) {
     const seconds = Math.ceil(budget.retryAfterMs / 1000);
     return Response.json(
       { error: 'rate_limited', retryInMs: budget.retryAfterMs },
-      { status: 429, headers: { 'Retry-After': String(seconds), ...rateLimitHeaders(budget) } },
+      { status: 429, headers: { 'Retry-After': String(seconds), ...rateLimitHeaders(budget), ...CORS } },
     );
   }
 
@@ -48,10 +53,10 @@ export async function GET(request) {
     // from, which is how a bad REGISTRY_TOKEN can look like a UI bug.
     console.error(`check ${name} failed: status=${err.status ?? 'none'} ${err.message}`);
     const code = err.status === 403 || err.status === 429 ? 'busy' : 'check_failed';
-    return Response.json({ available: false, code });
+    return Response.json({ available: false, code }, { headers: CORS });
   }
   return Response.json(
     { available: existing === null, code: existing ? 'taken' : 'available' },
-    { headers: rateLimitHeaders(budget) },
+    { headers: { ...rateLimitHeaders(budget), ...CORS } },
   );
 }
