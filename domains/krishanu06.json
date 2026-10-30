@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "kriskundu06.github.io"
   },
-  "country": "IN",
-  "subdomains": {
-    "subdomain-owner-verification": {
-      "TXT": [
-        "3a8455964afce2945a632cf86b01fddc"
-      ]
-    }
-  }
+  "country": "IN"
 }
