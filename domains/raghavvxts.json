@@ -4,6 +4,15 @@
     "github": "raghavvxts"
   },
   "claimedAt": "2026-10-30T05:39:53.953Z",
-  "records": {},
-  "country": "IN"
+  "records": {
+    "CNAME": "97d5beae261ea911.vercel-dns-017.com"
+  },
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=raghavvxts.runs-on.dev,2ef4fb59bfab19611e48"
+      ]
+    }
+  }
 }
