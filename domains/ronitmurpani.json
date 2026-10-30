@@ -4,6 +4,8 @@
     "github": "ronitttm"
   },
   "claimedAt": "2026-10-30T19:08:20.976Z",
-  "records": {},
+  "records": {
+    "CNAME": "a581613107db1cbb.vercel-dns-017.com"
+  },
   "country": "IN"
 }
