@@ -13,15 +13,7 @@ import { CLAIM_GEO } from '../app/components/claim-geo.js';
 import countryCentroids from './country-centroids.json' with { type: 'json' };
 import { readRegistry } from '../lib/registry-files.js';
 import { geoPlacement } from '../lib/geo-placement.js';
-import {
-  PITCH,
-  DOT_R,
-  HALO_R,
-  HALO_OPACITY,
-  CORE_R,
-  CORE_OPACITY,
-  bloomCenter,
-} from '../app/components/claim-bloom.js';
+import { PITCH, DOT_R, bloomCells, bloomStyle } from '../app/components/claim-bloom.js';
 
 const COLS = DOTMAP.cols;
 const NROWS = DOTMAP.rows.length;
@@ -43,16 +35,14 @@ DOTMAP.rows.forEach((line, r) => {
 });
 
 let heat = '';
-// Per-claim blooms, geometrically identical to the selection overlay in
-// app/components/home-map.jsx: both read their radii and opacities from
-// app/components/claim-bloom.js, so the resting map and the selected map
-// cannot disagree. The earlier version bucketed claims into grid cells and
-// drew one bloom per cell, which read noticeably sparser than the overlay
-// and made the resting map look like it was hiding the real heat.
-for (const [lat, lon] of Object.values(points)) {
-  const { x, y } = bloomCenter(lat, lon, COLS, NROWS);
-  heat += `<circle cx="${x}" cy="${y}" r="${HALO_R}" fill-opacity="${HALO_OPACITY}"/>`;
-  heat += `<circle cx="${x}" cy="${y}" r="${CORE_R}" fill-opacity="${CORE_OPACITY}"/>`;
+// One bloom per cell, sized by its claim count, geometrically identical to
+// the selection overlay in app/components/home-map.jsx: both group and size
+// through app/components/claim-bloom.js, so the resting map and the selected
+// map cannot disagree.
+for (const { x, y, count } of bloomCells(Object.values(points), DOTMAP)) {
+  const s = bloomStyle(count);
+  heat += `<circle cx="${x}" cy="${y}" r="${s.haloR}" fill-opacity="${s.haloOpacity}"/>`;
+  heat += `<circle cx="${x}" cy="${y}" r="${s.coreR}" fill-opacity="${s.coreOpacity}"/>`;
 }
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Dot-matrix world map; brighter dots mark where runs-on.dev names are claimed">
