@@ -4,6 +4,8 @@
     "github": "pankaj853-lab"
   },
   "claimedAt": "2026-10-30T14:01:08.764Z",
-  "records": {},
+  "records": {
+    "CNAME": "adorable-meerkat-61844f.netlify.app"
+  },
   "country": "IN"
 }
