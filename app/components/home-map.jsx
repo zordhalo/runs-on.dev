@@ -4,15 +4,7 @@ import { useState } from 'react';
 import { ContinentChart, continentOf } from './ui.jsx';
 import { DOTMAP } from './dotmap-data.js';
 import FlapFrame from './flap-frame.jsx';
-import {
-  PITCH,
-  DOT_R,
-  HALO_R,
-  HALO_OPACITY,
-  CORE_R,
-  CORE_OPACITY,
-  bloomCenter,
-} from './claim-bloom.js';
+import { PITCH, DOT_R, bloomCells, bloomStyle } from './claim-bloom.js';
 
 // The home page's claim map: the base world is a static image (keeps ~1600
 // map elements out of the HTML), and the continent cards drive a client-side
@@ -43,7 +35,7 @@ export default function HomeMap({ heading = false, points = {}, resolved = 0, to
     heatByContinent.get(name).push(point);
   }
 
-  const overlay = selected ? heatByContinent.get(selected) ?? [] : [];
+  const overlay = selected ? bloomCells(heatByContinent.get(selected) ?? [], DOTMAP) : [];
 
   return (
     <div>
@@ -74,12 +66,12 @@ export default function HomeMap({ heading = false, points = {}, resolved = 0, to
                 })}
               </g>
               <g fill="#4d7cff">
-                {overlay.map(([lat, lon], idx) => {
-                  const { x, y } = bloomCenter(lat, lon, COLS, DOTMAP.rows.length);
+                {overlay.map(({ x, y, count }) => {
+                  const b = bloomStyle(count);
                   return (
-                    <g key={idx}>
-                      <circle cx={x} cy={y} r={HALO_R} fillOpacity={HALO_OPACITY} />
-                      <circle cx={x} cy={y} r={CORE_R} fillOpacity={CORE_OPACITY} />
+                    <g key={`${x}-${y}`}>
+                      <circle cx={x} cy={y} r={b.haloR} fillOpacity={b.haloOpacity} />
+                      <circle cx={x} cy={y} r={b.coreR} fillOpacity={b.coreOpacity} />
                     </g>
                   );
                 })}
