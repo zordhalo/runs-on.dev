@@ -61,6 +61,12 @@ test('pixelMap draws a busier cell hotter, and a continent image holds only that
   const world = pixelMap(points, DOTMAP);
   assert.ok(at(india, world) > at(brazil, world), '500 claims glow brighter than 1');
 
+  // LED matrix: only each cell's one dot pixel is ever lit, so heat can
+  // recolour the grid but never flood the gaps into a blob.
+  world.pixels.forEach((v, i) => {
+    if (v && ((i % world.width) % SUB || Math.floor(i / world.width) % SUB)) assert.fail(`gap pixel ${i} is lit`);
+  });
+
   const asia = pixelMap(points, DOTMAP, 'Asia');
   assert.equal(at(brazil, asia), 0, 'South America is blank in the Asia image');
   assert.equal(brightest(asia.pixels), brightest(world.pixels), 'the same claims glow the same in both');

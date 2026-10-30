@@ -86,7 +86,8 @@ export function bloomCenter(lat, lon, cols, rows) {
 
 // The pixel look shared with advance-labs (web/scripts/pixelate.py) and
 // aeo-toolkit: square pixels, a 4x4 Bayer ordered dither, a small fixed
-// palette, no anti-aliasing. Each map cell is SUB x SUB art pixels.
+// palette, no anti-aliasing. Each map cell is SUB x SUB art pixels, of
+// which only one is ever lit.
 export const SUB = 2;
 const BAYER = [
   [0, 8, 2, 10],
@@ -95,13 +96,13 @@ const BAYER = [
   [15, 7, 13, 5],
 ].map((row) => row.map((v) => v / 16));
 
-// Index 0 is transparent (the page shows through). 1 is land: one lit pixel
-// per cell, which keeps the dot-matrix grid of the original map (a filled
-// cell reads as a heavy slab and drowns the heat). 2-5 are the claim ramp,
-// ending on the site's blue and a near-white for the hottest pixels.
-export const PALETTE = ['#000000', '#55555c', '#16245a', '#2541a8', '#4d7cff', '#b9cbff'];
+// Index 0 is transparent (the page shows through). 1 is unclaimed land. 2-6
+// are the claim ramp, ending on the site's blue and a near-white for the
+// hottest dots. The land grey is dim on purpose so blue is the only thing
+// that draws the eye.
+export const PALETTE = ['#000000', '#38383d', '#2a3f8f', '#3c62d9', '#4d7cff', '#9db5ff', '#e4ebff'];
 const LAND = 1;
-const HEAT = [2, 3, 4, 5];
+const RAMP = [LAND, 2, 3, 4, 5, 6];
 
 // Claim heat glows from each cell, with strength and spread on a log10 curve
 // pinned to 1000 claims rather than the current max, so the world image and
@@ -112,30 +113,31 @@ const HEAT = [2, 3, 4, 5];
 export function heatStrength(count) {
   return Math.min(1, Math.log10(count + 1) / 3) * 0.85 + 0.15;
 }
-// Heat over the sea draws at this fraction, so glows soften past coasts.
-const SEA_HEAT = 0.35;
 
 // Renders the map as palette indices, width x height art pixels, row-major.
 // With a continent, only that continent's land and claims are drawn.
+//
+// An LED matrix: every land cell is one lit pixel (a square dot on the
+// PITCH grid), and claim heat changes the dot's colour, never the gaps.
+// Filling the gaps turned each hotspot into a solid blob that erased the
+// grid and the coastline right where the claims are. Heat lives per cell
+// and the Bayer dither runs dot to dot, so density reads as a soft gradient.
 export function pixelMap(points, dotmap, continent = null) {
   const cols = dotmap.cols;
   const rows = dotmap.rows.length;
-  const width = cols * SUB;
-  const height = rows * SUB;
   const mine = continent ? points.filter((p) => continentOf(p) === continent) : points;
 
-  const field = new Float32Array(width * height);
+  const heat = new Float32Array(cols * rows);
   for (const { x, y, count } of bloomCells(mine, dotmap)) {
-    const cx = (x / PITCH) * SUB;
-    const cy = (y / PITCH) * SUB;
+    const cx = (x - PITCH / 2) / PITCH;
+    const cy = (y - PITCH / 2) / PITCH;
     const amp = heatStrength(count);
-    const sig = SUB * (0.45 + 1.1 * amp);
-    const reach = Math.ceil(4 * sig);
-    for (let py = Math.max(0, Math.floor(cy) - reach); py < Math.min(height, cy + reach); py++) {
-      for (let px = Math.max(0, Math.floor(cx) - reach); px < Math.min(width, cx + reach); px++) {
-        const d2 = (px + 0.5 - cx) ** 2 + (py + 0.5 - cy) ** 2;
-        const i = py * width + px;
-        field[i] = Math.max(field[i], amp * Math.exp(-d2 / (2 * sig * sig)));
+    const sig = 1.15 * (0.35 + amp);
+    const reach = Math.ceil(3 * sig);
+    for (let r = Math.max(0, cy - reach); r <= Math.min(rows - 1, cy + reach); r++) {
+      for (let c = Math.max(0, cx - reach); c <= Math.min(cols - 1, cx + reach); c++) {
+        const v = amp * Math.exp(-((c - cx) ** 2 + (r - cy) ** 2) / (2 * sig * sig));
+        heat[r * cols + c] = Math.max(heat[r * cols + c], v);
       }
     }
   }
@@ -148,15 +150,15 @@ export function pixelMap(points, dotmap, continent = null) {
     return continentOf([lat, lon]) === continent;
   };
 
+  const width = cols * SUB;
+  const height = rows * SUB;
   const pixels = new Uint8Array(width * height);
-  for (let py = 0; py < height; py++) {
-    for (let px = 0; px < width; px++) {
-      const b = BAYER[py % 4][px % 4];
-      const land = isLand(Math.floor(px / SUB), Math.floor(py / SUB));
-      const h = field[py * width + px] * (land ? 1 : SEA_HEAT);
-      const level = Math.floor(h * HEAT.length + b - 0.5);
-      if (h > 0.04 && level >= 0) pixels[py * width + px] = HEAT[Math.min(HEAT.length - 1, level)];
-      else if (land && px % SUB === 0 && py % SUB === 0) pixels[py * width + px] = LAND;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (!isLand(c, r)) continue;
+      const h = heat[r * cols + c];
+      const level = h > 0.03 ? Math.floor(h * (RAMP.length - 1) + BAYER[r % 4][c % 4]) : 0;
+      pixels[r * SUB * width + c * SUB] = RAMP[Math.min(RAMP.length - 1, level)];
     }
   }
   return { width, height, pixels };
