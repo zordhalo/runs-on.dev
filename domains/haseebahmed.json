@@ -14,5 +14,9 @@
         "vc-domain-verify=haseebahmed.runs-on.dev,3288765e256f1c7f60c1"
       ]
     }
+  },
+  "profile": {
+    "name": "Haseeb Ahmed",
+    "bio": "Developer"
   }
 }
