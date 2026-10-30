@@ -1,82 +1,46 @@
 'use client';
 
 import { useState } from 'react';
-import { ContinentChart, continentOf } from './ui.jsx';
-import { DOTMAP } from './dotmap-data.js';
+import { ContinentChart } from './ui.jsx';
 import FlapFrame from './flap-frame.jsx';
-import { PITCH, DOT_R, bloomCells, bloomStyle } from './claim-bloom.js';
+import { continentSlug } from './claim-bloom.js';
 
-// The home page's claim map: the base world is a static image (keeps ~1600
-// map elements out of the HTML), and the continent cards drive a client-side
-// spotlight. Selecting a continent dims the image and draws an SVG overlay
-// holding only that continent's dots and claim blooms, bright. The overlay
-// renders on demand, so the page's raw HTML never pays for it.
+// The home page's claim map: Bayer-dithered square pixels baked at build time
+// (scripts/generate-claim-map.mjs) into tiny indexed PNGs, scaled up with
+// image-rendering: pixelated. The continent cards drive a spotlight: the
+// world image dims and that continent's own image (only its land and claims)
+// lays over it, bright. Nothing about the map lives in the page's HTML.
 //
 // Points, resolved, and total are recounted against the live registry by the
 // page that renders this (see lib/geo-placement.js), so the cards and the
-// unplaced count always sum to the current owner total.
-const COLS = DOTMAP.cols;
-
-function cellContinent(c, r) {
-  const lon = ((c + 0.5) / COLS) * 360 - 180;
-  const lat = 84 - ((r + 0.5) / DOTMAP.rows.length) * 140;
-  return continentOf([lat, lon]);
-}
+// unplaced count always sum to the current owner total. The images are
+// recounted by the same code at build time.
+const pixelated = { imageRendering: 'pixelated' };
 
 export default function HomeMap({ heading = false, points = {}, resolved = 0, total = 0 }) {
   const [selected, setSelected] = useState(null);
-
-  // Heat blooms grouped per continent at render time (the data is a few KB).
-  const heatByContinent = new Map();
-  for (const point of Object.values(points)) {
-    const name = continentOf(point);
-    if (!name) continue;
-    if (!heatByContinent.has(name)) heatByContinent.set(name, []);
-    heatByContinent.get(name).push(point);
-  }
-
-  const overlay = selected ? bloomCells(heatByContinent.get(selected) ?? [], DOTMAP) : [];
 
   return (
     <div>
       <FlapFrame>
         <div className="relative">
           <img
-            src="/claim-map.svg"
-            alt={`Dot-matrix world map where brighter dots mark claimed runs-on.dev names: ${resolved} of ${total} owners resolved from claim-time countries and public GitHub profiles`}
+            src="/claim-map.png"
+            width={224}
+            height={100}
+            alt={`Pixel world map where brighter blue marks claimed runs-on.dev names: ${resolved} of ${total} owners resolved from claim-time countries and public GitHub profiles`}
             className="h-auto w-full transition-opacity duration-500"
-            style={{ opacity: selected ? 0.15 : 1 }}
+            style={{ ...pixelated, opacity: selected ? 0.15 : 1 }}
           />
-          {selected && overlay.length > 0 && (
-            <svg
-              viewBox="0 0 1120 500"
+          {selected && (
+            <img
+              src={`/claim-map-${continentSlug(selected)}.png`}
+              width={224}
+              height={100}
+              alt=""
               className="pointer-events-none absolute inset-0 h-full w-full"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <g fill="#f3f3f3" fillOpacity="0.55">
-                {DOTMAP.rows.map((line, r) => {
-                  const dots = [];
-                  for (let c = 0; c < COLS; c++) {
-                    if (line[c] === '1' && cellContinent(c, r) === selected) {
-                      dots.push(<circle key={`${c}-${r}`} cx={c * PITCH + PITCH / 2} cy={r * PITCH + PITCH / 2} r={DOT_R} />);
-                    }
-                  }
-                  return dots.length ? <g key={r}>{dots}</g> : null;
-                })}
-              </g>
-              <g fill="#4d7cff">
-                {overlay.map(({ x, y, count }) => {
-                  const b = bloomStyle(count);
-                  return (
-                    <g key={`${x}-${y}`}>
-                      <circle cx={x} cy={y} r={b.haloR} fillOpacity={b.haloOpacity} />
-                      <circle cx={x} cy={y} r={b.coreR} fillOpacity={b.coreOpacity} />
-                    </g>
-                  );
-                })}
-              </g>
-            </svg>
+              style={pixelated}
+            />
           )}
         </div>
       </FlapFrame>

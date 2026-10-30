@@ -1,43 +1,69 @@
-// The home map is drawn twice: prebuilt into public/claim-map.svg for the
-// resting state, and as a live SVG overlay in home-map.jsx when a continent
-// is selected. They sit on top of each other, so the two have to agree. They
-// did not once (the overlay's halo was 9.3, the image's 7.2), which is what
-// app/components/claim-bloom.js and these tests exist to prevent.
+// The claim map is baked into indexed PNGs (scripts/generate-claim-map.mjs)
+// from pixelMap in app/components/claim-bloom.js: the world image at rest,
+// and one per continent that home-map.jsx lays over it when a continent card
+// is selected. These tests keep the committed images in step with the code
+// and pin the behaviour that makes the heat readable.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { bloomCenter, bloomCells, bloomStyle, PITCH } from '../app/components/claim-bloom.js';
+import { readFileSync, existsSync } from 'node:fs';
+import { DOTMAP } from '../app/components/dotmap-data.js';
+import {
+  CONTINENTS,
+  PALETTE,
+  PITCH,
+  SUB,
+  bloomCenter,
+  bloomCells,
+  continentSlug,
+  heatStrength,
+  pixelMap,
+} from '../app/components/claim-bloom.js';
 
-const svg = readFileSync('public/claim-map.svg', 'utf8');
 const overlaySource = readFileSync('app/components/home-map.jsx', 'utf8');
 
-test('every bloom in the committed map image is a bloomStyle size', () => {
-  // Halo then core per cell. Any pair bloomStyle cannot produce for some
-  // count means the image is a stale build from before the curve changed.
-  const circles = [...svg.matchAll(/r="([0-9.]+)" fill-opacity="([0-9.]+)"/g)].map((m) => [Number(m[1]), Number(m[2])]);
-  assert.ok(circles.length > 0 && circles.length % 2 === 0);
-  const known = new Map();
-  for (let n = 1; n <= 5000; n++) {
-    const s = bloomStyle(n);
-    known.set(`${s.haloR},${s.haloOpacity},${s.coreR},${s.coreOpacity}`, n);
-  }
-  for (let i = 0; i < circles.length; i += 2) {
-    const key = [...circles[i], ...circles[i + 1]].join(',');
-    assert.ok(known.has(key), `bloom ${key} is not a bloomStyle output`);
+test('the committed images are palette PNGs at native size with the current palette', () => {
+  const files = ['public/claim-map.png', ...CONTINENTS.map((c) => `public/claim-map-${continentSlug(c)}.png`)];
+  const plte = Buffer.from(PALETTE.flatMap((hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))));
+  for (const file of files) {
+    assert.ok(existsSync(file), `${file} is committed`);
+    const buf = readFileSync(file);
+    assert.equal(buf.readUInt32BE(16), DOTMAP.cols * SUB, `${file} width`);
+    assert.equal(buf.readUInt32BE(20), DOTMAP.rows.length * SUB, `${file} height`);
+    assert.equal(buf[25], 3, `${file} is indexed`);
+    // A stale build from before a palette change fails here.
+    assert.ok(buf.includes(Buffer.concat([Buffer.from('PLTE'), plte])), `${file} carries the current palette`);
   }
 });
 
-test('the overlay reads its geometry from the shared module, never literals', () => {
-  assert.ok(overlaySource.includes("from './claim-bloom.js'"), 'home-map imports the shared geometry');
-  assert.ok(overlaySource.includes('bloomCells(') && overlaySource.includes('bloomStyle('), 'overlay uses the shared grouping and sizing');
-  assert.ok(!/r=\{[0-9]/.test(overlaySource), 'no hard-coded radius survives in the overlay');
+test('the map draws as pixels from the shared module', () => {
+  assert.ok(overlaySource.includes("from './claim-bloom.js'"), 'home-map imports the shared module');
+  assert.ok(overlaySource.includes("imageRendering: 'pixelated'"), 'scaled up without smoothing');
 });
 
-test('bloomStyle grows with the count and tops out at 1000', () => {
-  const sizes = [1, 10, 100, 1000].map((n) => bloomStyle(n).haloR);
-  assert.deepEqual([...sizes].sort((a, b) => a - b), sizes);
-  assert.ok(sizes[0] < sizes[3]);
-  assert.deepEqual(bloomStyle(1000), bloomStyle(100000));
+test('heatStrength grows with the count and tops out at 1000', () => {
+  const s = [1, 10, 100, 1000].map(heatStrength);
+  assert.deepEqual([...s].sort((a, b) => a - b), s);
+  assert.ok(s[0] < s[3]);
+  assert.equal(heatStrength(1000), heatStrength(100000));
+});
+
+test('pixelMap draws a busier cell hotter, and a continent image holds only that continent', () => {
+  const india = [22, 79];
+  const brazil = [-10, -55];
+  const points = [...Array(500).fill(india), brazil];
+  const brightest = (pixels) => Math.max(...pixels);
+  const at = ([lat, lon], { width, pixels }) => {
+    const { x, y } = bloomCenter(lat, lon, DOTMAP.cols, DOTMAP.rows.length);
+    const px = (x / PITCH) * SUB;
+    const py = (y / PITCH) * SUB;
+    return Math.max(...[-1, 0].flatMap((dy) => [-1, 0].map((dx) => pixels[(py + dy) * width + px + dx])));
+  };
+  const world = pixelMap(points, DOTMAP);
+  assert.ok(at(india, world) > at(brazil, world), '500 claims glow brighter than 1');
+
+  const asia = pixelMap(points, DOTMAP, 'Asia');
+  assert.equal(at(brazil, asia), 0, 'South America is blank in the Asia image');
+  assert.equal(brightest(asia.pixels), brightest(world.pixels), 'the same claims glow the same in both');
 });
 
 test('bloomCells counts per cell and snaps offshore cells onto nearby land', () => {

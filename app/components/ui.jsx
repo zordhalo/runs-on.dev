@@ -1,30 +1,13 @@
 import { DOTMAP } from './dotmap-data.js';
+import { continentOf } from './claim-bloom.js';
+
+export { continentOf };
 
 // The page's structural element: a horizontal slit of light, fading smoothly
 // into the canvas at both ends. Sections are separated exclusively by these
 // lines, never by background shifts.
 export function Divider({ className = '' }) {
   return <hr aria-hidden="true" className={`slit-h ${className}`} />;
-}
-
-// Continent bucketing for the claim map: rough lat/lon boxes, checked in an
-// order that settles the overlaps (Europe before Asia and Africa, Oceania
-// before Asia, North before South America). Crude on purpose; the caption on
-// the stats page says the whole thing is approximate.
-const CONTINENT_BOXES = [
-  ['Europe', -25, 36, 60, 72],
-  ['Africa', -20, -37, 52, 37],
-  ['Oceania', 110, -50, 180, 0],
-  ['North America', -170, 12, -52, 72],
-  ['South America', -82, -56, -34, 13],
-  ['Asia', 25, 0, 180, 80],
-];
-
-export function continentOf([lat, lon]) {
-  for (const [name, lonMin, latMin, lonMax, latMax] of CONTINENT_BOXES) {
-    if (lon >= lonMin && lon <= lonMax && lat >= latMin && lat <= latMax) return name;
-  }
-  return null;
 }
 
 // Continent-wise claim counts beneath the map: cells in a wrapping,
