@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "webforyou-studio.netlify.app"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "subdomain-owner-verification": {
+      "TXT": [
+        "816ef4d1e438cde62d217ccd13bb1f39"
+      ]
+    }
+  }
 }
