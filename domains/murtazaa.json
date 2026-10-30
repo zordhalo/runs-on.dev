@@ -11,7 +11,8 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=murtazaa.runs-on.dev,dc6a24e04fbfcd4fec16"
+        "vc-domain-verify=murtazaa.runs-on.dev,dc6a24e04fbfcd4fec16",
+        "google-site-verification=Z12Ltu_FUj3cCZ-EPiZEbRKv5GXcaa1LF0sQ2H1hM1g"
       ]
     }
   }
