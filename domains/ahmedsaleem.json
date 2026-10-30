@@ -1,4 +1,3 @@
-
 {
   "name": "ahmedsaleem",
   "owner": {
@@ -8,5 +7,12 @@
   "records": {
     "CNAME": "5015887337b2648e.vercel-dns-017.com"
   },
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=ahmedsaleem.runs-on.dev,2a01007c8e6e2bdb7ac2"
+      ]
+    }
+  }
 }
