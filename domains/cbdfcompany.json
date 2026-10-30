@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "adorable-meerkat-61844f.netlify.app"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "subdomain-owner-verification": {
+      "TXT": [
+        "86a0a60a0221aa67430555fff6a4f0e2"
+      ]
+    }
+  }
 }
