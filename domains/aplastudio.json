@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "a03e59382bc9b42d.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=aplastudio.runs-on.dev,33729100e8080393690f"
-      ]
-    }
-  }
+  "country": "IN"
 }

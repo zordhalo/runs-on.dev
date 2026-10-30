@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "portfolio-sigma-three-2l5sd22w56.vercel.app"
   },
-  "country": "PK",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=murtazaa.runs-on.dev,dc6a24e04fbfcd4fec16"
-      ]
-    }
-  }
+  "country": "PK"
 }
