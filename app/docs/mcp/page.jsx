@@ -12,11 +12,11 @@ export const metadata = {
 const TOOLS = [
   ['check_name', 'none', 'Is a name available to claim?'],
   ['get_record', 'none', "Any claimed name's public record."],
-  ['whoami', 'any token', 'Your login, the token scope, and the names you own.'],
-  ['update_records', 'manage', 'Replace the apex records, subdomains, or profile card.'],
-  ['deploy_site', 'any token', 'Publish static files to https://<name>.runs-on.dev/.'],
-  ['list_deployments', 'any token', 'Deployment history and which one is live.'],
-  ['rollback_site', 'any token', 'Re-point the live site at an earlier deployment.'],
+  ['whoami', 'signed in', 'Your login, the token scope, and the names you own.'],
+  ['update_records', 'signed in + DNS', 'Replace the apex records, subdomains, or profile card.'],
+  ['deploy_site', 'signed in', 'Publish static files to https://<name>.runs-on.dev/.'],
+  ['list_deployments', 'signed in', 'Deployment history and which one is live.'],
+  ['rollback_site', 'signed in', 'Re-point the live site at an earlier deployment.'],
 ];
 
 export default function Mcp() {
@@ -36,15 +36,31 @@ export default function Mcp() {
         <p className="text-sm leading-relaxed sm:text-base">Codex:</p>
         <Code>{`codex mcp add runs-on --url https://runs-on.dev/.well-known/mcp`}</Code>
         <p className="text-sm leading-relaxed sm:text-base">
-          Any other client: a Streamable HTTP server at that URL. No token yet, and that is fine:
-          the two public tools work right away.
+          Cursor, in <C>~/.cursor/mcp.json</C> (or <C>.cursor/mcp.json</C> in a project):
+        </p>
+        <Code>{`{
+  "mcpServers": {
+    "runs-on": { "url": "https://runs-on.dev/.well-known/mcp" }
+  }
+}`}</Code>
+        <p className="text-sm leading-relaxed sm:text-base">VS Code, in <C>.vscode/mcp.json</C>:</p>
+        <Code>{`{
+  "servers": {
+    "runs-on": { "type": "http", "url": "https://runs-on.dev/.well-known/mcp" }
+  }
+}`}</Code>
+        <p className="text-sm leading-relaxed sm:text-base">
+          Any other client: a Streamable HTTP server at that URL. It supports standard MCP OAuth,
+          with dynamic client registration and PKCE. You don&apos;t need to sign in before
+          connecting: the two public tools work right away.
         </p>
       </Section>
 
       <Section title="2. Sign in">
         <p className="text-sm leading-relaxed sm:text-base">
           In Claude Code, run <C>/mcp</C>, pick <C>runs-on</C>, and choose Authenticate. In Codex,
-          run <C>codex mcp login runs-on</C>. If you skip this, the first owner tool you use asks
+          run <C>codex mcp login runs-on</C>. Cursor and VS Code show a sign-in prompt next to the
+          server. If you skip this, the first owner tool you use asks
           you to sign in.
         </p>
         <p className="text-sm leading-relaxed sm:text-base">
@@ -81,7 +97,7 @@ The last deploy broke the homepage. Roll back to the one before it.`}</Code>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="text-(--color-muted)">
-              <tr><th className="py-2 pr-4 font-normal">tool</th><th className="py-2 pr-4 font-normal">token</th><th className="py-2 font-normal">does</th></tr>
+              <tr><th className="py-2 pr-4 font-normal">tool</th><th className="py-2 pr-4 font-normal">needs</th><th className="py-2 font-normal">does</th></tr>
             </thead>
             <tbody>
               {TOOLS.map(([name, token, does]) => (
@@ -119,6 +135,68 @@ The last deploy broke the homepage. Roll back to the one before it.`}</Code>
 export RUNS_ON_TOKEN=rod1.YOUR_TOKEN
 codex mcp add runs-on --url https://runs-on.dev/.well-known/mcp \\
   --bearer-token-env-var RUNS_ON_TOKEN`}</Code>
+      </Section>
+
+      <Section title="Troubleshooting">
+        <dl className="space-y-4 text-sm leading-relaxed sm:text-base">
+          <div>
+            <dt><C>needs you to sign in</C> / <C>auth_required</C></dt>
+            <dd className="mt-1 text-(--color-muted)">
+              The agent has no token for runs-on.dev yet. Sign in (step 2). Claude Code shows the
+              server as connected before this, because the public tools work without a login.
+            </dd>
+          </div>
+          <div>
+            <dt><C>invalid_token</C> or <C>revoked_token</C></dt>
+            <dd className="mt-1 text-(--color-muted)">
+              The token expired after 30 days, or it was deleted on /manage. Sign in again.
+            </dd>
+          </div>
+          <div>
+            <dt><C>insufficient_scope</C></dt>
+            <dd className="mt-1 text-(--color-muted)">
+              The agent tried to edit DNS with deploy-only access. Sign in again and pick
+              &ldquo;deploys plus DNS&rdquo; on the approval page, or generate a token with{' '}
+              <C>also edit DNS</C> ticked.
+            </dd>
+          </div>
+          <div>
+            <dt><C>no_claimed_name</C> or <C>not_your_name</C></dt>
+            <dd className="mt-1 text-(--color-muted)">
+              The GitHub account you signed in with doesn&apos;t own a name, or doesn&apos;t own the
+              one the agent named. Claim a name first, or sign in with the account that owns it.
+            </dd>
+          </div>
+          <div>
+            <dt><C>invalid_record</C></dt>
+            <dd className="mt-1 text-(--color-muted)">
+              The edit broke a record rule. For example, a CNAME can&apos;t sit beside other
+              records. The <C>details</C> list says which rule, and the{' '}
+              <a className="underline" href="/docs/records">record reference</a> has them all.
+            </dd>
+          </div>
+          <div>
+            <dt><C>rate_limited</C></dt>
+            <dd className="mt-1 text-(--color-muted)">
+              Per account, every 10 minutes: 12 record edits, 6 deploys or rollbacks, 30 reads.
+              Wait <C>retryInMs</C> and try once more.
+            </dd>
+          </div>
+          <div>
+            <dt><C>stale</C></dt>
+            <dd className="mt-1 text-(--color-muted)">
+              Something else changed the record or the site while the agent was writing. Read it
+              again, then retry.
+            </dd>
+          </div>
+          <div>
+            <dt>The approval page says &ldquo;Cannot authorize this app&rdquo;</dt>
+            <dd className="mt-1 text-(--color-muted)">
+              The app sent a malformed request. Remove the server from your agent, add it again,
+              and sign in from scratch.
+            </dd>
+          </div>
+        </dl>
       </Section>
 
       <Section title="What it cannot do">
