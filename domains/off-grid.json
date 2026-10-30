@@ -4,6 +4,8 @@
     "github": "rearestofemall"
   },
   "claimedAt": "2026-10-30T13:34:47.118Z",
-  "records": {},
+  "records": {
+    "CNAME": "off-grid-studio.netlify.app"
+  },
   "country": "PK"
 }
