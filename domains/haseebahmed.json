@@ -17,6 +17,12 @@
   },
   "profile": {
     "name": "Haseeb Ahmed",
-    "bio": "Developer"
+    "bio": "Developer",
+    "links": [
+      {
+        "label": "My Portfolio",
+        "url": "https://haseebahmed.runs-on.dev/"
+      }
+    ]
   }
 }
