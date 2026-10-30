@@ -18,12 +18,17 @@ const CHECK_WINDOW_MS = 60 * 1000;
 const CHECK_MAX = 10;
 const takeCheck = createRateLimiter({ windowMs: CHECK_WINDOW_MS, max: CHECK_MAX });
 
-// Any site may ask whether a name is free from the browser (advancelabs.dev's homepage demo does).
-// Safe to open: a public, read-only GET with no cookies or credentials, already in openapi.json,
-// and the per-name limiter above caps it the same for every caller.
-const CORS = { 'Access-Control-Allow-Origin': '*' };
+// Browser reads from an allowlist only (advancelabs.dev's homepage demo). Reflected per request
+// with Vary: Origin, so a shared cache never serves one origin's header to another.
+const ALLOWED = new Set(['https://advancelabs.dev', 'https://www.advancelabs.dev']);
+const corsFor = (request) => {
+  const origin = request.headers.get('origin');
+  if (!origin || !ALLOWED.has(origin)) return { Vary: 'Origin' };
+  return { 'Access-Control-Allow-Origin': origin, 'Access-Control-Expose-Headers': 'Retry-After', Vary: 'Origin' };
+};
 
 export async function GET(request) {
+  const CORS = corsFor(request);
   const name = (new URL(request.url).searchParams.get('name') ?? '').trim().toLowerCase();
 
   const grammar = validateName(name);
