@@ -4,6 +4,8 @@
     "github": "machinecodebyte"
   },
   "claimedAt": "2026-10-30T17:00:16.865Z",
-  "records": {},
+  "records": {
+    "CNAME": "ac4c6bc363548370.vercel-dns-017.com"
+  },
   "country": "IN"
 }
