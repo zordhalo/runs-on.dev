@@ -53,10 +53,13 @@ the registry; they differ in what they check first.
   (`lib/blocklist.js`), and the per-account claim limit (`lib/claim.js`'s
   `evaluateClaim`, backed by the `owners/<login>.json` index in
   `lib/owners.js`) before writing with `lib/registry.js`'s `putRecord`.
-- **Changing an existing record from the site** goes through
-  `POST /api/records` (`app/api/records/route.js`), which reads the record
-  with its blob `sha`, applies `lib/edit.js`'s `validateEdit`, and writes
-  with `putRecordUpdate`. This is what `/manage` posts to.
+- **Changing an existing record from the site or an agent** goes through
+  `lib/record-edit.js`'s `editRecord`, which reads the record with its blob
+  `sha`, applies `lib/edit.js`'s `validateEdit`, and writes with
+  `putRecordUpdate`. Two front doors call it: `POST /api/records`
+  (`app/api/records/route.js`, the session cookie, what `/manage` posts to)
+  and the MCP server's `update_records` tool (a `manage`-scoped bearer token;
+  see [mcp.md](mcp.md)). Only who `login` is differs between them.
 - **Changing or removing a record by pull request**, which is also a
   first-class way to claim a new name, is validated by `lib/pr.js`'s
   `validateChangeset` in
