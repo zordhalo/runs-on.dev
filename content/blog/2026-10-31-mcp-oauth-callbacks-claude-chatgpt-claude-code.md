@@ -74,7 +74,7 @@ const LOOPBACK = new Set(["localhost", "127.0.0.1", "[::1]"]);
 function allowed(raw: string): boolean {
   let u: URL;
   try { u = new URL(raw); } catch { return false; }
-  if (u.hash) return false;
+  if (u.hash || u.username || u.password) return false;
 
   // Claude Code: http loopback, any port, nothing else
   if (u.protocol === "http:") return LOOPBACK.has(u.hostname);
@@ -113,33 +113,33 @@ whatever `callback_id` OpenAI generates, so it allows one segment of
 `[A-Za-z0-9_-]+` and nothing else. That is still a wildcard, and it is a
 wildcard on a host you decided to trust.
 
-## What runs-on.dev does today
+## What runs-on.dev had, and what we changed
 
 runs-on.dev has its own MCP server (`claude mcp add --transport http runs-on
-https://runs-on.dev/.well-known/mcp`, then sign in with GitHub). Its OAuth
-server is the open variant, and it is not the same as the allowlist above.
+https://runs-on.dev/.well-known/mcp`, then sign in with GitHub). Writing this
+post is how we noticed it had the open variant: registration accepted any
+`https` redirect URI, plus `http` on loopback. The claude.ai and chatgpt.com
+callbacks worked because Claude and ChatGPT register them, but so did any other
+`https` address, on a server whose codes can change a user's DNS records.
 
-Registration is open, and a client can register any `https` redirect URI, or
-`http` on `localhost`, `127.0.0.1` or `[::1]`. At authorize time the presented
-`redirect_uri` has to match one the client registered, exactly, except that a
-loopback redirect may change port. So the claude.ai and chatgpt.com callbacks
-work, because Claude and ChatGPT register them, but so does any other `https`
-address. The code is in `lib/oauth.js`.
+It had mitigations. Protocol errors only redirected back to loopback, so the
+authorize endpoint was never an open redirect. The consent page showed the
+signed-in GitHub login and the host you were being sent to. PKCE with S256 was
+required. None of that stops a user who clicks Approve on a page naming a host
+they do not recognise.
 
-That is a real tradeoff, and the mitigations are narrower than an allowlist:
+So the same day, runs-on.dev got the same allowlist as above: loopback, the
+Claude callback, and the two ChatGPT ones. Registering any other redirect now
+returns 400. The code is in `lib/oauth.js`.
 
-- Protocol errors only redirect back to loopback. For any other host the user
-  gets an error page on runs-on.dev, so the authorize endpoint is not an open
-  redirect.
-- The consent page shows the signed-in GitHub login and the host you are
-  being sent back to, and the user has to click Approve.
-- The client name is self-asserted, so it is stripped to printable text and
-  capped at 60 characters.
-- PKCE with S256 is required, and only public clients are accepted.
-
-Those make an attack harder to pull off, but they do not remove it. A user who
-approves a consent page for an unfamiliar host would still hand over a code.
-We have not changed that, and it is not in any directory.
+One detail is worth copying if your client ids are stateless. runs-on.dev
+issues a client id that is the signed registration itself, with no database.
+That means a client registered before the change still carries its old
+redirect, and its signature still verifies. Checking the allowlist only at
+`/register` would have left every earlier registration working forever. The
+check now runs again at `/authorize`, and there is a test that builds a
+pre-change client id with an arbitrary `https` redirect and confirms it is
+refused.
 
 ## The short version
 
