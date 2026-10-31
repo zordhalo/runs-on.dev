@@ -114,14 +114,27 @@ test('authorize: bad client or redirect never redirects; the rest go back with e
 });
 
 test('errors for an https client never auto-redirect (no open redirect off runs-on.dev)', () => {
-  const { clientId } = registerClient({ redirect_uris: ['https://evil.example/cb'] }, secret);
+  const claude = 'https://claude.ai/api/mcp/auth_callback';
+  const { clientId } = registerClient({ redirect_uris: [claude] }, secret);
   const out = checkAuthorizeRequest(
-    authorizeParams(clientId, pkce().challenge, { redirect_uri: 'https://evil.example/cb', response_type: 'bad' }),
+    authorizeParams(clientId, pkce().challenge, { redirect_uri: claude, response_type: 'bad' }),
     secret,
   );
   assert.equal(out.ok, false);
   assert.equal(out.redirect, false);
   assert.equal(out.error, 'unsupported_response_type');
+});
+
+test('a client sealed before the allowlist, with an arbitrary https redirect, is refused at authorize', () => {
+  // Same signing path registerClient uses, minus the allowlist: what an
+  // attacker holds if they registered before this change.
+  const clientId = registered();
+  const [body] = clientId.slice(5).split('.');
+  const payload = JSON.parse(Buffer.from(body, 'base64url').toString());
+  const legacy = `roc1.${sealBlob('client', { ...payload, r: ['https://evil.example/cb'] }, secret)}`;
+  assert.ok(readClient(legacy, secret), 'the legacy id still verifies');
+  const out = checkAuthorizeRequest(authorizeParams(legacy, pkce().challenge, { redirect_uri: 'https://evil.example/cb' }), secret);
+  assert.deepEqual([out.ok, out.redirect, out.error], [false, false, 'invalid_redirect_uri']);
 });
 
 test('loopback redirects may change port; nothing else may change', () => {
@@ -132,13 +145,24 @@ test('loopback redirects may change port; nothing else may change', () => {
   assert.ok(redirectUriMatches('https://app.example/cb', 'https://app.example/cb'));
 });
 
-test('registration accepts https and loopback http only', () => {
-  assert.ok(isAllowedRedirectUri('https://app.example/cb'));
+test('registration accepts loopback http and the named Claude and ChatGPT callbacks only', () => {
   assert.ok(isAllowedRedirectUri('http://127.0.0.1:9/cb'));
   assert.ok(isAllowedRedirectUri('http://[::1]:9/cb'));
-  for (const bad of ['http://example.com/cb', 'javascript:alert(1)', 'myapp://cb', 'https://a.example/cb#frag', 'https://u:p@a.example/', 'not a url']) {
+  assert.ok(isAllowedRedirectUri('https://claude.ai/api/mcp/auth_callback'));
+  assert.ok(isAllowedRedirectUri('https://chatgpt.com/connector_platform_oauth_redirect'));
+  assert.ok(isAllowedRedirectUri('https://chatgpt.com/connector/oauth/abc_DEF-123'));
+  for (const bad of [
+    'https://app.example/cb', 'https://evil.example/cb',
+    'http://claude.ai/api/mcp/auth_callback', 'https://claude.ai/api/mcp/auth_callback/x',
+    'https://claude.ai/api/mcp/auth_callback?next=evil', 'https://claude.ai:8443/api/mcp/auth_callback',
+    'https://evil.claude.ai/api/mcp/auth_callback', 'https://claude.ai.evil.example/api/mcp/auth_callback',
+    'https://chatgpt.com/connector/oauth/a/b', 'https://chatgpt.com/connector/oauth/', 'https://chatgpt.com/connector/oauth/..%2Fx',
+    'http://example.com/cb', 'javascript:alert(1)', 'myapp://cb', 'https://claude.ai/api/mcp/auth_callback#frag',
+    'https://u:p@claude.ai/api/mcp/auth_callback', 'not a url',
+  ]) {
     assert.ok(!isAllowedRedirectUri(bad), bad);
   }
+  assert.equal(registerClient({ redirect_uris: ['https://evil.example/cb'] }, secret).ok, false);
   assert.equal(registerClient({ redirect_uris: ['http://example.com/cb'] }, secret).ok, false);
   assert.equal(registerClient({ redirect_uris: [] }, secret).ok, false);
   assert.equal(registerClient(null, secret).ok, false);

@@ -72,8 +72,15 @@ gain the power to repoint DNS.
 - **CSRF on approve.** The approval POST needs the `SameSite=Lax` session
   cookie *and* a consent blob minted for the same login. The page refuses to
   be framed.
-- **Redirect URIs** are https, or http on loopback only. A loopback redirect
-  may come back on any port (RFC 8252 §7.3); nothing else may change.
+- **Redirect URIs** are http on loopback, or exactly the hosted callbacks of
+  clients trusted by name: `https://claude.ai/api/mcp/auth_callback`,
+  `https://chatgpt.com/connector_platform_oauth_redirect` and
+  `https://chatgpt.com/connector/oauth/{id}` (`lib/oauth.js`). Registration is
+  open, so this list is the only thing deciding who can receive a code; a new
+  hosted client is added on purpose. It is checked at authorize as well as at
+  registration, because client ids are stateless and older ones would
+  otherwise keep their redirect forever. A loopback redirect may come back on
+  any port (RFC 8252 §7.3); nothing else may change.
 - **Shared gates.** Edits go through `validateEdit`, the same check CI runs on
   pull requests, and every tool spends the same per-login rate limits as the
   HTTP routes.
