@@ -64,7 +64,7 @@ keep the list short and exact.
 
 ## What our search MCP server allows
 
-The Advance Labs AEO Toolkit search MCP server (changed 2026-10-31) accepts
+The [Advance Labs AEO Toolkit](https://aeo.advancelabs.dev/mcp) search MCP server (changed 2026-10-31) accepts
 loopback on any port, plus exactly three hosted entries. A sketch of the
 logic:
 
@@ -153,6 +153,8 @@ refused.
   and keep your discovery and token endpoints fast.
 
 On 2026-10-31 we published the AEO Toolkit servers to the official MCP Registry
+([install guide](https://docs.advancelabs.dev/aeo-toolkit/reference/mcp-registry-install/), and
+[how we listed them](https://advancelabs.dev/guides/where-to-list-your-mcp-server))
 as `dev.advancelabs/aeo-search`, `aeo-visibility` and `aeo-backlink`. Directory
 reviewers also want every tool to carry a title and
 `readOnlyHint`/`destructiveHint` annotations, so we made that field required
