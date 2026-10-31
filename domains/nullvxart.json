@@ -4,6 +4,8 @@
     "github": "DarkPrinceOG"
   },
   "claimedAt": "2026-10-31T08:27:30.668Z",
-  "records": {},
+  "records": {
+    "CNAME": "a32bc37faacffd10.vercel-dns-017.com"
+  },
   "country": "IN"
 }
