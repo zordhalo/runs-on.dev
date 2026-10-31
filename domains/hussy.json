@@ -4,7 +4,9 @@
     "github": "hussainwajda"
   },
   "claimedAt": "2026-10-31T20:47:48.616Z",
-  "records": {},
+  "records": {
+    "CNAME": "157e66e9b6bd6025.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
