@@ -11,7 +11,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "e4b35f10df9571ebf762"
+        "ds.runs-on.dev,e4b35f10df9571ebf762"
       ]
     }
   }
