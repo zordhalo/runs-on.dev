@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "portfolio-aopgqt3w7-north-light.vercel.app"
   },
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "murtazaa": {
+      "TXT": [
+        "08b7c248e8a2ba42.vercel-dns-017.com."
+      ]
+    }
+  }
 }
