@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-10-31T20:47:48.616Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=hussy.runs-on.dev,d10a01eb40e6d4003522"
+      ]
+    }
+  }
 }
