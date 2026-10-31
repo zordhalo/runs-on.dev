@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "d55f415f89531e01.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=awaazai.runs-on.dev,6460dd62296695b45d39"
+      ]
+    }
+  }
 }
