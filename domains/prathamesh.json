@@ -4,5 +4,9 @@
     "github": "Prathamesh-2448"
   },
   "claimedAt": "2026-09-03T04:48:11.224Z",
-  "records": {"URL": "http://ec2-54-152-229-212.compute-1.amazonaws.com:8000"}
+  "records": {
+    "A": [
+      "13.235.69.96"
+    ]
+  }
 }
