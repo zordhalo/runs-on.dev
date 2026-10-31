@@ -5,5 +5,15 @@
   },
   "claimedAt": "2026-10-31T17:03:57.944Z",
   "records": {},
-  "country": "PK"
+  "country": "PK",
+  "profile": {
+    "name": "ChSab178",
+    "bio": "Software Developer focused on building scalable web applications. Passionate about clean code, continuous learning, and open-source.",
+    "links": [
+      {
+        "label": "Linkedin",
+        "url": "https://www.linkedin.com/in/hammad-asghar-a879b1414/"
+      }
+    ]
+  }
 }
