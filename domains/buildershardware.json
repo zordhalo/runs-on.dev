@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "fuzzy6381.github.io"
   },
-  "country": "ZA"
+  "country": "ZA",
+  "subdomains": {
+    "_github-pages-challenge-fuzzy6381.buildershardware": {
+      "TXT": [
+        "8b5f94c8106cba84466c8efb517566"
+      ]
+    }
+  }
 }
