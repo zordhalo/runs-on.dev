@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-10-26T13:08:59.321Z",
+  "title": "Fix(health): stop the held-name reconciler closing dns-stuck nudges",
+  "summary": "Covers fix(health): stop the held-name reconciler closing dns-stuck nudges (#350), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 350,
+      "title": "fix(health): stop the held-name reconciler closing dns-stuck nudges",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/350"
+    }
+  ],
+  "category": "fix",
+  "tags": [
+    "Bug fix",
+    "health"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: lib/health.js, test/health.test.mjs)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "fix(health): stop the held-name reconciler closing dns-stuck nudges"
+  ],
+  "links": [
+    {
+      "label": "PR #350: fix(health): stop the held-name reconciler closing dns-stuck nudges",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/350"
+    }
+  ],
+  "seo": {
+    "title": "Fix(health): stop the held-name reconciler closing dns-stuck",
+    "metaDescription": "Covers fix(health): stop the held-name reconciler closing dns-stuck nudges (#350), merged into the registry."
+  },
+  "coveredPrs": [
+    350
+  ],
+  "suggestedSlugBase": "health-stop-held-name-reconciler"
+}

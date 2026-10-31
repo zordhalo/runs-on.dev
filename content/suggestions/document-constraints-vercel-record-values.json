@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-10-26T13:08:59.322Z",
+  "title": "Document the two constraints Vercel adds to record values",
+  "summary": "Covers docs: document the two constraints Vercel adds to record values (#344), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 344,
+      "title": "docs: document the two constraints Vercel adds to record values",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/344"
+    }
+  ],
+  "category": "docs",
+  "tags": [
+    "Docs",
+    "document"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: app/docs/records/page.jsx, docs/records.md)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "document the two constraints Vercel adds to record values"
+  ],
+  "links": [
+    {
+      "label": "PR #344: docs: document the two constraints Vercel adds to record values",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/344"
+    }
+  ],
+  "seo": {
+    "title": "Document the two constraints Vercel adds to record values · ",
+    "metaDescription": "Covers docs: document the two constraints Vercel adds to record values (#344), merged into the registry."
+  },
+  "coveredPrs": [
+    344
+  ],
+  "suggestedSlugBase": "document-constraints-vercel-record-values"
+}

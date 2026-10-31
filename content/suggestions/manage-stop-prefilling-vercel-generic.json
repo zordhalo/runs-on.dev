@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-10-26T13:08:59.322Z",
+  "title": "Fix(manage): stop prefilling Vercel's generic CNAME target",
+  "summary": "Covers fix(manage): stop prefilling Vercel's generic CNAME target (#329), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 329,
+      "title": "fix(manage): stop prefilling Vercel's generic CNAME target",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/329"
+    }
+  ],
+  "category": "fix",
+  "tags": [
+    "Bug fix",
+    "manage"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: README.md, app/docs/guides/vercel/page.jsx, app/docs/seo/page.jsx, app/manage/host-presets.js)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "fix(manage): stop prefilling Vercel's generic CNAME target"
+  ],
+  "links": [
+    {
+      "label": "PR #329: fix(manage): stop prefilling Vercel's generic CNAME target",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/329"
+    }
+  ],
+  "seo": {
+    "title": "Fix(manage): stop prefilling Vercel's generic CNAME target ·",
+    "metaDescription": "Covers fix(manage): stop prefilling Vercel's generic CNAME target (#329), merged into the registry."
+  },
+  "coveredPrs": [
+    329
+  ],
+  "suggestedSlugBase": "manage-stop-prefilling-vercel-generic"
+}
