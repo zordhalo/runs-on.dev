@@ -9,7 +9,8 @@
       "216.24.57.1"
     ],
     "TXT": [
-      "v=spf1 include:spf.improvmx.com ~all"
+      "v=spf1 include:spf.improvmx.com include:sendmailas.com ~all",
+      "brevo-code:5444feedc2041f9dbd8c0ff0813310e8"
     ],
     "MX": [
       {
@@ -19,6 +20,10 @@
       {
         "priority": 20,
         "value": "mx2.improvmx.com"
+      },
+      {
+        "priority": 30,
+        "value": "mail.sendmailas.com"
       }
     ]
   },
@@ -26,6 +31,29 @@
   "subdomains": {
     "tools": {
       "CNAME": "likhora-tools.onrender.com"
+    },
+    "sendmailas._domainkey": {
+      "TXT": [
+        "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGlDMu2WBl+s8nyGF64tvBU4JRGAuTn6DwXgugVzGlbTPA/6gSQylr3zabxkbIS4vA8rpE65k8MGFWRBOeGdkoTKCWD79DUZ/X0u/57Kmz1htgbRwYrBBBKorJWSAvcqVLcAwNlzEcahrZ5/flVdPZbfwwOPhM8zNpEXOJjmx4/JzMd8m+uVwxbkW4vT85eGT",
+        "mc/1F/cr8SIgIPOoVSo7B6fRmvc998b8rUPQapqIIaN9CdmuzRyeqpdz2abge45Gxod6wIsGNWdi+GG/nGLLcH+f67G6+9Hj0QwOyG5r6ZfjtOYlYMYN3bMA0Q4D3Q0U5JFibEiL84z7nvPhhjKiwIDAQAB"
+      ]
+    },
+    "_dmarc": {
+      "TXT": [
+        "v=DMARC1; p=none; aspf=r; adkim=r; rua=mailto:rua@dmarc.brevo.com"
+      ]
+    },
+    "bounces": {
+      "CNAME": "bounces.sendmailas.com"
+    },
+    "brevo1._domainkey": {
+      "CNAME": "b1.likhora-runs-on-dev.dkim.brevo.com"
+    },
+    "brevo2._domainkey": {
+      "CNAME": "b2.likhora-runs-on-dev.dkim.brevo.com"
+    },
+    "em": {
+      "CNAME": "em-likhora-runs-on-dev.brand.brevosend.com"
     }
   }
 }
