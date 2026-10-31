@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "panos140.github.io"
   },
-  "country": "GR"
+  "country": "GR",
+  "subdomains": {
+    "_discord": {
+      "TXT": [
+        "dh=e2541346fd4adf88ce5f5519b41e64cc0fd8b636"
+      ]
+    }
+  }
 }
