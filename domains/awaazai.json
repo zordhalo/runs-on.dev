@@ -4,6 +4,8 @@
     "github": "Ash-At-all"
   },
   "claimedAt": "2026-10-28T18:15:42.981Z",
-  "records": {},
+  "records": {
+    "CNAME": "d55f415f89531e01.vercel-dns-017.com"
+  },
   "country": "IN"
 }
