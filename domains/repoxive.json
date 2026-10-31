@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "32c04fc017d5dfc5.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=repoxive.runs-on.dev,e6f9708192e4de0588b8"
-      ]
-    }
-  }
+  "country": "IN"
 }

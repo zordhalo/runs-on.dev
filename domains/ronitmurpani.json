@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "a581613107db1cbb.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=ronitmurpani.runs-on.dev,d8d8e00b0f92e9a28324"
-      ]
-    }
-  }
+  "country": "IN"
 }

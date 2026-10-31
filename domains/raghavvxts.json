@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "97d5beae261ea911.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=raghavvxts.runs-on.dev,2ef4fb59bfab19611e48"
-      ]
-    }
-  }
+  "country": "IN"
 }

@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "7822012ef287e705.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=shailender.runs-on.dev,5dffe91b0ed7a59f5710"
-      ]
-    }
-  }
+  "country": "IN"
 }
