@@ -4,6 +4,10 @@
     "github": "satriahmarrento"
   },
   "claimedAt": "2026-10-31T08:49:45.500Z",
-  "records": {},
+  "records": {
+    "A": [
+      "168.110.196.230"
+    ]
+  },
   "country": "ID"
 }
