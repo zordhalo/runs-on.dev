@@ -4,6 +4,8 @@
     "github": "muhaglitch"
   },
   "claimedAt": "2026-11-01T16:17:33.047Z",
-  "records": {},
+  "records": {
+    "CNAME": "a8397888bdd12428.vercel-dns-017.com"
+  },
   "country": "PK"
 }
