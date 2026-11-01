@@ -4,7 +4,9 @@
     "github": "johnlloydmelu"
   },
   "claimedAt": "2026-11-01T05:00:45.790Z",
-  "records": {},
+  "records": {
+    "CNAME": "175ab77184184a1a.vercel-dns-017.com"
+  },
   "country": "PH",
   "subdomains": {
     "_vercel": {
