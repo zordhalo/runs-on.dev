@@ -23,16 +23,6 @@
     },
     "clk2._domainkey": {
       "CNAME": "dkim2.0shmonk0ozft.clerk.services"
-    },
-    "_acme-challenge": {
-      "TXT": [
-        "WKlOgKHzWJDc2wy9hmL8eu46iY-18Sck06qaWKkzQnA"
-      ]
-    },
-    "_cf-custom-hostname": {
-      "TXT": [
-        "521d6106-5df9-40f9-b021-54e9f562cfb8"
-      ]
     }
   }
 }
