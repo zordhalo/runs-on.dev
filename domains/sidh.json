@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-01T13:27:05.970Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=sidh.runs-on.dev,2c85773d9327e6b30cee"
+      ]
+    }
+  }
 }
