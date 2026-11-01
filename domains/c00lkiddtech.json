@@ -4,6 +4,10 @@
     "github": "c00lkiddtech"
   },
   "claimedAt": "2026-11-01T20:34:34.204Z",
-  "records": {},
+  "records": {
+    "A": [
+      "15.204.116.29"
+    ]
+  },
   "country": "US"
 }
