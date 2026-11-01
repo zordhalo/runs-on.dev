@@ -4,6 +4,8 @@
     "github": "BuddhaNag12"
   },
   "claimedAt": "2026-11-01T00:33:15.344Z",
-  "records": {},
+  "records": {
+    "CNAME": "98ad3cd813e4230c.vercel-dns-017.com"
+  },
   "country": "IN"
 }
