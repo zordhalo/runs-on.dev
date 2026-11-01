@@ -4,6 +4,10 @@
     "github": "maomao9-0"
   },
   "claimedAt": "2026-11-01T02:04:27.622Z",
-  "records": {},
+  "records": {
+    "A": [
+      "35.212.221.147"
+    ]
+  },
   "country": "SG"
 }
