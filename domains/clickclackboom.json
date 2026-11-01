@@ -4,6 +4,8 @@
     "github": "AshishMehta10"
   },
   "claimedAt": "2026-11-01T10:17:23.521Z",
-  "records": {},
+  "records": {
+    "CNAME": "project1-603165939.ap-south-1.elb.amazonaws.com"
+  },
   "country": "IN"
 }
