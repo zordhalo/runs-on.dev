@@ -4,7 +4,9 @@
     "github": "SidhCodez"
   },
   "claimedAt": "2026-11-01T13:27:05.970Z",
-  "records": {},
+  "records": {
+    "CNAME": "4cb5f1fb1df5e1c2.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
