@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "157e66e9b6bd6025.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=hussy.runs-on.dev,d10a01eb40e6d4003522"
-      ]
-    }
-  }
+  "country": "IN"
 }

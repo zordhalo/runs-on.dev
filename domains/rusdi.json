@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "cbfb4912d192b465.vercel-dns-017.com"
   },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=rusdi.runs-on.dev,935c2e4d0761a04bd007"
-      ]
-    }
-  },
   "country": "ID"
 }

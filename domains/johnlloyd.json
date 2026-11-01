@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "175ab77184184a1a.vercel-dns-017.com"
   },
-  "country": "PH",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=johnlloyd.runs-on.dev,52169f30024ab767e172"
-      ]
-    }
-  }
+  "country": "PH"
 }

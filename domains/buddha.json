@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "98ad3cd813e4230c.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=buddha.runs-on.dev,dee575107ff26baaeb4e"
-      ]
-    }
-  }
+  "country": "IN"
 }
