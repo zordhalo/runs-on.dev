@@ -4,6 +4,8 @@
     "github": "kaustav173"
   },
   "claimedAt": "2026-11-01T13:50:33.802Z",
-  "records": {},
+  "records": {
+    "CNAME": "3096a5fd75567827.vercel-dns-017.com"
+  },
   "country": "IN"
 }
