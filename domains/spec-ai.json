@@ -11,6 +11,9 @@
   "subdomains": {
     "clerk": {
       "CNAME": "frontend-api.clerk.services"
+    },
+    "accounts": {
+      "CNAME": "accounts.clerk.services"
     }
   }
 }
