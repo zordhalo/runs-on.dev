@@ -10,5 +10,12 @@
   "country": "IN",
   "profile": {
     "name": "Ajay"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "887a726fdee240d0.vercel-dns-017.com."
+      ]
+    }
   }
 }
