@@ -5,7 +5,9 @@
   },
   "claimedAt": "2026-11-01T04:44:18.499Z",
   "records": {
-    "CNAME": "n4n4ncatl.github.io"
+    "TXT": [
+      "google-site-verification=tmNVAdVC3c9eka0idd0Gs2fgmfoXu7TAGyFdwV-1ybk"
+    ]
   },
   "country": "CO"
 }
