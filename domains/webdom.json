@@ -4,6 +4,8 @@
     "github": "rohit-mehmi"
   },
   "claimedAt": "2026-11-01T06:12:51.034Z",
-  "records": {},
+  "records": {
+    "CNAME": "webdom.com"
+  },
   "country": "IN"
 }
