@@ -17,6 +17,9 @@
     },
     "clkmail": {
       "CNAME": "mail.0shmonk0ozft.clerk.services"
+    },
+    "clk._domainkey": {
+      "CNAME": "dkim1.0shmonk0ozft.clerk.services"
     }
   }
 }
