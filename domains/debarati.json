@@ -4,6 +4,8 @@
     "github": "dfordebarati"
   },
   "claimedAt": "2026-11-01T15:36:34.334Z",
-  "records": {},
+  "records": {
+    "CNAME": "5eb7f0fe4725128f.vercel-dns-017.com"
+  },
   "country": "IN"
 }
