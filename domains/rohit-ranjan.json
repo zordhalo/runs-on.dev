@@ -5,5 +5,13 @@
   },
   "claimedAt": "2026-11-01T08:01:33.163Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "profile": {
+    "links": [
+      {
+        "label": "My portfolio",
+        "url": "https://rohit-ranjan-patra.netlify.app"
+      }
+    ]
+  }
 }
