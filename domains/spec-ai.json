@@ -20,6 +20,9 @@
     },
     "clk._domainkey": {
       "CNAME": "dkim1.0shmonk0ozft.clerk.services"
+    },
+    "clk2._domainkey": {
+      "CNAME": "dkim2.0shmonk0ozft.clerk.services"
     }
   }
 }
