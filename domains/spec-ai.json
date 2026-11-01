@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "92a22abb8bcbf59e.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "clerk": {
+      "CNAME": "frontend-api.clerk.services"
+    }
+  }
 }
