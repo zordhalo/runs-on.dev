@@ -33,6 +33,9 @@
       "TXT": [
         "521d6106-5df9-40f9-b021-54e9f562cfb8"
       ]
+    },
+    "spec-ai": {
+      "CNAME": "cname.mintlify.builders"
     }
   }
 }
