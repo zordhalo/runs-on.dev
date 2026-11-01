@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "5eb7f0fe4725128f.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=debarati.runs-on.dev,288f62261641410bcc42"
+      ]
+    }
+  }
 }
