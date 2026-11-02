@@ -4,6 +4,8 @@
     "github": "devhasen"
   },
   "claimedAt": "2026-11-02T02:13:39.621Z",
-  "records": {},
+  "records": {
+    "CNAME": "formvault.wasmer.app"
+  },
   "country": "BR"
 }
