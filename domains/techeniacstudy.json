@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "3096a5fd75567827.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=techeniacstudy.runs-on.dev,bed1141ae1d4b4876d51"
-      ]
-    }
-  }
+  "country": "IN"
 }

@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "a8397888bdd12428.vercel-dns-017.com"
   },
-  "country": "PK",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=furqan.runs-on.dev,a0a194fa4046f8bde338"
-      ]
-    }
-  }
+  "country": "PK"
 }

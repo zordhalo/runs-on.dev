@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "b9edef47f99101e9.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=velvetlabs.runs-on.dev,90a9008bf442070af1b0"
-      ]
-    }
-  }
+  "country": "IN"
 }
