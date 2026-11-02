@@ -4,6 +4,8 @@
     "github": "sanker1234"
   },
   "claimedAt": "2026-11-02T16:42:18.545Z",
-  "records": {},
+  "records": {
+    "CNAME": "9cinejoy.pages.dev"
+  },
   "country": "IN"
 }
