@@ -4,6 +4,8 @@
     "github": "Redev325"
   },
   "claimedAt": "2026-11-02T03:00:46.992Z",
-  "records": {},
+  "records": {
+    "CNAME": "redev325.github.io"
+  },
   "country": "US"
 }
