@@ -6,5 +6,12 @@
   "claimedAt": "2026-09-06T11:59:35.846Z",
   "records": {
     "CNAME": "dhruvshah0506.github.io"
+  },
+  "subdomains": {
+    "api": {
+      "A": [
+        "103.30.154.111"
+      ]
+    }
   }
 }
