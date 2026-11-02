@@ -11,7 +11,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "b9edef47f99101e9.vercel-dns-017.com"
+        "vc-domain-verify=velvetlabs.runs-on.dev,90a9008bf442070af1b0"
       ]
     }
   }
