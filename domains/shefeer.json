@@ -4,6 +4,8 @@
     "github": "shefeer12"
   },
   "claimedAt": "2026-11-02T13:50:37.271Z",
-  "records": {},
+  "records": {
+    "CNAME": "6f43c1750e69cd89.vercel-dns-017.com"
+  },
   "country": "IN"
 }
