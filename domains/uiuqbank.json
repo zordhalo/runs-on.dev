@@ -4,6 +4,8 @@
     "github": "Hameme21"
   },
   "claimedAt": "2026-11-02T16:42:51.097Z",
-  "records": {},
+  "records": {
+    "CNAME": "9a54b92ae811cc61.vercel-dns-017.com"
+  },
   "country": "BD"
 }
