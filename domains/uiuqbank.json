@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "9a54b92ae811cc61.vercel-dns-017.com"
   },
-  "country": "BD"
+  "country": "BD",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=uiuqbank.runs-on.dev,05c3b90fe1161d1fc3f2"
+      ]
+    }
+  }
 }
