@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "6f43c1750e69cd89.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=shefeer.runs-on.dev,19e63c4a8da337c98032"
+      ]
+    }
+  }
 }
