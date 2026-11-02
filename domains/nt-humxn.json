@@ -4,6 +4,8 @@
     "github": "GT-Snix"
   },
   "claimedAt": "2026-11-02T15:05:18.016Z",
-  "records": {},
+  "records": {
+    "CNAME": "gt-snix.github.io"
+  },
   "country": "IN"
 }
