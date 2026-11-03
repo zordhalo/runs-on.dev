@@ -13,9 +13,7 @@
       "CNAME": "jralex07.github.io"
     },
     "sms": {
-      "TXT": [
-        "hosting-site=lav-school-sms-2026"
-      ]
+      "CNAME": "lav-school-sms-2026.web.app"
     }
   }
 }
