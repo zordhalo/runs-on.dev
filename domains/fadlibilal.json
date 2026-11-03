@@ -12,9 +12,7 @@
   "country": "ID",
   "subdomains": {
     "_vercel": {
-      "TXT": [
-        "vc-domain-verify=fadlibilal.runs-on.dev,e17f9476d23980d756f2"
-      ]
+      "CNAME": "cname.vercel-dns.com"
     }
   }
 }
