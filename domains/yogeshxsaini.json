@@ -9,5 +9,12 @@
       "130.210.62.191"
     ]
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "jellyfin": {
+      "A": [
+        "130.210.62.191"
+      ]
+    }
+  }
 }
