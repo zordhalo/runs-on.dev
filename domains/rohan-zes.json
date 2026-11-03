@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-03T12:35:56.749Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=rohan-zes.runs-on.dev,6c233b55439079fcedf1"
+      ]
+    }
+  }
 }
