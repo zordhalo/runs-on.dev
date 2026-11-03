@@ -11,7 +11,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=runs-on.dev,de8e106e610fd1aae0bc"
+        "vc-domain-verify=imran-s.runs-on.dev,5f581466fc17546981f0"
       ]
     }
   }
