@@ -4,6 +4,16 @@
     "github": "mr-x003"
   },
   "claimedAt": "2026-11-03T18:28:37.395Z",
-  "records": {},
+  "records": {
+    "A": [
+      "162.210.102.233"
+    ],
+    "MX": [
+      {
+        "priority": 10,
+        "value": "mbox.freehostia.com"
+      }
+    ]
+  },
   "country": "EG"
 }
