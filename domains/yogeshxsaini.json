@@ -4,6 +4,10 @@
     "github": "YogeshxSaini"
   },
   "claimedAt": "2026-11-03T14:43:46.662Z",
-  "records": {},
+  "records": {
+    "A": [
+      "130.210.62.191"
+    ]
+  },
   "country": "IN"
 }
