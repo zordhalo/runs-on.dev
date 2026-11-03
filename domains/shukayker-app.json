@@ -4,6 +4,10 @@
     "github": "andotsy"
   },
   "claimedAt": "2026-11-03T11:41:04.397Z",
-  "records": {},
+  "records": {
+    "A": [
+      "147.15.129.78"
+    ]
+  },
   "country": "UA"
 }
