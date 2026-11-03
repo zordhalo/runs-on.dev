@@ -9,7 +9,7 @@
   },
   "country": "PK",
   "subdomains": {
-    "_vercel": {
+    "7indev": {
       "TXT": [
         "google-site-verification=khE94B87iXR7CJpcaZYobRbsvXsU7fvYWDBnrSg96oA"
       ]
