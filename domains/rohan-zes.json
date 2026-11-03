@@ -4,7 +4,9 @@
     "github": "RohanKodesss"
   },
   "claimedAt": "2026-11-03T12:35:56.749Z",
-  "records": {},
+  "records": {
+    "CNAME": "120be696c694866a.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
