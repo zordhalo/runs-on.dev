@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "cb87e0cb5c900d96.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=tusharchauhan.runs-on.dev,25a8cc51c7db8af77e06"
-      ]
-    }
-  }
+  "country": "IN"
 }

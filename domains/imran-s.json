@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "45f87dbfe945b20f.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=imran-s.runs-on.dev,5f581466fc17546981f0"
-      ]
-    }
-  }
+  "country": "IN"
 }
