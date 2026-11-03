@@ -11,6 +11,11 @@
   "subdomains": {
     "school": {
       "CNAME": "jralex07.github.io"
+    },
+    "sms": {
+      "TXT": [
+        "JhAnjuo5iJpSoVbAZTJbWQs0YAgMYq6zAhEmrCQLlig"
+      ]
     }
   }
 }
