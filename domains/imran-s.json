@@ -4,7 +4,9 @@
     "github": "Imran8125"
   },
   "claimedAt": "2026-10-19T13:51:29.188Z",
-  "records": {},
+  "records": {
+    "CNAME": "45f87dbfe945b20f.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
