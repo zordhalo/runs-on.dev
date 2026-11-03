@@ -4,6 +4,8 @@
     "github": "BeingTushh"
   },
   "claimedAt": "2026-11-03T02:50:08.624Z",
-  "records": {},
+  "records": {
+    "CNAME": "cb87e0cb5c900d96.vercel-dns-017.com"
+  },
   "country": "IN"
 }
