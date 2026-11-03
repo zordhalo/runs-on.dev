@@ -4,7 +4,9 @@
     "github": "manishtiwari2"
   },
   "claimedAt": "2026-11-03T02:13:06.275Z",
-  "records": {},
+  "records": {
+    "CNAME": "0950571b93fc334c.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
