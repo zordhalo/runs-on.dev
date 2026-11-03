@@ -10,6 +10,10 @@
 <h1 align="center">runs-on.dev</h1>
 
 <p align="center">
+  <a href="https://whobuildsagents.com/advancelabs.dev"><img src="https://whobuildsagents.com/badge/advancelabs.dev.svg" alt="MCP servers live" /></a>
+</p>
+
+<p align="center">
   Free subdomains for developers. Claim <code>yourname.runs-on.dev</code> in seconds,
   then point it wherever you like.
 </p>
