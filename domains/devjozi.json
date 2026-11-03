@@ -4,5 +4,10 @@
     "github": "devjozi"
   },
   "claimedAt": "2026-10-24T18:05:53.690Z",
-  "records": {}
+  "records": {},
+  "subdomains": {
+    "offers": {
+      "CNAME": "client-offer-publication.pages.dev"
+    }
+  }
 }
