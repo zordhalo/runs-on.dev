@@ -5,5 +5,13 @@
   },
   "claimedAt": "2026-11-04T10:18:17.547Z",
   "records": {},
-  "country": "GB"
+  "country": "GB",
+  "subdomains": {
+    "_discord": {
+      "TXT": [
+        "\"subdomains\": {",
+        "\"_discord\": { \"TXT\": [\"dh=7d18be982bbe527e5c51ed811b3494231fa7de02\"] }"
+      ]
+    }
+  }
 }
