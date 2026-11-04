@@ -4,6 +4,16 @@
     "github": "harimayco"
   },
   "claimedAt": "2026-11-04T16:58:05.085Z",
-  "records": {},
+  "records": {
+    "A": [
+      "138.2.89.10"
+    ],
+    "MX": [
+      {
+        "priority": 10,
+        "value": "mail.belizedigital.dev"
+      }
+    ]
+  },
   "country": "ID"
 }
