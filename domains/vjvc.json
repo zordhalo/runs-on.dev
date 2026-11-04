@@ -5,7 +5,12 @@
   },
   "claimedAt": "2026-11-04T11:08:08.559Z",
   "records": {
-    "URL": "https://vjvc.vercel.app/"
+    "A": [
+      "89.42.196.229"
+    ],
+    "TXT": [
+      "v=spf1 -all"
+    ]
   },
   "country": "AZ"
 }
