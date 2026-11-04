@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "b6caada461e5cd55.vercel-dns-017.com"
   },
-  "country": "IE",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=ledgerpoint.runs-on.dev,72335b3ce54959d95f63"
-      ]
-    }
-  }
+  "country": "IE"
 }
