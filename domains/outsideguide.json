@@ -5,5 +5,18 @@
   },
   "claimedAt": "2026-11-04T15:54:12.131Z",
   "records": {},
-  "country": "BR"
+  "country": "BR",
+  "subdomains": {
+    "resend._domainkey": {
+      "TXT": [
+        "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC2+0YgGPzFJUTK1xS//9ZZLKQdl+O8Nz4rhM+qA1TJ1Xqm4FxsN3ZoIRT98HzM97gZrGM3WfRQ8/ODQ0t3OOj4uhZiKBrTi5hKNERoDRTLeSfySrzvZINSb5Bc4qnXRCxv1YC9anm1UOqh/fkWLL4bUvQP/Kl6e5BPpNBRxiSgewIDAQAB"
+      ]
+    },
+    "rsend": {
+      "CNAME": "rsend-sae1.forge.rmta.net"
+    },
+    "send": {
+      "CNAME": "send.forge.rmta.net"
+    }
+  }
 }
