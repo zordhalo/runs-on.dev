@@ -4,7 +4,9 @@
     "github": "salah-07-alt"
   },
   "claimedAt": "2026-11-04T13:47:52.295Z",
-  "records": {},
+  "records": {
+    "CNAME": "salah-portfolio-93f.pages.dev"
+  },
   "country": "AE",
   "subdomains": {
     "subdomain-owner-verification": {
