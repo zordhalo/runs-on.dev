@@ -5,9 +5,7 @@
   },
   "claimedAt": "2026-11-05T07:05:03.957Z",
   "records": {
-    "TXT": [
-      "vc-domain-verify=kakashisan9.runs-on.dev,7d14adde835d898482d8"
-    ]
+    "CNAME": "edef753e6294eecb.vercel-dns-017.com"
   },
   "country": "IN"
 }
