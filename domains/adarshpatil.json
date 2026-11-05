@@ -4,7 +4,9 @@
     "github": "adarshpatil-07"
   },
   "claimedAt": "2026-11-05T13:36:56.405Z",
-  "records": {},
+  "records": {
+    "CNAME": "34f29c01543e394f.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
