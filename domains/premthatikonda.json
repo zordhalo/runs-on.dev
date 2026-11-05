@@ -4,7 +4,9 @@
     "github": "prem-thatikonda29"
   },
   "claimedAt": "2026-11-05T05:07:47.194Z",
-  "records": {},
+  "records": {
+    "CNAME": "1d5206891f5bf74d.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
