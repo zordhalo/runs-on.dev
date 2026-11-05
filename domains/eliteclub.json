@@ -9,10 +9,5 @@
       "No"
     ]
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "CNAME": "vercel-dns-017.com"
-    }
-  }
+  "country": "IN"
 }
