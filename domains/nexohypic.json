@@ -4,6 +4,8 @@
     "github": "Ahtshamdev"
   },
   "claimedAt": "2026-11-05T18:47:00.441Z",
-  "records": {},
+  "records": {
+    "CNAME": "d5486466901b963f.vercel-dns-017.com"
+  },
   "country": "PK"
 }
