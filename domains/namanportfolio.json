@@ -4,6 +4,8 @@
     "github": "namanpatel7018-ux"
   },
   "claimedAt": "2026-11-05T10:05:31.202Z",
-  "records": {},
+  "records": {
+    "CNAME": "naman-s-portfolio.namanpatel7018.workers.dev"
+  },
   "country": "IN"
 }
