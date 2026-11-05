@@ -4,6 +4,10 @@
     "github": "MUTO444"
   },
   "claimedAt": "2026-11-05T15:40:40.432Z",
-  "records": {},
+  "records": {
+    "TXT": [
+      "_vercel"
+    ]
+  },
   "country": "IN"
 }
