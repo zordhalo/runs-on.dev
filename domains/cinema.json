@@ -4,7 +4,9 @@
     "github": "Namanparashar248"
   },
   "claimedAt": "2026-11-05T14:03:39.953Z",
-  "records": {},
+  "records": {
+    "CNAME": "c66c31e24e27d36d.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
