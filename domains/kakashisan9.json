@@ -5,9 +5,7 @@
   },
   "claimedAt": "2026-11-05T07:05:03.957Z",
   "records": {
-    "TXT": [
-      "vc-domain-verify=kakashisan9.runs-on.dev,2b2cae5f5277ca520722"
-    ]
+    "URL": "https://kakashuu.vercel.app/"
   },
   "country": "IN"
 }
