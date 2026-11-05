@@ -9,5 +9,10 @@
       "vc-domain-verify=runs-on.dev,16cbd11a5c4b80a8f1b8"
     ]
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "CNAME": "vercel-dns-017.com"
+    }
+  }
 }
