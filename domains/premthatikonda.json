@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "1d5206891f5bf74d.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=premthatikonda.runs-on.dev,18ba0e255ed58a542a78"
-      ]
-    }
-  }
+  "country": "IN"
 }

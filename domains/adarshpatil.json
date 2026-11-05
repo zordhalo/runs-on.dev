@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "34f29c01543e394f.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=adarshpatil.runs-on.dev,a7c3f47ae1c8aaa4bc0d"
-      ]
-    }
-  }
+  "country": "IN"
 }

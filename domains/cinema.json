@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "c66c31e24e27d36d.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=cinema.runs-on.dev,17a8ae99f18df58926e5"
-      ]
-    }
-  }
+  "country": "IN"
 }
