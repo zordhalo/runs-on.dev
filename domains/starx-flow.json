@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "0ca1ae1f8ab4bbf1.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=starx-flow.runs-on.dev,092c330b4d170f68636e"
+      ]
+    }
+  }
 }
