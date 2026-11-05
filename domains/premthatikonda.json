@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-05T05:07:47.194Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=premthatikonda.runs-on.dev,18ba0e255ed58a542a78"
+      ]
+    }
+  }
 }
