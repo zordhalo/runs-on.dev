@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "d5486466901b963f.vercel-dns-017.com"
   },
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=nexohypic.runs-on.dev,499daaf0fbaf158248c6"
+      ]
+    }
+  }
 }
