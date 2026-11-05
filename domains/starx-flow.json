@@ -4,6 +4,8 @@
     "github": "Tara1903"
   },
   "claimedAt": "2026-11-05T08:01:44.773Z",
-  "records": {},
+  "records": {
+    "CNAME": "0ca1ae1f8ab4bbf1.vercel-dns-017.com"
+  },
   "country": "IN"
 }
