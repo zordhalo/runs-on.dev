@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-05T14:03:39.953Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=cinema.runs-on.dev,17a8ae99f18df58926e5"
+      ]
+    }
+  }
 }
