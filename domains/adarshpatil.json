@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-05T13:36:56.405Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=adarshpatil.runs-on.dev,a7c3f47ae1c8aaa4bc0d"
+      ]
+    }
+  }
 }
