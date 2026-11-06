@@ -7,5 +7,8 @@
   "records": {
     "CNAME": "d97bc116251c1a3f.vercel-dns-017.com"
   },
-  "country": "NP"
+  "country": "NP",
+  "profile": {
+    "name": "bigem-hub"
+  }
 }
