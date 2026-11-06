@@ -5,5 +5,10 @@
   },
   "claimedAt": "2026-11-06T13:16:06.658Z",
   "records": {},
-  "country": "DE"
+  "country": "DE",
+  "subdomains": {
+    "admin": {
+      "CNAME": "lordlolqdh.github.io"
+    }
+  }
 }
