@@ -13,6 +13,17 @@
       "TXT": [
         "668d82b446e2838aedf355835989a649"
       ]
+    },
+    "resend._domainkey": {
+      "TXT": [
+        "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDuLPMIe0GVMI0iY+IXLMx4c5e3YU7Doz1c/x2aYuhbWd7RHA74LvDgDe6rtCcAcTcP//JBkqloSZd5yvbQdZ1FzHkxoiroBCyemx0MZVW7krhgYwaFT4o52ZiClohDzj/fWy/+KsNrG1guXPrN3BzlwsaXBj+M/0rQ7KrbvsfyHQIDAQAB"
+      ]
+    },
+    "rsend": {
+      "CNAME": "rsend-apne1.forge.rmta.net"
+    },
+    "send": {
+      "CNAME": "send.forge.rmta.net"
     }
   }
 }
