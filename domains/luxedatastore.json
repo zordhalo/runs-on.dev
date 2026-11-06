@@ -4,7 +4,9 @@
     "github": "zicciluxe"
   },
   "claimedAt": "2026-11-06T19:28:52.751Z",
-  "records": {},
+  "records": {
+    "CNAME": "5aaa8dd5b9ca243c.vercel-dns-016.com"
+  },
   "country": "GH",
   "subdomains": {
     "_vercel": {
