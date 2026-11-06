@@ -7,12 +7,5 @@
   "records": {
     "URL": "https://oliver-claridge.xyz"
   },
-  "country": "GB",
-  "subdomains": {
-    "subdomain-owner-verification": {
-      "TXT": [
-        "b45fdb24b0f0a62257aa5b6e7647e020"
-      ]
-    }
-  }
+  "country": "GB"
 }
