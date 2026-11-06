@@ -14,7 +14,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=bigem.runs-on.dev,45ba0acda7d972f0ccb8"
+        "bigem.runs-on.dev,45ba0acda7d972f0ccb8"
       ]
     }
   }
