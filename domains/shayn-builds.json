@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-10-17T15:52:08.668Z",
   "records": {},
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=shayn-builds.runs-on.dev,d3ff32b518204418a769"
+      ]
+    }
+  }
 }
