@@ -16,5 +16,12 @@
       }
     ]
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "stharan": {
+      "TXT": [
+        "v=spf1 include:spf.improvmx.com ~all"
+      ]
+    }
+  }
 }
