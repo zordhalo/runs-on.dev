@@ -4,7 +4,9 @@
     "github": "shayn468"
   },
   "claimedAt": "2026-10-17T15:52:08.668Z",
-  "records": {},
+  "records": {
+    "CNAME": "24f07d961cfb7cda.vercel-dns-017.com"
+  },
   "country": "PK",
   "subdomains": {
     "_vercel": {
