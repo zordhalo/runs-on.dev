@@ -11,7 +11,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=smartstudy.run-s-on.dev,b5bb617adb159cdb0888"
+        "vc-domain-verify=smartstudy.run-on.dev,c5d133da075ada7944fd"
       ]
     }
   }
