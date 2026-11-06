@@ -12,12 +12,5 @@
       "vc-domain-verify=runs-on.dev,16cbd11a5c4b80a8f1b8"
     ]
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=runs-on.dev,16cbd11a5c4b80a8f1b8"
-      ]
-    }
-  }
+  "country": "IN"
 }

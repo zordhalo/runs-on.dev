@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "fe263518cf0dd70b.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=smartstudy.run-on.dev,c5d133da075ada7944fd"
-      ]
-    }
-  }
+  "country": "IN"
 }
