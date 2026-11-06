@@ -10,5 +10,12 @@
   "country": "NP",
   "profile": {
     "name": "bigem-hub"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=bigem.runs-on.dev,45ba0acda7d972f0ccb8"
+      ]
+    }
   }
 }
