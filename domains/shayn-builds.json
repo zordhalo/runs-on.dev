@@ -9,10 +9,8 @@
   },
   "country": "PK",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=shayn-builds.runs-on.dev,d3ff32b518204418a769"
-      ]
+    "shayn-builds": {
+      "CNAME": "shayn468.github.io"
     }
   }
 }
