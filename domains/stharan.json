@@ -5,7 +5,16 @@
   },
   "claimedAt": "2026-10-02T14:15:41.107Z",
   "records": {
-    "CNAME": "8ca5870f8469fcdb.vercel-dns-017.com"
+    "MX": [
+      {
+        "priority": 10,
+        "value": "mx1.improvmx.com"
+      },
+      {
+        "priority": 20,
+        "value": "mx2.improvmx.com"
+      }
+    ]
   },
   "country": "IN"
 }
