@@ -11,7 +11,7 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=luxedatastore.runs-on.dev,ad7d47609aa6ccbf188d"
+        "vc-domain-verify=luxedatastore.runs-on.dev,f490c39915cece7b64aa"
       ]
     }
   }
