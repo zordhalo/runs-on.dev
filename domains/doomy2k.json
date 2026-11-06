@@ -4,6 +4,8 @@
     "github": "pityup1234-cell"
   },
   "claimedAt": "2026-11-06T08:02:08.821Z",
-  "records": {},
+  "records": {
+    "CNAME": "514e030021901e74.vercel-dns-017.com"
+  },
   "country": "IN"
 }
