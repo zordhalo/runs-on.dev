@@ -7,10 +7,5 @@
   "records": {
     "CNAME": "shayn468.github.io"
   },
-  "country": "PK",
-  "subdomains": {
-    "shayn-builds": {
-      "CNAME": "shayn468.github.io"
-    }
-  }
+  "country": "PK"
 }
