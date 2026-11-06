@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-06T19:28:52.751Z",
   "records": {},
-  "country": "GH"
+  "country": "GH",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=luxedatastore.runs-on.dev,ad7d47609aa6ccbf188d"
+      ]
+    }
+  }
 }
