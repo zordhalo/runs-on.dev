@@ -4,6 +4,8 @@
     "github": "bigem-hub"
   },
   "claimedAt": "2026-11-06T18:30:07.300Z",
-  "records": {},
+  "records": {
+    "CNAME": "d97bc116251c1a3f.vercel-dns-017.com"
+  },
   "country": "NP"
 }
