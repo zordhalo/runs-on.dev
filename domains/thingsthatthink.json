@@ -4,6 +4,8 @@
     "github": "arjav1181"
   },
   "claimedAt": "2026-11-07T07:51:46.892Z",
-  "records": {},
+  "records": {
+    "CNAME": "things-that-think.pages.dev"
+  },
   "country": "IN"
 }
