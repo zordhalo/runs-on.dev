@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "aa41a3e645525d4f.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=abhijith.runs-on.dev,e275a131567c582e8c5d"
-      ]
-    }
-  }
+  "country": "IN"
 }

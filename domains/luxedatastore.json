@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "5aaa8dd5b9ca243c.vercel-dns-016.com"
   },
-  "country": "GH",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=luxedatastore.runs-on.dev,f490c39915cece7b64aa"
-      ]
-    }
-  }
+  "country": "GH"
 }

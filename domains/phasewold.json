@@ -9,11 +9,6 @@
   },
   "country": "FR",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=phasewold.runs-on.dev,08370a98dfccf65433b9"
-      ]
-    },
     "_discord": {
       "TXT": [
         "dh=4280684a29d728deeca9236655a070fe587c323f"
