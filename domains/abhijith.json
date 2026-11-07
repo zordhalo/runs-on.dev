@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-07T09:30:57.802Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=abhijith.runs-on.dev,e275a131567c582e8c5d"
+      ]
+    }
+  }
 }
