@@ -4,6 +4,10 @@
     "github": "TheClio69"
   },
   "claimedAt": "2026-11-07T02:49:24.023Z",
-  "records": {},
+  "records": {
+    "A": [
+      "217.182.64.207"
+    ]
+  },
   "country": "FR"
 }
