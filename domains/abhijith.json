@@ -4,7 +4,9 @@
     "github": "abhijithbhat"
   },
   "claimedAt": "2026-11-07T09:30:57.802Z",
-  "records": {},
+  "records": {
+    "CNAME": "aa41a3e645525d4f.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
