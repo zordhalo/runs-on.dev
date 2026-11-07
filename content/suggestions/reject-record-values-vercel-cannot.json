@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-10-26T13:08:59.322Z",
+  "title": "Reject record values Vercel cannot store",
+  "summary": "Covers fix: reject record values Vercel cannot store (#339), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 339,
+      "title": "fix: reject record values Vercel cannot store",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/339"
+    }
+  ],
+  "category": "fix",
+  "tags": [
+    "Bug fix",
+    "reject"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: lib/record-fields.js, lib/schema.js, schema/record.schema.json, test/record-fields.test.mjs)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "reject record values Vercel cannot store"
+  ],
+  "links": [
+    {
+      "label": "PR #339: fix: reject record values Vercel cannot store",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/339"
+    }
+  ],
+  "seo": {
+    "title": "Reject record values Vercel cannot store · runs-on.dev",
+    "metaDescription": "Covers fix: reject record values Vercel cannot store (#339), merged into the registry."
+  },
+  "coveredPrs": [
+    339
+  ],
+  "suggestedSlugBase": "reject-record-values-vercel-cannot"
+}
