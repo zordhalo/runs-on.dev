@@ -4,6 +4,8 @@
     "github": "dev-dyly"
   },
   "claimedAt": "2026-11-07T04:31:30.346Z",
-  "records": {},
+  "records": {
+    "CNAME": "bracket-app-cgc.pages.dev"
+  },
   "country": "NZ"
 }
