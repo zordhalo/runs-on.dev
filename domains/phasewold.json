@@ -19,5 +19,19 @@
         "dh=4280684a29d728deeca9236655a070fe587c323f"
       ]
     }
+  },
+  "profile": {
+    "name": "PhaseWorld",
+    "bio": "Full-stack developer & creative technologist\n✦ Purpurite Studio — Founder\n✦ RFH — Developer\n\nbut still no one cares about me",
+    "links": [
+      {
+        "label": "Portfolio",
+        "url": "https://www.phaseworld.top"
+      },
+      {
+        "label": "Portfolio",
+        "url": "https://phasewold.runs-on.dev"
+      }
+    ]
   }
 }
