@@ -4,6 +4,10 @@
     "github": "RiccardoManzan"
   },
   "claimedAt": "2026-11-07T11:32:24.085Z",
-  "records": {},
+  "records": {
+    "A": [
+      "192.168.1.2"
+    ]
+  },
   "country": "IT"
 }
