@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-11-02T16:01:51.115Z",
+  "title": "MCP server and OAuth sign-in architecture",
+  "summary": "Covers docs: MCP server and OAuth sign-in architecture (#403), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 403,
+      "title": "docs: MCP server and OAuth sign-in architecture",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/403"
+    }
+  ],
+  "category": "docs",
+  "tags": [
+    "Docs",
+    "server"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: app/docs/mcp/page.jsx, docs/architecture.md, docs/mcp.md)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "MCP server and OAuth sign-in architecture"
+  ],
+  "links": [
+    {
+      "label": "PR #403: docs: MCP server and OAuth sign-in architecture",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/403"
+    }
+  ],
+  "seo": {
+    "title": "MCP server and OAuth sign-in architecture · runs-on.dev",
+    "metaDescription": "Covers docs: MCP server and OAuth sign-in architecture (#403), merged into the registry."
+  },
+  "coveredPrs": [
+    403
+  ],
+  "suggestedSlugBase": "server-oauth-sign-architecture"
+}
