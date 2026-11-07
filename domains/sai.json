@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "a26f9e5d02efb15b.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=sai.runs-on.dev,c7ccc6d215da2d650a38"
+      ]
+    }
+  }
 }
