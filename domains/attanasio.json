@@ -9,5 +9,12 @@
       "192.168.1.2"
     ]
   },
-  "country": "IT"
+  "country": "IT",
+  "subdomains": {
+    "_acme-challenge": {
+      "TXT": [
+        "ADjWq-fFNuk3PuCihw3y5ijzznmk5XsJR0zRufvfZlA"
+      ]
+    }
+  }
 }
