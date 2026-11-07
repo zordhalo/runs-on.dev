@@ -4,6 +4,8 @@
     "github": "gjcu019-cell"
   },
   "claimedAt": "2026-11-07T07:47:51.475Z",
-  "records": {},
+  "records": {
+    "CNAME": "b299241e3294f87d.vercel-dns-017.com"
+  },
   "country": "DE"
 }
