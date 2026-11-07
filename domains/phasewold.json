@@ -4,7 +4,9 @@
     "github": "phaseworld-creator"
   },
   "claimedAt": "2026-11-07T01:35:49.496Z",
-  "records": {},
+  "records": {
+    "CNAME": "8e12ae6f824b2d27.vercel-dns-017.com"
+  },
   "country": "FR",
   "subdomains": {
     "_vercel": {
