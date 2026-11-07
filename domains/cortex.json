@@ -9,5 +9,22 @@
       "13.55.93.39"
     ]
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "clerk": {
+      "CNAME": "frontend-api.clerk.services"
+    },
+    "accounts": {
+      "CNAME": "accounts.clerk.services"
+    },
+    "clkmail": {
+      "CNAME": "mail.wddsk2ugx46u.clerk.services"
+    },
+    "clk._domainkey": {
+      "CNAME": "dkim1.wddsk2ugx46u.clerk.services"
+    },
+    "clk2._domainkey": {
+      "CNAME": "dkim2.wddsk2ugx46u.clerk.services"
+    }
+  }
 }
