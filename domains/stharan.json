@@ -19,5 +19,12 @@
       }
     ]
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=runs-on.dev,29cab55343c9e059e4dc"
+      ]
+    }
+  }
 }
