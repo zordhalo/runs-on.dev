@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-07T01:35:49.496Z",
   "records": {},
-  "country": "FR"
+  "country": "FR",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=phasewold.runs-on.dev,08370a98dfccf65433b9"
+      ]
+    }
+  }
 }
