@@ -4,6 +4,8 @@
     "github": "rorelb"
   },
   "claimedAt": "2026-11-08T21:05:44.967Z",
-  "records": {},
+  "records": {
+    "CNAME": "rorelb.github.io"
+  },
   "country": "NL"
 }
