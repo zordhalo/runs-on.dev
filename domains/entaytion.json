@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "4a6395ff6d2034c0.vercel-dns-017.com"
   },
-  "country": "UA"
+  "country": "UA",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=entaytion.runs-on.dev,bd3e0245302112653d5f"
+      ]
+    }
+  }
 }
