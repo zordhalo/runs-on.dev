@@ -10,5 +10,12 @@
   "country": "PK",
   "profile": {
     "name": "Ans A"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=anasahmad.runs-on.dev,2363201a2f8d992191b1"
+      ]
+    }
   }
 }
