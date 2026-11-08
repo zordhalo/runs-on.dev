@@ -5,5 +5,17 @@
   },
   "claimedAt": "2026-11-08T20:02:48.346Z",
   "records": {},
-  "country": "NL"
+  "country": "NL",
+  "subdomains": {
+    "goyda": {
+      "TXT": [
+        "goyda"
+      ]
+    },
+    "yiuim": {
+      "TXT": [
+        "yiuim"
+      ]
+    }
+  }
 }
