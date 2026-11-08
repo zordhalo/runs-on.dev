@@ -4,6 +4,8 @@
     "github": "entaytion"
   },
   "claimedAt": "2026-11-08T19:25:26.521Z",
-  "records": {},
+  "records": {
+    "CNAME": "4a6395ff6d2034c0.vercel-dns-017.com"
+  },
   "country": "UA"
 }
