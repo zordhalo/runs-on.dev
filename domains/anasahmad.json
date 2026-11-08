@@ -4,7 +4,9 @@
     "github": "anastanvir"
   },
   "claimedAt": "2026-10-01T20:23:49.199Z",
-  "records": {},
+  "records": {
+    "CNAME": "45839ce0d9c92e8a.vercel-dns-017.com"
+  },
   "country": "PK",
   "profile": {
     "name": "Ans A"
