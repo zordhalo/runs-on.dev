@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-08T18:43:09.927Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "remote": {
+      "A": [
+        "13.200.189.129"
+      ]
+    }
+  }
 }
