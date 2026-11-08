@@ -4,6 +4,10 @@
     "github": "ausl0ser"
   },
   "claimedAt": "2026-11-08T19:54:55.253Z",
-  "records": {},
+  "records": {
+    "A": [
+      "13.143.162.33"
+    ]
+  },
   "country": "NL"
 }
