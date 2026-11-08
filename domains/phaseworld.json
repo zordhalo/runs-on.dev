@@ -1,0 +1,22 @@
+{
+  "name": "phaseworld",
+  "owner": {
+    "github": "phaseworld-creator"
+  },
+  "claimedAt": "2026-11-08T03:08:33.439Z",
+  "records": {
+    "CNAME": "8e12ae6f824b2d27.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_discord": {
+      "TXT": [
+        "dh=4280684a29d728deeca9236655a070fe587c323f"
+      ]
+    }
+  },
+  "profile": {
+    "name": "PhaseWorld",
+    "bio": "Full-stack developer & creative technologist\n✦ Purpurite Studio — Founder\n✦ RFH — Developer\n\nbut still no one cares about me"
+  },
+  "country": "FR"
+}
