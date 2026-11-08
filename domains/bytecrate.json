@@ -9,11 +9,6 @@
   },
   "country": "IN",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=bytecrate.runs-on.dev,4772f32dce31878f4fda"
-      ]
-    },
     "_google": {
       "TXT": [
         "google-site-verification=iMNPcJDWx452MyveUlmPmx3Av6Grco5jZxmgJEmAyjc"

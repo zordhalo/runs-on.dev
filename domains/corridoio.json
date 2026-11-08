@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "eb5303d2420d8548.vercel-dns-017.com"
   },
-  "country": "IT",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=corridoio.runs-on.dev,40f6833594b3df46f7b1"
-      ]
-    }
-  }
+  "country": "IT"
 }
