@@ -4,6 +4,8 @@
     "github": "vikazop09"
   },
   "claimedAt": "2026-11-09T08:30:54.488Z",
-  "records": {},
+  "records": {
+    "CNAME": "vikazop09.github.io"
+  },
   "country": "IN"
 }
