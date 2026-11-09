@@ -4,7 +4,11 @@
     "github": "Faisalalialhassani"
   },
   "claimedAt": "2026-11-09T20:17:04.877Z",
-  "records": {},
+  "records": {
+    "A": [
+      "185.158.133.1"
+    ]
+  },
   "country": "JO",
   "subdomains": {
     "_lovable.postify": {
