@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-09T20:17:04.877Z",
   "records": {},
-  "country": "JO"
+  "country": "JO",
+  "subdomains": {
+    "_lovable.postify": {
+      "TXT": [
+        "lovable_verify=60111d88d41d27fe913e97a8161bedffcc76d8d9651e523c47ca3331af424905"
+      ]
+    }
+  }
 }
