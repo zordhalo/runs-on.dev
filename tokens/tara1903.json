@@ -1,3 +1,10 @@
 {
-  "tokens": []
+  "tokens": [
+    {
+      "id": "8ccf8327a1514890",
+      "scope": "manage",
+      "createdAt": 1794246679220,
+      "exp": 1802022679220
+    }
+  ]
 }
