@@ -4,6 +4,16 @@
     "github": "Anubisx7"
   },
   "claimedAt": "2026-11-09T11:53:30.819Z",
-  "records": {},
+  "records": {
+    "A": [
+      "162.210.102.233"
+    ],
+    "MX": [
+      {
+        "priority": 10,
+        "value": "mbox.freehostia.com"
+      }
+    ]
+  },
   "country": "EG"
 }
