@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "mihirportfolio1.netlify.app"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=mihir.runs-on.dev,286a95de4fdef95a9147"
+      ]
+    }
+  }
 }
