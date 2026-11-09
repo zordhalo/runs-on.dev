@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "076971727fbc1231.vercel-dns-017.com"
   },
-  "country": "US"
+  "country": "US",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=reflexlabs.runs-on.dev,7fe1438e763409285437"
+      ]
+    }
+  }
 }
