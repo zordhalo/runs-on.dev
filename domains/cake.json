@@ -10,5 +10,12 @@
       "zoho-verification=zb59174608.zmverify.zoho.com"
     ]
   },
-  "country": "DZ"
+  "country": "DZ",
+  "subdomains": {
+    "cake": {
+      "TXT": [
+        "zoho-verification=zb59174608.zmverify.zoho.com"
+      ]
+    }
+  }
 }
