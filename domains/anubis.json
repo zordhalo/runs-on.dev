@@ -9,7 +9,9 @@
       "162.210.102.233"
     ],
     "TXT": [
-      "v=spf1 include:spf.freehostia.com mx -all"
+      "v=spf1 include:spf.freehostia.com mx -all",
+      "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC41vG+wqCWOd0F/oWYE+eCCtVzX+orzBn5+rXS54pC3nxuqVNMZpLiq38bIyJsAIROsvvfmDtoh5XdP8Y1PB9RYVMmqvU4wGyd2xV+9eGeH3SOHL6RYPLmhXY9v0XKamfbTfUZT8k13T5MHJZRQg1MUGJkKWVyB6IHFL7NyciBIwIDAQAB",
+      "o=~"
     ],
     "MX": [
       {
