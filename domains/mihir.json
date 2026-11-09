@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "65f87cc07c01071f.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=mihir.runs-on.dev,286a95de4fdef95a9147"
-      ]
-    }
-  }
+  "country": "IN"
 }
