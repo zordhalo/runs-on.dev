@@ -4,6 +4,8 @@
     "github": "gudisesathvika-web"
   },
   "claimedAt": "2026-11-09T06:01:51.255Z",
-  "records": {},
+  "records": {
+    "CNAME": "cname.vercel-dns.com"
+  },
   "country": "IN"
 }
