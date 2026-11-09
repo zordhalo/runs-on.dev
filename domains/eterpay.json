@@ -1,0 +1,21 @@
+{
+  "name": "eterpay",
+  "owner": {
+    "github": "jashveer-sharma"
+  },
+  "claimedAt": "2026-11-09T05:08:00.000Z",
+  "records": {
+    "URL": "https://github.com/jashveer-sharma/eterpay"
+  },
+  "profile": {
+    "name": "EterPay",
+    "bio": "AI-Powered Global Financial Platform",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jashveer-sharma/eterpay"
+      }
+    ]
+  },
+  "country": "IN"
+}
