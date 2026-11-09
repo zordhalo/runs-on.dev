@@ -14,7 +14,7 @@
   "subdomains": {
     "api._domainkey": {
       "TXT": [
-        "[\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFOC8QAMIIBCgKCAQEAOJ8jXs4iV17G7WjITcir1KS\",\"PnemqSlVc04jcjDvBi+eVAbvy953fAJzfJULAD2pauhSDPKVPRWiP7+DHDyQ/zkgkZpaER\"]"
+        "\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFOC8QAMIIBCgKCAQEAOJ8jXs4iV17G7WjITcir1KS\",\"PnemqSlVc04jcjDvBi+eVAbvy953fAJzfJULAD2pauhSDPKVPRWiP7+DHDyQ/zkgkZpaER\""
       ]
     },
     "tracking": {
