@@ -10,12 +10,5 @@
   "country": "ID",
   "profile": {
     "name": "rapitn"
-  },
-  "subdomains": {
-    "_discord": {
-      "TXT": [
-        "dh=9197f36be53b17328d232255837a2fbd902f24f9"
-      ]
-    }
   }
 }
