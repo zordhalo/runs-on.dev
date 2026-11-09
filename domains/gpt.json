@@ -4,6 +4,8 @@
     "github": "Quit4859"
   },
   "claimedAt": "2026-10-21T15:05:24.269Z",
-  "records": {},
+  "records": {
+    "CNAME": "0ca454ca44e03490.vercel-dns-017.com"
+  },
   "country": "IN"
 }
