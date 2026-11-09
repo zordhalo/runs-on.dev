@@ -7,5 +7,12 @@
   "records": {
     "URL": "https://portfoliovr-tan.vercel.app/"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "portfoliovr.runs-on.dev"
+      ]
+    }
+  }
 }
