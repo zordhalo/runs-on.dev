@@ -12,17 +12,19 @@
   },
   "country": "DZ",
   "subdomains": {
-    "cake": {
-      "TXT": [
-        "zoho-verification=zb59174608.zmverify.zoho.com"
-      ]
-    },
     "api._domainkey": {
       "TXT": [
-        "[",
-        "\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFOC8QAMIIBCgKCAQEAOJ8jXs4iV17G7WjITcir1KS PnemqSlVc04jcjDvBi+eVAbvy953fAJzfJULAD2pauhSDPKVPRWiP7+DHDyQ/zkgkZpaER /KoStGqmAgmoA/JUcgtqMdDwGYW49o14D27FjM1yPDig0Yn72kBzeDHgI9x1B686enz+3vW\",",
-        "\"SWHT6hEMf51dfBv11GPueRoM4WvZmRgSUS7I0Je3cu0j2Vh+W9/1Q90q6mLRtq1ZCtL7Ct QDcZeqD7Z9oVSj46EeYuQoEDFtDLFOUxuitPTObtWQA/Tpwi8jEKUoEf8er/w1tF1QwIt2 EWLD2cxDkukqrlHS1Gdwic1A5GEJ11X2v0/p6wIDAQAB\"",
-        "]"
+        "[\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFOC8QAMIIBCgKCAQEAOJ8jXs4iV17G7WjITcir1KS\",\"PnemqSlVc04jcjDvBi+eVAbvy953fAJzfJULAD2pauhSDPKVPRWiP7+DHDyQ/zkgkZpaER\"]"
+      ]
+    },
+    "tracking": {
+      "TXT": [
+        "api.elasticemail.com"
+      ]
+    },
+    "_dmarc": {
+      "TXT": [
+        "v=DMARC1;p=none;"
       ]
     }
   }
