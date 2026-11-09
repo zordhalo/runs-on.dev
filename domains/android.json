@@ -5,5 +5,9 @@
   },
   "claimedAt": "2026-11-09T00:26:27.639Z",
   "records": {},
-  "country": "SE"
+  "country": "SE",
+  "profile": {
+    "name": "xenone-beta",
+    "bio": "Something"
+  }
 }
