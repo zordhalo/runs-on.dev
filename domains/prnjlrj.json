@@ -7,5 +7,9 @@
   "records": {
     "URL": "https://deluxe-tiramisu-9f08e8.netlify.app/"
   },
-  "country": "IN"
+  "country": "IN",
+  "profile": {
+    "name": "Pranjal Raj",
+    "bio": "Software Engineer"
+  }
 }
