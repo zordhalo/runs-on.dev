@@ -8,6 +8,9 @@
     "A": [
       "162.210.102.233"
     ],
+    "TXT": [
+      "v=spf1 include:spf.freehostia.com mx -all"
+    ],
     "MX": [
       {
         "priority": 10,
