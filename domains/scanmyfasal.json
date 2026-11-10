@@ -4,6 +4,8 @@
     "github": "ShikharMehta001"
   },
   "claimedAt": "2026-11-10T15:14:13.267Z",
-  "records": {},
+  "records": {
+    "CNAME": "fasal-scan.au.com"
+  },
   "country": "IN"
 }
