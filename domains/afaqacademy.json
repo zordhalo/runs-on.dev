@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-10T17:56:11.643Z",
   "records": {},
-  "country": "PS"
+  "country": "PS",
+  "subdomains": {
+    "_amelu": {
+      "TXT": [
+        "amelu-verify=7d560090544813675deee423d2e5c61d"
+      ]
+    }
+  }
 }
