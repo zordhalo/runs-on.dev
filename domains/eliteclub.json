@@ -5,12 +5,7 @@
   },
   "claimedAt": "2026-11-05T16:08:20.467Z",
   "records": {
-    "A": [
-      "76.76.21.21"
-    ],
-    "TXT": [
-      "vc-domain-verify=runs-on.dev,16cbd11a5c4b80a8f1b8"
-    ]
+    "CNAME": "79ef03646a133268.vercel-dns-017.com"
   },
   "country": "IN",
   "subdomains": {
