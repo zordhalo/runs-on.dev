@@ -4,6 +4,8 @@
     "github": "ArshdeepSahni"
   },
   "claimedAt": "2026-11-10T05:15:06.375Z",
-  "records": {},
+  "records": {
+    "CNAME": "glass-83eb5066.workers.dev"
+  },
   "country": "IN"
 }
