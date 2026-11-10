@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "abdulhannan1.netlify.app"
   },
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "abdulhannan": {
+      "CNAME": "abdulhannan1.netlify.app"
+    }
+  }
 }
