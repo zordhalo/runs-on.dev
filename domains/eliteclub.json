@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "79ef03646a133268.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=eliteclub.runs-on.dev,27e1ba13db7705475999"
-      ]
-    }
-  }
+  "country": "IN"
 }

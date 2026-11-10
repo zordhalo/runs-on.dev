@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "804d171c929a19f8.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=frosty.runs-on.dev,0f0bbee1c02e79936033"
-      ]
-    }
-  }
+  "country": "IN"
 }
