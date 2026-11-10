@@ -4,6 +4,10 @@
     "github": "LucaJMazz"
   },
   "claimedAt": "2026-09-17T15:01:29.584Z",
-  "records": {},
+  "records": {
+    "A": [
+      "40.233.75.102"
+    ]
+  },
   "country": "CA"
 }
