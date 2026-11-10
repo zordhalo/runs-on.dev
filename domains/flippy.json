@@ -4,6 +4,8 @@
     "github": "LittleHost"
   },
   "claimedAt": "2026-11-10T21:11:22.747Z",
-  "records": {},
+  "records": {
+    "CNAME": "flippy.ctrlfree.host"
+  },
   "country": "SE"
 }
