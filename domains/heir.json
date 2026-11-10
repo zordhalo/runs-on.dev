@@ -4,6 +4,10 @@
     "github": "Heir2050"
   },
   "claimedAt": "2026-11-10T08:56:52.572Z",
-  "records": {},
+  "records": {
+    "TXT": [
+      "vc-domain-verify=runs-on.dev,7342ab8d7a05f77bf990"
+    ]
+  },
   "country": "BI"
 }
