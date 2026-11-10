@@ -4,6 +4,10 @@
     "github": "dranik831"
   },
   "claimedAt": "2026-11-09T18:47:02.946Z",
-  "records": {},
+  "records": {
+    "A": [
+      "77.94.115.216"
+    ]
+  },
   "country": "DE"
 }
