@@ -11,6 +11,9 @@
   "subdomains": {
     "abdulhannan": {
       "CNAME": "abdulhannan1.netlify.app"
+    },
+    "psqu4rdasqgp": {
+      "CNAME": "gv-hojbaudz5iujci.dv.googlehosted.com"
     }
   }
 }
