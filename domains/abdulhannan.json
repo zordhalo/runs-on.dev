@@ -4,6 +4,8 @@
     "github": "AbdulHannan031"
   },
   "claimedAt": "2026-11-10T11:30:18.537Z",
-  "records": {},
+  "records": {
+    "CNAME": "bdulhannan1.netlify.app"
+  },
   "country": "PK"
 }
