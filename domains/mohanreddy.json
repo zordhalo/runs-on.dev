@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "e926da191d3c5b05.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=mohanreddy.runs-on.dev,7e61fc28f68f7184bdc8"
+      ]
+    }
+  }
 }
