@@ -4,7 +4,9 @@
     "github": "Sujal01go"
   },
   "claimedAt": "2026-11-10T13:00:21.358Z",
-  "records": {},
+  "records": {
+    "CNAME": "sujal01go.github.io"
+  },
   "country": "IN",
   "profile": {
     "name": "sujal01go"
