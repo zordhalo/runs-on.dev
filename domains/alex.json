@@ -14,6 +14,9 @@
     },
     "sms": {
       "CNAME": "lav-school-sms-2026.web.app"
+    },
+    "metamantle": {
+      "CNAME": "jralex07.github.io"
     }
   }
 }
