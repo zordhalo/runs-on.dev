@@ -4,6 +4,10 @@
     "github": "AbiBoc"
   },
   "claimedAt": "2026-11-10T16:15:14.560Z",
-  "records": {},
+  "records": {
+    "A": [
+      "217.60.245.77"
+    ]
+  },
   "country": "FI"
 }
