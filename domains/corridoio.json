@@ -7,5 +7,18 @@
   "records": {
     "CNAME": "eb5303d2420d8548.vercel-dns-017.com"
   },
-  "country": "IT"
+  "country": "IT",
+  "subdomains": {
+    "resend._domainkey": {
+      "TXT": [
+        "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCWy8e6MQtN1Mh/tPnyJGVEFNwTwKZPGzzWnpJynqnc39ixF1rcg+HhooeA1vvG4CVTP/bZ425ql9mlBDnvOxHbMAb95W1Dj6VNz0X7XFhlpGs4fre3ST6Uw5pH9bmIvSJzikHzlOE8PX61fd+K0L18NtV+6JMA7AxvjGf4ArA9QIDAQAB"
+      ]
+    },
+    "rsend": {
+      "CNAME": "rsend-euw1.forge.rmta.net"
+    },
+    "send": {
+      "CNAME": "send.forge.rmta.net"
+    }
+  }
 }
