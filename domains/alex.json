@@ -10,7 +10,7 @@
   "country": "IN",
   "subdomains": {
     "school": {
-      "CNAME": "jralex07.github.io"
+      "CNAME": "alex-prototype.netlify.app"
     },
     "sms": {
       "CNAME": "lav-school-sms-2026.web.app"
