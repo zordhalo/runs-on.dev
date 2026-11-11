@@ -11,12 +11,5 @@
   "profile": {
     "name": "hack and develop with ai",
     "bio": "AI"
-  },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=hackndevelopwithai.runs-on.dev,348494fe71cc71c0ecca"
-      ]
-    }
   }
 }
