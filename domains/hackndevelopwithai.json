@@ -5,5 +5,9 @@
   },
   "claimedAt": "2026-11-11T11:44:43.308Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "profile": {
+    "name": "hack and develop with ai",
+    "bio": "AI"
+  }
 }
