@@ -4,6 +4,8 @@
     "github": "ilker-binzet"
   },
   "claimedAt": "2026-11-11T08:04:28.275Z",
-  "records": {},
+  "records": {
+    "CNAME": "9c348cacc67ab3de.vercel-dns-017.com"
+  },
   "country": "TR"
 }
