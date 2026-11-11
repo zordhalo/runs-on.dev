@@ -4,6 +4,8 @@
     "github": "gilangakbarnugroho"
   },
   "claimedAt": "2026-11-11T02:06:22.777Z",
-  "records": {},
+  "records": {
+    "CNAME": "e10e11d05742ed49.vercel-dns-017.com"
+  },
   "country": "ID"
 }
