@@ -4,6 +4,8 @@
     "github": "umarmukhtar865-create"
   },
   "claimedAt": "2026-11-10T22:24:54.860Z",
-  "records": {},
+  "records": {
+    "CNAME": "b7685b98709ba727.vercel-dns-017.com"
+  },
   "country": "PK"
 }
