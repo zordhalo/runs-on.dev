@@ -5,7 +5,9 @@
   },
   "claimedAt": "2026-10-23T19:56:03.757Z",
   "records": {
-    "URL": "https://nasa.com"
+    "A": [
+      "152.67.4.245"
+    ]
   },
   "country": "IN"
 }
