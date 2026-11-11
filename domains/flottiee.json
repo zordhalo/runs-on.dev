@@ -5,5 +5,14 @@
   },
   "claimedAt": "2026-11-11T10:20:54.562Z",
   "records": {},
-  "country": "CH"
+  "country": "CH",
+  "profile": {
+    "name": "flottiee",
+    "links": [
+      {
+        "label": "flottiee.bond",
+        "url": "http://flottiee.bond/"
+      }
+    ]
+  }
 }
