@@ -7,5 +7,10 @@
   "records": {
     "URL": "https://ente.lleyn-coho.ts.net"
   },
-  "country": "FR"
+  "country": "FR",
+  "subdomains": {
+    "test": {
+      "CNAME": "example.org"
+    }
+  }
 }
