@@ -7,12 +7,5 @@
   "records": {
     "URL": "https://ente.lleyn-coho.ts.net"
   },
-  "country": "FR",
-  "subdomains": {
-    "cockpit": {
-      "TXT": [
-        "https://notes.lleyn-coho.ts.net"
-      ]
-    }
-  }
+  "country": "FR"
 }
