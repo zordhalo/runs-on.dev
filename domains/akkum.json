@@ -4,6 +4,8 @@
     "github": "Axfline"
   },
   "claimedAt": "2026-11-11T06:36:44.271Z",
-  "records": {},
+  "records": {
+    "CNAME": "18a8fefb25615e52.vercel-dns-017.com"
+  },
   "country": "RU"
 }
