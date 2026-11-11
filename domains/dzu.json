@@ -11,7 +11,7 @@
   "subdomains": {
     "cockpit": {
       "TXT": [
-        "https://iskra.lleyn-coho.ts.net"
+        "https://notes.lleyn-coho.ts.net"
       ]
     }
   }
