@@ -7,10 +7,5 @@
   "records": {
     "URL": "https://example.com"
   },
-  "country": "FR",
-  "subdomains": {
-    "msg": {
-      "CNAME": "msg.lleyn-coho.ts.net"
-    }
-  }
+  "country": "FR"
 }
