@@ -4,6 +4,8 @@
     "github": "ashishacharjee"
   },
   "claimedAt": "2026-11-11T14:22:44.081Z",
-  "records": {},
+  "records": {
+    "CNAME": "5fb0ccb89cca5798.vercel-dns-017.com"
+  },
   "country": "IN"
 }
