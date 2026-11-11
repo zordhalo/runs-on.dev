@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "18a8fefb25615e52.vercel-dns-017.com"
   },
-  "country": "RU"
+  "country": "RU",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=akkum.runs-on.dev,857b1e1419a14826b27c"
+      ]
+    }
+  }
 }
