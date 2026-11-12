@@ -4,6 +4,8 @@
     "github": "dhakreshivkant-hub"
   },
   "claimedAt": "2026-11-12T16:21:30.308Z",
-  "records": {},
+  "records": {
+    "CNAME": "d2755e6402b10d83.vercel-dns-017.com"
+  },
   "country": "IN"
 }
