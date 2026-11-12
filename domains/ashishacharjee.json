@@ -13,6 +13,11 @@
       "TXT": [
         "vc-domain-verify=ashishacharjee.runs-on.dev,da73cea4edfaf5194bda"
       ]
+    },
+    "google": {
+      "TXT": [
+        "google-site-verification=_EYf9r5xzXMi6fCKzrGxzrQDvRJUCxBN_dY1Z_n8YVU"
+      ]
     }
   }
 }
