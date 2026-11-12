@@ -11,5 +11,12 @@
   "profile": {
     "name": "Krupal Sanchaniya",
     "bio": "As a Software developer, I create dynamic, cross-platform digital solutions that ensure scalability, efficiency, and user satisfaction."
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=krupal-sanchaniya.runs-on.dev,b8e78e8ac4a1080274ab"
+      ]
+    }
   }
 }
