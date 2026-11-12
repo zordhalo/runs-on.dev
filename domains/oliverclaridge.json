@@ -5,5 +5,15 @@
   },
   "claimedAt": "2026-10-14T23:31:00.761Z",
   "records": {},
-  "country": "GB"
+  "country": "GB",
+  "profile": {
+    "name": "Mysterio997",
+    "bio": "Hey! I am Oliver Claridge a software development student.",
+    "links": [
+      {
+        "label": "My Portfolio Website",
+        "url": "https://portfolio.oliver-claridge.xyz/"
+      }
+    ]
+  }
 }
