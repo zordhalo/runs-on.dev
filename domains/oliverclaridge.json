@@ -4,7 +4,9 @@
     "github": "Mysterio997"
   },
   "claimedAt": "2026-10-14T23:31:00.761Z",
-  "records": {},
+  "records": {
+    "CNAME": "oliver-claridge.xyz"
+  },
   "country": "GB",
   "profile": {
     "name": "Mysterio997",
