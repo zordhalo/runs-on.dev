@@ -24,14 +24,6 @@
     },
     "info": {
       "CNAME": "bounces.elasticemail.net"
-    },
-    "api._domainkey": {
-      "TXT": [
-        "[",
-        "\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0J8jXs4i8vl7G7WjItcir1kSPnemqSIvc04jcjDvBi+eVAbvy953fAJzfJULAD2pauHsDPKVPRWip7+DHDyQ/zkgkZpaER/KoSTgqmAgmoA/JUcgtqMdDwgYW4\",",
-        "\"9o14D27FyMlypDIg0Yn72kBze8oI9xlB686enz+3vWSWHT6hEMf5ldfBv11GPueRoM4WvZmRgSUS7I0Je3cu0j2Vh+W9/1Q90q6mLRtq1ZcTL7CtQDcZEqd7Z9oVSj46EeYuQoeDFtDLFOUxuitPTObtWQA/Tpwi8jEKUoEf8er/w1tFlQWTb2EWLD2cxDkukqrlHSlGdwic1A5GEJ1lX2v0/p6wIDAQAB\"",
-        "]"
-      ]
     }
   }
 }
