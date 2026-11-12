@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { commitUrl, shortSha } from '../../lib/repo.js';
 import {
   modeOf, mxToLines, buildRecords,
-  SUBDOMAIN_TYPES, buildSubdomains, subdomainsToRows,
+  SUBDOMAIN_TYPES, buildSubdomains, subdomainsToRows, subdomainRowProblems,
 } from '../../lib/record-fields.js';
 import { providerFor } from '../../lib/stats.js';
 import { PRESETS } from './host-presets.js';
@@ -334,7 +334,13 @@ export default function RecordForm({ name, record: loaded }) {
     });
   };
 
-  const saveSubdomains = () => post({ subdomains: buildSubdomains(subRows) }, 'subdomains');
+  // A half-filled row would be dropped by buildSubdomains and the save would
+  // report "no changes", so the guard names the row instead.
+  const subProblems = subdomainRowProblems(subRows);
+  const saveSubdomains = () => {
+    if (subProblems.length) return;
+    post({ subdomains: buildSubdomains(subRows) }, 'subdomains');
+  };
 
   // Enter in an input saves the section the input belongs to.
   const activeSaver =
@@ -549,6 +555,8 @@ export default function RecordForm({ name, record: loaded }) {
           label="Save subdomain records"
           status={status}
           commit={commit}
+          disabled={subProblems.length > 0}
+          hint={subProblems.join(' ')}
           onSave={saveSubdomains}
         />
       </SubdomainRecords>
@@ -824,7 +832,7 @@ function SubdomainRecords({ name, subRows, setRow, addRow, removeRow, children }
             </select>
             <button type="button" onClick={() => removeRow(i)} className="ml-auto font-(family-name:--font-mono) text-xs text-(--color-muted) underline transition-colors hover:text-(--color-ink)">remove</button>
           </div>
-          <textarea value={row.value} onChange={(e) => setRow(i, { value: e.target.value })} rows={2} aria-label="Record value" spellCheck={false} className={`mt-2 ${INPUT} resize-y`} />
+          <textarea value={row.value} onChange={(e) => setRow(i, { value: e.target.value })} rows={2} placeholder="paste the value here, e.g. vc-domain-verify=…" aria-label="Record value" spellCheck={false} className={`mt-2 ${INPUT} resize-y`} />
         </div>
       ))}
       {subRows.length < MAX_SUBDOMAINS && (
