@@ -8,12 +8,6 @@
   "country": "IN",
   "profile": {
     "name": "Krupal19",
-    "bio": "As a Software developer, I create dynamic, cross-platform digital solutions that ensure scalability, efficiency, and user satisfaction.",
-    "links": [
-      {
-        "label": "Krupal Sanchaniya | Protfolio",
-        "url": "https://krupal-portfolio.vercel.app/"
-      }
-    ]
+    "bio": "As a Software developer, I create dynamic, cross-platform digital solutions that ensure scalability, efficiency, and user satisfaction."
   }
 }
