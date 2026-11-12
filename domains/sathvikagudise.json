@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "8c8352f751e6b6db.vercel-dns-017.com"
   },
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=sathvikagudise.runs-on.dev,a72f559f8954a9b531cf"
-      ]
-    }
-  },
   "country": "IN"
 }
