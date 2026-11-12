@@ -4,7 +4,9 @@
     "github": "ajardeen"
   },
   "claimedAt": "2026-09-17T11:18:22.938Z",
-  "records": {},
+  "records": {
+    "CNAME": "ajardeendev.netlify.app"
+  },
   "country": "IN",
   "subdomains": {
     "netlify": {
