@@ -7,6 +7,24 @@
   "records": {
     "CNAME": "0ca1ae1f8ab4bbf1.vercel-dns-017.com"
   },
+  "subdomains": {
+    "resend._domainkey": {
+      "TXT": [
+        "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5xvdTEe/z+fh4IHueCJoF42763RsDNaHIGCXOLG5HCFeStBGdGJt00Y2+ys3/U6oGlJ1QtIOOIQT971RrDxqORT5TY4VjhzUMO17fc19l9MCb5A4BJ37WzyRw5BHDXLqqrNNiwZYy8jrA76buru0xPdANscAfeaEM/XQKHT7f0wIDAQAB"
+      ]
+    },
+    "rsend": {
+      "CNAME": "rsend-apne1.forge.rmta.net"
+    },
+    "send": {
+      "CNAME": "send.forge.rmta.net"
+    },
+    "_dmarc": {
+      "TXT": [
+        "v=DMARC1; p=none;"
+      ]
+    }
+  },
   "country": "IN",
   "profile": {
     "name": "Tara1903"
