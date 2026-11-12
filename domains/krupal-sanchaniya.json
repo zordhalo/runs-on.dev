@@ -4,7 +4,9 @@
     "github": "Krupal19"
   },
   "claimedAt": "2026-10-23T16:50:31.458Z",
-  "records": {},
+  "records": {
+    "CNAME": "e1b6358e5259c1b0.vercel-dns-017.com"
+  },
   "country": "IN",
   "profile": {
     "name": "Krupal Sanchaniya",
