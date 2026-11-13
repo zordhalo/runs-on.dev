@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "d061ea262013935a.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=khushan.runs-on.dev,e7d1689c9cb6c0e1214d"
+      ]
+    }
+  }
 }
