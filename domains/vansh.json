@@ -10,6 +10,9 @@
   "subdomains": {
     "pramaan": {
       "CNAME": "pramaan-kz9p.onrender.com"
+    },
+    "ai-persona": {
+      "CNAME": "ai-persona-domain.pages.dev"
     }
   }
 }
