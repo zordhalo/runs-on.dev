@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "ad421bb65bff7268.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=kevinjoy.runs-on.dev,5ad006b10de5ce5c7d5e"
-      ]
-    }
-  }
+  "country": "IN"
 }

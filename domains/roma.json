@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "47e391b3fcf796cc.vercel-dns-017.com"
   },
-  "country": "KZ",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=roma.runs-on.dev,32a5cba771abd855d9e4"
-      ]
-    }
-  }
+  "country": "KZ"
 }

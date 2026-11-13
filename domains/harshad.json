@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "a91d96aa20abec79.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=harshad.runs-on.dev,c541e0407143c3366e37"
-      ]
-    }
-  }
+  "country": "IN"
 }
