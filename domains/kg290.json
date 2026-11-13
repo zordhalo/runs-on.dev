@@ -1,0 +1,15 @@
+{
+  "name": "kg290",
+  "owner": {
+    "github": "kg290"
+  },
+  "claimedAt": "2026-11-13T10:48:46.000Z",
+  "records": {
+    "CNAME": "796d1113c83a8c80.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=kg290.runs-on.dev,0bb162392bd4e2536f65"]
+    }
+  }
+}
