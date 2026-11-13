@@ -4,6 +4,8 @@
     "github": "Vivek4320"
   },
   "claimedAt": "2026-11-13T10:40:10.487Z",
-  "records": {},
+  "records": {
+    "CNAME": "18273ce76d0b5b7b.vercel-dns-017.com"
+  },
   "country": "IN"
 }
