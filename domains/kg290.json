@@ -4,6 +4,8 @@
     "github": "kg290"
   },
   "claimedAt": "2026-11-13T11:00:19.945Z",
-  "records": {},
+  "records": {
+    "CNAME": "796d1113c83a8c80.vercel-dns-017.com"
+  },
   "country": "IN"
 }
