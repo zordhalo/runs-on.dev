@@ -16,6 +16,9 @@
     },
     "othello": {
       "CNAME": "nexxucc.github.io"
+    },
+    "nlp-research-assistant": {
+      "CNAME": "nlp-research-assistant.onrender.com"
     }
   }
 }
