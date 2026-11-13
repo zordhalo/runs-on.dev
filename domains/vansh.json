@@ -13,6 +13,9 @@
     },
     "ai-persona": {
       "CNAME": "ai-persona-domain.pages.dev"
+    },
+    "othello": {
+      "CNAME": "nexxucc.github.io"
     }
   }
 }
