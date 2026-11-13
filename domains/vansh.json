@@ -6,5 +6,10 @@
   "claimedAt": "2026-09-03T09:29:58.158Z",
   "records": {
     "CNAME": "nexxucc.github.io"
+  },
+  "subdomains": {
+    "othello": {
+      "CNAME": "nexxucc.github.io"
+    }
   }
 }
