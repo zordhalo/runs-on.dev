@@ -4,6 +4,8 @@
     "github": "TB4T3M4N"
   },
   "claimedAt": "2026-11-13T14:22:20.054Z",
-  "records": {},
+  "records": {
+    "CNAME": "tb4t3m4n.github.io"
+  },
   "country": "US"
 }
