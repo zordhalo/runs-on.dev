@@ -7,5 +7,12 @@
   "records": {
     "URL": "https://normal-rome-alot-elementary.trycloudflare.com/"
   },
-  "country": "KZ"
+  "country": "KZ",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=roma.runs-on.dev,32a5cba771abd855d9e4"
+      ]
+    }
+  }
 }
