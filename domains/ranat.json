@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "9293fd021c221725.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=ranat.runs-on.dev,9d1a995e69cbfba5409f"
+      ]
+    }
+  }
 }
