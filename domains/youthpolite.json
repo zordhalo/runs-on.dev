@@ -9,9 +9,12 @@
   },
   "country": "IN",
   "subdomains": {
+    "youthpolite": {
+      "CNAME": "6ca556ca5498b961.vercel-dns-017.com"
+    },
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=runs-on.dev,f318cc6f2f229980865b"
+        "vc-domain-verify=youthpolite.runs-on.dev,87b9a2d4246fd1ce2b61"
       ]
     }
   }
