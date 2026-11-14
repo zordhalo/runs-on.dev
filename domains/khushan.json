@@ -7,12 +7,5 @@
   "records": {
     "URL": "https://myweb-three-sepia.vercel.app/"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=khushan.runs-on.dev,e7d1689c9cb6c0e1214d"
-      ]
-    }
-  }
+  "country": "IN"
 }
