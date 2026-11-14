@@ -8,5 +8,12 @@
   "country": "IN",
   "profile": {
     "name": "Prudhvi"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=codevo.runs-on.dev,0ea4e016f277ebe3864a"
+      ]
+    }
   }
 }
