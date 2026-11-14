@@ -6,13 +6,7 @@
   "claimedAt": "2026-11-14T23:13:11.469Z",
   "records": {
     "TXT": [
-      "_vercel vc-domain-verify=runs-on.dev,867754767a34e5e3badf"
-    ],
-    "MX": [
-      {
-        "priority": 10,
-        "value": "hi.deomail.com"
-      }
+      "forward-email=QWh4ZU9iNi1ZVmRVZ1BjbmpidGd6R1NicFlVem5Md084VWlJcE56Q1RJNVUwQ0dTbWlwdktrMXBpZS1kenBwSWMyNmFCMGpfcC1oQ1hhNGtSYk5FNFE="
     ]
   },
   "country": "DE"
