@@ -4,6 +4,17 @@
     "github": "daniy-al110"
   },
   "claimedAt": "2026-10-26T17:49:49.926Z",
-  "records": {},
-  "country": "PK"
+  "country": "PK",
+  "records": {
+    "A": [
+      "76.76.21.21"
+    ]
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=kradtech.runs-on.dev,282ce19f5b7abbd2b72d"
+      ]
+    }
+  }
 }
