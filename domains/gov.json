@@ -7,5 +7,9 @@
   "records": {
     "CNAME": "www.faa.gov"
   },
-  "country": "US"
+  "country": "US",
+  "profile": {
+    "name": "Cloudy",
+    "bio": "Cloudy"
+  }
 }
