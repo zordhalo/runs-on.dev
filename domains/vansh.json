@@ -19,6 +19,9 @@
     },
     "nlp-research-assistant": {
       "CNAME": "nlp-research-assistant.onrender.com"
+    },
+    "tacit": {
+      "CNAME": "tacit-3in.pages.dev"
     }
   }
 }
