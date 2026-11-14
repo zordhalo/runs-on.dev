@@ -6,5 +6,12 @@
   "claimedAt": "2026-09-03T11:10:03.160Z",
   "records": {
     "CNAME": "1e4b18e4f34eb01f.vercel-dns-017.com"
+  },
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=henry.runs-on.dev,6b737b517a094e8cc60d"
+      ]
+    }
   }
 }
