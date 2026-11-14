@@ -1,0 +1,13 @@
+{
+  "name": "munim",
+  "owner": {
+    "github": "catoolskit"
+  },
+  "records": {
+    "CNAME": "0151511a7347f1d3.vercel-dns-017.com.",
+    "TXT": {
+      "_vercel": "vc-domain-verify=munim.runs-on.dev,505f144b9011f02977ad"
+    }
+  },
+  "country": "IN"
+}
