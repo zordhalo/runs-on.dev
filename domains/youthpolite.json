@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "forichthe-a11y.github.io"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=runs-on.dev,f318cc6f2f229980865b"
+      ]
+    }
+  }
 }
