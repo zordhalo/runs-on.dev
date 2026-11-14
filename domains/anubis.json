@@ -1,23 +1,49 @@
 {
   "name": "anubis",
-  "owner": {
-    "github": "Anubisx7"
-  },
-  "claimedAt": "2026-11-09T11:53:30.819Z",
+  "owner": { "github": "Anubisx7" },
+  "claimedAt": "2026-01-01T00:00:00.000Z",
   "records": {
     "A": [
       "162.210.102.233"
-    ],
-    "TXT": [
-      "v=spf1 include:spf.freehostia.com mx -all",
-      "o=~"
     ],
     "MX": [
       {
         "priority": 10,
         "value": "mbox.freehostia.com"
       }
+    ],
+    "TXT": [
+      "v=spf1 include:spf.freehostia.com mx -all",
+      "o=~"
     ]
   },
-  "country": "EG"
+  "subdomains": {
+    "www": {
+      "records": {
+        "A": [
+          "162.210.102.233"
+        ],
+        "MX": [
+          {
+            "priority": 10,
+            "value": "mbox.freehostia.com"
+          }
+        ]
+      }
+    },
+    "default._domainkey": {
+      "records": {
+        "TXT": [
+          "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC41vG+wqCWOd0F/oWYE+eCCtVzX+orzBn5+rXS54pC3nxuqVNMZpLiq38bIyJsAIROsvvfmDtoh5XdP8Y1PB9RYVMmqvU4wGyd2xV+9eGeH3SOHL6RYPLmhXY9v0XKamfbTfUZT8k13T5MHJZRQg1MUGJkKWVyB6IHFL7NyciBIwIDAQAB"
+        ]
+      }
+    },
+    "_domainkey": {
+      "records": {
+        "TXT": [
+          "o=~"
+        ]
+      }
+    }
+  }
 }
