@@ -24,6 +24,14 @@
         "v=DMARC1; p=none;"
       ]
     },
+    "mail": {
+      "MX": [
+        {
+          "priority": 10,
+          "value": "receive-apne1.forge.rmta.net"
+        }
+      ]
+    },
     "openai-business-profile": {
       "TXT": [
         "openai-business-profile=fSYQ-zwYilgdCUaqHiliUX2Mz8aLkhIRlliizAivbTZk"
