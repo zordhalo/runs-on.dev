@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "fc959b343f5d0d6f.vercel-dns-017.com"
   },
-  "country": "EG",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=clone-thailandcodes.runs-on.dev,b8bafd616a7794c75e4b"
-      ]
-    }
-  }
+  "country": "EG"
 }
