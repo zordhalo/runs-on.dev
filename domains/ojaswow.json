@@ -4,6 +4,8 @@
     "github": "Ojaswow"
   },
   "claimedAt": "2026-11-09T13:53:26.662Z",
-  "records": {},
+  "records": {
+    "CNAME": "e43b1efe19f471a5.vercel-dns-017.com"
+  },
   "country": "IN"
 }
