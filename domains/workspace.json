@@ -7,6 +7,12 @@
   "records": {
     "TXT": [
       "google-site-verification=b_Odq9CvUbWzoSkL_ydVkQYEaLg5GYV6PtU4qnGA5OU"
+    ],
+    "MX": [
+      {
+        "priority": 1,
+        "value": "smtp.google.com"
+      }
     ]
   },
   "country": "BR"
