@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-15T23:53:07.773Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=health-companion.runs-on.dev,859a5372943296323c11"
+      ]
+    }
+  }
 }
