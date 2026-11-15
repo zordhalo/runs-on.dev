@@ -5,7 +5,9 @@
   },
   "claimedAt": "2026-11-02T02:13:39.621Z",
   "records": {
-    "CNAME": "formvault.wasmer.app"
+    "TXT": [
+      "google-site-verification=0QvQK9LhcGdC2AFq7t2vv_w19EPxgs46kxAa6QgDIo0"
+    ]
   },
   "country": "BR",
   "subdomains": {
