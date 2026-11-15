@@ -4,7 +4,9 @@
     "github": "rikkigound7-maker"
   },
   "claimedAt": "2026-11-15T14:35:51.651Z",
-  "records": {},
+  "records": {
+    "CNAME": "a953ba6e9558f223.vercel-dns-017.com"
+  },
   "profile": {
     "name": "Hack & Develop with Ai",
     "bio": "AI"
