@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "aniverse-5wg1.onrender.com"
   },
-  "country": "US"
+  "country": "US",
+  "subdomains": {
+    "aniverse": {
+      "CNAME": "aniverse-5wg1.onrender.com"
+    }
+  }
 }
