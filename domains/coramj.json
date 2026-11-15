@@ -4,6 +4,8 @@
     "github": "coramj"
   },
   "claimedAt": "2026-09-17T19:35:14.301Z",
-  "records": {},
+  "records": {
+    "CNAME": "4dbb24e922abc886.vercel-dns-017.com"
+  },
   "country": "ES"
 }
