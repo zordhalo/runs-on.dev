@@ -4,7 +4,9 @@
     "github": "aiusersandy1410-oss"
   },
   "claimedAt": "2026-11-15T23:53:07.773Z",
-  "records": {},
+  "records": {
+    "CNAME": "8549be41703422c6.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
