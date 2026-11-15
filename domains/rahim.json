@@ -4,6 +4,8 @@
     "github": "rahim-sheakh"
   },
   "claimedAt": "2026-11-15T08:20:26.003Z",
-  "records": {},
+  "records": {
+    "CNAME": "02adc7d795f52648.vercel-dns-017.com"
+  },
   "country": "IN"
 }
