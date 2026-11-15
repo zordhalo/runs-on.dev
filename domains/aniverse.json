@@ -4,6 +4,8 @@
     "github": "thedevguyfr"
   },
   "claimedAt": "2026-11-15T06:49:44.742Z",
-  "records": {},
+  "records": {
+    "CNAME": "aniverse-5wg1.onrender.com"
+  },
   "country": "US"
 }
