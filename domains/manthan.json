@@ -14,5 +14,14 @@
     "sectube": {
       "CNAME": "bhattmanthan.github.io"
     }
+  },
+  "profile": {
+    "name": "bhatmanthan",
+    "links": [
+      {
+        "label": "Portfolio",
+        "url": "https://portfolio.bhattmanthan.dev"
+      }
+    ]
   }
 }
