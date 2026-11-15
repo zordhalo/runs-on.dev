@@ -9,9 +9,9 @@
   },
   "country": "IN",
   "subdomains": {
-    "home": {
+    "subdomain-owner-verification": {
       "TXT": [
-        "69a0f7429e7362e1e5a45aef59e88e8b"
+        "1ade13d236d35a8af543513c4650a008"
       ]
     }
   }
