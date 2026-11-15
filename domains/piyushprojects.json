@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "piyush-projects.netlify.app"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "subdomain-owner-verification": {
+      "TXT": [
+        "1ade13d236d35a8af543513c4650a008"
+      ]
+    }
+  }
 }
