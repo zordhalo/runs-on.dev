@@ -4,6 +4,8 @@
     "github": "arsx-s"
   },
   "claimedAt": "2026-11-15T16:35:20.530Z",
-  "records": {},
+  "records": {
+    "CNAME": "ed5056f8d941865b.vercel-dns-017.com"
+  },
   "country": "BD"
 }
