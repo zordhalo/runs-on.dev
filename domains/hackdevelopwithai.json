@@ -11,5 +11,12 @@
     "name": "Hack & Develop with Ai",
     "bio": "AI"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=hackdevelopwithai.runs-on.dev,c0c9e874b0b99ed2ddd9"
+      ]
+    }
+  }
 }
