@@ -4,6 +4,8 @@
     "github": "piyush-project79"
   },
   "claimedAt": "2026-11-15T11:50:17.077Z",
-  "records": {},
+  "records": {
+    "CNAME": "piyush-projects.netlify.app"
+  },
   "country": "IN"
 }
