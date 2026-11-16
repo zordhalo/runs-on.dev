@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-11-16T15:52:23.414Z",
+  "title": "Feat(records): add resend dkim, spf, and dmarc records for starx-flow",
+  "summary": "Covers feat(records): add resend dkim, spf, and dmarc records for starx-flow (#439), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 439,
+      "title": "feat(records): add resend dkim, spf, and dmarc records for starx-flow",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/439"
+    }
+  ],
+  "category": "feature",
+  "tags": [
+    "Feature",
+    "feat"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: domains/starx-flow.json)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "feat(records): add resend dkim, spf, and dmarc records for starx-flow"
+  ],
+  "links": [
+    {
+      "label": "PR #439: feat(records): add resend dkim, spf, and dmarc records for starx-flow",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/439"
+    }
+  ],
+  "seo": {
+    "title": "Feat(records): add resend dkim, spf, and dmarc records for s",
+    "metaDescription": "Covers feat(records): add resend dkim, spf, and dmarc records for starx-flow (#439), merged into the registry."
+  },
+  "coveredPrs": [
+    439
+  ],
+  "suggestedSlugBase": "feat-records-resend-dkim-dmarc"
+}
