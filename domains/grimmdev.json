@@ -7,5 +7,19 @@
   "records": {
     "URL": "https://grimmdev.fyi"
   },
-  "country": "US"
+  "country": "US",
+  "profile": {
+    "name": "Sean Loper",
+    "bio": "Full Stack Software Engineer",
+    "links": [
+      {
+        "label": "Github",
+        "url": "https://github.com/grimmdev"
+      },
+      {
+        "label": "Linkedin",
+        "url": "https://www.linkedin.com/in/seanloper/"
+      }
+    ]
+  }
 }
