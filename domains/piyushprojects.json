@@ -16,6 +16,11 @@
     },
     "habitqr": {
       "CNAME": "habitqr.netlify.app"
+    },
+    "0646bc839a241ee3e92b69f6e0570a29": {
+      "TXT": [
+        "0646bc839a241ee3e92b69f6e0570a29"
+      ]
     }
   }
 }
