@@ -11,11 +11,14 @@
   "subdomains": {
     "subdomain-owner-verification": {
       "TXT": [
-        "0646bc839a241ee3e92b69f6e0570a29"
+        "32280dab9518a1b78b30253fd8285f59"
       ]
     },
     "habitqr": {
       "CNAME": "habitqr.netlify.app"
+    },
+    "print": {
+      "CNAME": "printoptimiser.netlify.app"
     }
   }
 }
