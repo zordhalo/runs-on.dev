@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "8549be41703422c6.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=health-companion.runs-on.dev,859a5372943296323c11"
-      ]
-    }
-  }
+  "country": "IN"
 }

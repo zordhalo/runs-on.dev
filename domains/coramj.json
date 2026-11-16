@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "4dbb24e922abc886.vercel-dns-017.com"
   },
-  "country": "ES",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=coramj.runs-on.dev,90b18091b33b6cd6fe83"
-      ]
-    }
-  }
+  "country": "ES"
 }
