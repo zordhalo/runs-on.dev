@@ -4,6 +4,8 @@
     "github": "carazovedemc-png"
   },
   "claimedAt": "2026-11-08T20:15:35.257Z",
-  "records": {},
+  "records": {
+    "CNAME": "carazovedemc-png.github.io"
+  },
   "country": "DE"
 }
