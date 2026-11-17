@@ -5,7 +5,10 @@
   },
   "claimedAt": "2026-11-17T17:05:40.895Z",
   "records": {
-    "CNAME": "webdevportfolioaaydee99.netlify.app"
+    "TXT": [
+      "subdomain-owner-verification",
+      "dd0cf3551a89830d5e82c16c9d8f4f4c"
+    ]
   },
   "country": "PK"
 }
