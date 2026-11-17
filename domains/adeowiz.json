@@ -4,6 +4,8 @@
     "github": "adeowiz"
   },
   "claimedAt": "2026-11-17T15:58:17.977Z",
-  "records": {},
+  "records": {
+    "CNAME": "dose-caf.netlify.app"
+  },
   "country": "TR"
 }
