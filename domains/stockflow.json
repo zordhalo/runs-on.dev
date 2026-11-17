@@ -4,6 +4,8 @@
     "github": "rahulprajapati1826"
   },
   "claimedAt": "2026-11-17T08:38:29.698Z",
-  "records": {},
+  "records": {
+    "CNAME": "stockflow-t16d.onrender.com"
+  },
   "country": "IN"
 }
