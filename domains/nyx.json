@@ -4,6 +4,8 @@
     "github": "Nyx-0s"
   },
   "claimedAt": "2026-11-17T04:56:25.619Z",
-  "records": {},
+  "records": {
+    "CNAME": "791ada3f90be43f7.vercel-dns-017.com"
+  },
   "country": "IN"
 }
