@@ -4,6 +4,8 @@
     "github": "aaydee99"
   },
   "claimedAt": "2026-11-17T17:05:40.895Z",
-  "records": {},
+  "records": {
+    "CNAME": "webdevportfolioaaydee99.netlify.app"
+  },
   "country": "PK"
 }
