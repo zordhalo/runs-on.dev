@@ -4,6 +4,8 @@
     "github": "mohamedco-de"
   },
   "claimedAt": "2026-11-18T08:40:43.642Z",
-  "records": {},
+  "records": {
+    "CNAME": "2ae5570c8797bd18.vercel-dns-017.com"
+  },
   "country": "EG"
 }
