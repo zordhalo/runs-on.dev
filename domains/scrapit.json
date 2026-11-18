@@ -4,6 +4,8 @@
     "github": "ayush76-65"
   },
   "claimedAt": "2026-11-18T07:01:55.493Z",
-  "records": {},
+  "records": {
+    "CNAME": "youtube-email-scraper-mtm8.onrender.com"
+  },
   "country": "DE"
 }
