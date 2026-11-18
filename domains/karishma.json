@@ -4,6 +4,8 @@
     "github": "7soumyajitghosh"
   },
   "claimedAt": "2026-11-06T20:14:01.975Z",
-  "records": {},
+  "records": {
+    "CNAME": "karishma-v2.vercel.app"
+  },
   "country": "IN"
 }
