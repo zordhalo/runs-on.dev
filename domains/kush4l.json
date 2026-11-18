@@ -4,6 +4,8 @@
     "github": "Kushal-Gajjar"
   },
   "claimedAt": "2026-11-18T11:32:34.984Z",
-  "records": {},
+  "records": {
+    "CNAME": "3da756d7f7387dca.vercel-dns-017.com"
+  },
   "country": "IN"
 }
