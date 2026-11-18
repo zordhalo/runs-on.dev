@@ -4,6 +4,8 @@
     "github": "Rmdir-Matrix"
   },
   "claimedAt": "2026-11-18T20:26:20.547Z",
-  "records": {},
+  "records": {
+    "CNAME": "matrices-c6l.pages.dev"
+  },
   "country": "AZ"
 }
