@@ -4,6 +4,8 @@
     "github": "saviour345-glitch"
   },
   "claimedAt": "2026-11-16T20:10:44.063Z",
-  "records": {},
+  "records": {
+    "CNAME": "felix-forge-academy.onrender.com"
+  },
   "country": "NG"
 }
