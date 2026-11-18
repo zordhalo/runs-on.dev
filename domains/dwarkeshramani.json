@@ -11,6 +11,11 @@
   "subdomains": {
     "lzgwo3jti2bq": {
       "CNAME": "gv-ya2ztiu6vicq6a.dv.googlehosted.com"
+    },
+    "_hackyard": {
+      "TXT": [
+        "hackyard-verification=hy-bf3beff025c141875b90c6a5"
+      ]
     }
   }
 }
