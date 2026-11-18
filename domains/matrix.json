@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "matrices-c6l.pages.dev"
   },
-  "country": "AZ"
+  "country": "AZ",
+  "subdomains": {
+    "matrix": {
+      "CNAME": "matrix.runs-on.dev"
+    }
+  }
 }
