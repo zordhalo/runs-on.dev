@@ -12,10 +12,8 @@
   },
   "country": "PK",
   "subdomains": {
-    "subdomain-owner-verification": {
-      "TXT": [
-        "dd0cf3551a89830d5e82c16c9d8f4f4c"
-      ]
+    "aydee99": {
+      "CNAME": "webdevportfolioaaydee99.netlify.app"
     }
   },
   "profile": {
