@@ -5,7 +5,9 @@
   },
   "claimedAt": "2026-09-23T18:19:37.062Z",
   "records": {
-    "CNAME": "mohmmedrad.github.io"
+    "A": [
+      "95.169.177.29"
+    ]
   },
   "country": "JO",
   "subdomains": {
