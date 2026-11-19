@@ -4,6 +4,8 @@
     "github": "jaimanv"
   },
   "claimedAt": "2026-09-21T05:43:23.113Z",
-  "records": {},
+  "records": {
+    "CNAME": "jaimanv.github.io"
+  },
   "country": "IN"
 }
