@@ -4,6 +4,8 @@
     "github": "katrate"
   },
   "claimedAt": "2026-11-19T10:24:32.068Z",
-  "records": {},
+  "records": {
+    "CNAME": "d8acc86122a0d1af.vercel-dns-017.com"
+  },
   "country": "IN"
 }
