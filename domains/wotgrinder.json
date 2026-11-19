@@ -4,6 +4,8 @@
     "github": "ISMAILdz13"
   },
   "claimedAt": "2026-11-14T08:56:44.387Z",
-  "records": {},
+  "records": {
+    "CNAME": "wotgrinder-site.pages.dev"
+  },
   "country": "DZ"
 }
