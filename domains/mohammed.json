@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "mohmmedrad.github.io"
   },
-  "country": "JO"
+  "country": "JO",
+  "subdomains": {
+    "desirecord": {
+      "TXT": [
+        "ddd"
+      ]
+    }
+  }
 }
