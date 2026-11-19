@@ -4,6 +4,8 @@
     "github": "djsolanki-py"
   },
   "claimedAt": "2026-11-19T18:38:00.159Z",
-  "records": {},
+  "records": {
+    "CNAME": "djsolanki-py.github.io"
+  },
   "country": "IN"
 }
