@@ -4,6 +4,8 @@
     "github": "fozo-code"
   },
   "claimedAt": "2026-11-19T20:32:06.226Z",
-  "records": {},
+  "records": {
+    "CNAME": "f536d15caf3466b7.vercel-dns-017.com"
+  },
   "country": "EG"
 }
