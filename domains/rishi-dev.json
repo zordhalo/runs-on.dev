@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "2b544e1a0d301747.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=rishi-dev.runs-on.dev,1cfc98a9b8f28eda5d71"
+      ]
+    }
+  }
 }
