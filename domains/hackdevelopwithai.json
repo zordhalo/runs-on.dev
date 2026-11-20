@@ -11,5 +11,12 @@
     "name": "Hack & Develop with Ai",
     "bio": "AI"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "api": {
+      "A": [
+        "48.102.170.209"
+      ]
+    }
+  }
 }
