@@ -4,6 +4,8 @@
     "github": "devrishh"
   },
   "claimedAt": "2026-11-20T10:56:55.041Z",
-  "records": {},
+  "records": {
+    "CNAME": "2b544e1a0d301747.vercel-dns-017.com"
+  },
   "country": "IN"
 }
