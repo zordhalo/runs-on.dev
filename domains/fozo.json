@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "f536d15caf3466b7.vercel-dns-017.com"
   },
-  "country": "EG"
+  "country": "EG",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=fozo.runs-on.dev,d0d2939e489759805c67"
+      ]
+    }
+  }
 }
