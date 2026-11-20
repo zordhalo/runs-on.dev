@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "thachvn0296.github.io"
   },
+  "subdomains": {
+    "tracker": {
+      "CNAME": "thachvn0296.github.io"
+    }
+  },
   "country": "GB"
 }
