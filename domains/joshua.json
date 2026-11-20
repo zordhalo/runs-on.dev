@@ -4,6 +4,8 @@
     "github": "joshua-cislini"
   },
   "claimedAt": "2026-11-20T08:05:05.311Z",
-  "records": {},
+  "records": {
+    "CNAME": "joshua-cislini.github.io"
+  },
   "country": "CH"
 }
