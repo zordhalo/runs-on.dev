@@ -4,6 +4,8 @@
     "github": "RISHAB-999"
   },
   "claimedAt": "2026-11-20T13:50:21.782Z",
-  "records": {},
+  "records": {
+    "CNAME": "rishab-999.github.io"
+  },
   "country": "IN"
 }
