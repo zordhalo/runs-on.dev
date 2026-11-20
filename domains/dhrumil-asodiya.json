@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "89c0ee8b60f45199.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=dhrumil-asodiya.runs-on.dev,a9082af21a946af82532"
-      ]
-    }
-  }
+  "country": "IN"
 }
