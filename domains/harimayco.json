@@ -15,5 +15,12 @@
       }
     ]
   },
-  "country": "ID"
+  "country": "ID",
+  "subdomains": {
+    "excel": {
+      "A": [
+        "138.2.76.92"
+      ]
+    }
+  }
 }
