@@ -1,0 +1,14 @@
+{
+  "name": "vortex-dns",
+  "owner": "mito-pro",
+  "active": "14bfb754",
+  "deployments": [
+    {
+      "id": "14bfb754",
+      "at": "2026-11-20T02:42:32.928Z",
+      "files": 5,
+      "bytes": 1202422
+    }
+  ],
+  "updatedAt": "2026-11-20T02:42:32.928Z"
+}
