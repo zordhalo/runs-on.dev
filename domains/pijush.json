@@ -4,6 +4,8 @@
     "github": "TEJAS-MK2"
   },
   "claimedAt": "2026-11-21T18:12:33.429Z",
-  "records": {},
+  "records": {
+    "CNAME": "tejas-mk2.github.io"
+  },
   "country": "IN"
 }
