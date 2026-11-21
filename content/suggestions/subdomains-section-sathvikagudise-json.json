@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-11-16T15:52:23.413Z",
+  "title": "Add subdomains section to sathvikagudise.json",
+  "summary": "Covers Add subdomains section to sathvikagudise.json (#432), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 432,
+      "title": "Add subdomains section to sathvikagudise.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/432"
+    }
+  ],
+  "category": "feature",
+  "tags": [
+    "Feature",
+    "subdomains"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: domains/sathvikagudise.json)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "Add subdomains section to sathvikagudise.json"
+  ],
+  "links": [
+    {
+      "label": "PR #432: Add subdomains section to sathvikagudise.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/432"
+    }
+  ],
+  "seo": {
+    "title": "Add subdomains section to sathvikagudise.json · runs-on.dev",
+    "metaDescription": "Covers Add subdomains section to sathvikagudise.json (#432), merged into the registry."
+  },
+  "coveredPrs": [
+    432
+  ],
+  "suggestedSlugBase": "subdomains-section-sathvikagudise-json"
+}
