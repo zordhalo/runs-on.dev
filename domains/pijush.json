@@ -7,5 +7,9 @@
   "records": {
     "CNAME": "tejas-mk2.github.io"
   },
-  "country": "IN"
+  "country": "IN",
+  "profile": {
+    "name": "Tejas-mk2",
+    "bio": "Idk"
+  }
 }
