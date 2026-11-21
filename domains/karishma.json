@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "b42c203f49db4a49.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=karishma.runs-on.dev,80a0123bd755fc648ab0"
+      ]
+    }
+  }
 }
