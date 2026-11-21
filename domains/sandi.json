@@ -22,8 +22,8 @@
     "cipher": {
       "CNAME": "fascinating-truffle-1d4ae8.netlify.app"
     },
-    "nativelet": {
-      "CNAME": "nativelet.netlify.app"
+    "nari": {
+      "CNAME": "nari-pcos.netlify.app"
     }
   }
 }
