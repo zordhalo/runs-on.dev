@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "666d7b3e3b69bf69.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=zenway.runs-on.dev,9bea97dcda8dff7912d5"
+      ]
+    }
+  }
 }
