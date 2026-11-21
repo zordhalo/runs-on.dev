@@ -4,6 +4,8 @@
     "github": "No-name-required"
   },
   "claimedAt": "2026-11-21T17:04:14.657Z",
-  "records": {},
+  "records": {
+    "CNAME": "lectureai-436.pages.dev"
+  },
   "country": "GB"
 }
