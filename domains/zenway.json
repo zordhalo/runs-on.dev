@@ -7,5 +7,23 @@
   "records": {
     "CNAME": "666d7b3e3b69bf69.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "zenway": {
+      "TXT": [
+        "brevo-code:75e6bac2b86073dfea389ad2b6fe2bc5"
+      ]
+    },
+    "brevo1domainkeyzenway": {
+      "CNAME": "b1.zenway-runs-on-dev.dkim.brevo.com"
+    },
+    "brevo2domainkeyzenway": {
+      "CNAME": "b2.zenway-runs-on-dev.dkim.brevo.com"
+    },
+    "_dmarc.zenway": {
+      "TXT": [
+        "v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com"
+      ]
+    }
+  }
 }
