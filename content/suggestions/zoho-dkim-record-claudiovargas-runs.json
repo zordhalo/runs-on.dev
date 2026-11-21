@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-11-02T16:01:51.115Z",
+  "title": "Add Zoho DKIM record for claudiovargas.runs-on.dev",
+  "summary": "Covers Add Zoho DKIM record for claudiovargas.runs-on.dev (#349), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 349,
+      "title": "Add Zoho DKIM record for claudiovargas.runs-on.dev",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/349"
+    }
+  ],
+  "category": "feature",
+  "tags": [
+    "Feature",
+    "zoho"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: domains/claudiovargas.json)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "Add Zoho DKIM record for claudiovargas.runs-on.dev"
+  ],
+  "links": [
+    {
+      "label": "PR #349: Add Zoho DKIM record for claudiovargas.runs-on.dev",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/349"
+    }
+  ],
+  "seo": {
+    "title": "Add Zoho DKIM record for claudiovargas.runs-on.dev · runs-on",
+    "metaDescription": "Covers Add Zoho DKIM record for claudiovargas.runs-on.dev (#349), merged into the registry."
+  },
+  "coveredPrs": [
+    349
+  ],
+  "suggestedSlugBase": "zoho-dkim-record-claudiovargas-runs"
+}
