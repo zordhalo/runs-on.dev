@@ -4,6 +4,8 @@
     "github": "Chanok18"
   },
   "claimedAt": "2026-11-21T23:06:46.921Z",
-  "records": {},
+  "records": {
+    "CNAME": "96c9916bd6f6049a.vercel-dns-017.com"
+  },
   "country": "PE"
 }
