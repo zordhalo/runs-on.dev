@@ -4,6 +4,8 @@
     "github": "tankotan"
   },
   "claimedAt": "2026-11-21T17:49:48.579Z",
-  "records": {},
+  "records": {
+    "CNAME": "tankotan.github.io"
+  },
   "country": "VN"
 }
