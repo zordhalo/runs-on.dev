@@ -23,6 +23,11 @@
       "TXT": [
         "v=DMARC1; p=none;"
       ]
+    },
+    "openai-business-profile": {
+      "TXT": [
+        "openai-business-profile=fSYQ-zwYilgdCUaqHiliUX2Mz8aLkhIRlliizAivbTZk"
+      ]
     }
   },
   "country": "IN",
