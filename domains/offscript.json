@@ -7,5 +7,10 @@
   "records": {
     "URL": "https://offscript-phi-eight.vercel.app/"
   },
+  "subdomains": {
+    "_vercel": {
+      "TXT": ["vc-domain-verify=offscript.runs-on.dev,12224400a46010d34be1"]
+    }
+  },
   "country": "BD"
 }
