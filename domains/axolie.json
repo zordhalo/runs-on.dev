@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "d927c0bacdf27ddf.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "axolie": {
+      "TXT": [
+        "vc-domain-verify=axolie.runs-on.dev,6a1a498f4386d22b946a"
+      ]
+    }
+  }
 }
