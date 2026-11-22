@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "14d304319d264367.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "14d304319d264367.vercel-dns-017.com."
+      ]
+    }
+  }
 }
