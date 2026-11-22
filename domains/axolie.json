@@ -4,6 +4,8 @@
     "github": "bloodycrafter10-alt"
   },
   "claimedAt": "2026-11-22T08:51:10.070Z",
-  "records": {},
+  "records": {
+    "CNAME": "d927c0bacdf27ddf.vercel-dns-017.com"
+  },
   "country": "IN"
 }
