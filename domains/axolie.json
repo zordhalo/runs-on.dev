@@ -9,7 +9,7 @@
   },
   "country": "IN",
   "subdomains": {
-    "axolie": {
+    "_vercel": {
       "TXT": [
         "vc-domain-verify=axolie.runs-on.dev,6a1a498f4386d22b946a"
       ]
