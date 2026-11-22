@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "96c9916bd6f6049a.vercel-dns-017.com"
   },
-  "country": "PE",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=kevinquispe.runs-on.dev,5de5bc7ced74263d3c16"
-      ]
-    }
-  }
+  "country": "PE"
 }

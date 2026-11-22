@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "14d304319d264367.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=adrix.runs-on.dev,82bc4f13222b0db51398"
-      ]
-    }
-  }
+  "country": "IN"
 }
