@@ -4,6 +4,8 @@
     "github": "n5rvc"
   },
   "claimedAt": "2026-11-05T15:23:41.818Z",
-  "records": {},
+  "records": {
+    "CNAME": "n5rvc.github.io"
+  },
   "country": "RS"
 }
