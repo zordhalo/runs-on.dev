@@ -4,6 +4,8 @@
     "github": "2b-adrix"
   },
   "claimedAt": "2026-11-22T05:19:31.096Z",
-  "records": {},
+  "records": {
+    "CNAME": "2b-adrix.vercel.app"
+  },
   "country": "IN"
 }
