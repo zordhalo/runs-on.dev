@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "c1722d891d7e994f.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=maroof.runs-on.dev,b79a8efabde7e22f05a4"
+      ]
+    }
+  }
 }
