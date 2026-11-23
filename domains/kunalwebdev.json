@@ -8,6 +8,12 @@
   "country": "IN",
   "profile": {
     "name": "kunal chola",
-    "bio": "MEAN Stack | Software Developer | Hybrid App (Angular + Ionic + CapacitorJs (Android & IOS)) Developer | Tauri | Electron (Desktop App)"
+    "bio": "MEAN Stack | Software Developer | Hybrid App (Angular + Ionic + CapacitorJs (Android & IOS)) Developer | Tauri | Electron (Desktop App)",
+    "links": [
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/kunal-chola-k34c119/"
+      }
+    ]
   }
 }
