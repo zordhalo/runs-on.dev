@@ -5,5 +5,9 @@
   },
   "claimedAt": "2026-11-23T06:28:23.902Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "profile": {
+    "name": "kunal chola",
+    "bio": "MEAN Stack | Software Developer | Hybrid App (Angular + Ionic + CapacitorJs (Android & IOS)) Developer | Tauri | Electron (Desktop App)"
+  }
 }
