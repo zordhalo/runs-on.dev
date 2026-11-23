@@ -4,6 +4,8 @@
     "github": "todorw"
   },
   "claimedAt": "2026-11-23T23:48:15.165Z",
-  "records": {},
+  "records": {
+    "CNAME": "vuktodorovic.netlify.app"
+  },
   "country": "ME"
 }
