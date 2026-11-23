@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "7c9157a2b47bdae6.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=filmywala.runs-on.dev,0cee3039ab46a81f54a0"
+      ]
+    }
+  }
 }
