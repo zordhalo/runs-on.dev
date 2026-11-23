@@ -4,6 +4,8 @@
     "github": "Arif1258"
   },
   "claimedAt": "2026-11-23T05:58:02.459Z",
-  "records": {},
+  "records": {
+    "CNAME": "06f94cb9cb9ef02d.vercel-dns-017.com"
+  },
   "country": "IN"
 }
