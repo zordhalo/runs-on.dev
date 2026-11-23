@@ -1,0 +1,43 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-11-23T18:15:35.958Z",
+  "title": "AI bot collector in proxy",
+  "summary": "Covers feat: AI bot collector in proxy (#462), merged into the registry.",
+  "why": "Ships a change readers of the registry would notice. Worth documenting so users discover it and search engines can index it.",
+  "prs": [
+    {
+      "number": 462,
+      "title": "feat: AI bot collector in proxy",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/462"
+    }
+  ],
+  "category": "feature",
+  "tags": [
+    "Feature",
+    "collector"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: proxy.js)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "AI bot collector in proxy"
+  ],
+  "links": [
+    {
+      "label": "PR #462: feat: AI bot collector in proxy",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/462"
+    }
+  ],
+  "seo": {
+    "title": "AI bot collector in proxy · runs-on.dev",
+    "metaDescription": "Covers feat: AI bot collector in proxy (#462), merged into the registry."
+  },
+  "coveredPrs": [
+    462
+  ],
+  "suggestedSlugBase": "collector-proxy"
+}
