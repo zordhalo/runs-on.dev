@@ -4,6 +4,8 @@
     "github": "pavankumarksv-cmyk"
   },
   "claimedAt": "2026-09-17T08:44:36.554Z",
-  "records": {},
+  "records": {
+    "CNAME": "pavankumarksv-cmyk.github.io"
+  },
   "country": "IN"
 }
