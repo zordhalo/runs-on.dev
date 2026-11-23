@@ -4,6 +4,8 @@
     "github": "maroofu07"
   },
   "claimedAt": "2026-11-23T14:53:02.529Z",
-  "records": {},
+  "records": {
+    "CNAME": "c1722d891d7e994f.vercel-dns-017.com"
+  },
   "country": "IN"
 }
