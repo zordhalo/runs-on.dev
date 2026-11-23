@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "f79dccc3d6e67ddb.vercel-dns-017.com"
   },
-  "country": "US"
+  "country": "US",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=kmkushal.runs-on.dev,54d34864953a1ae7d9c2"
+      ]
+    }
+  }
 }
