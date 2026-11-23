@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "06f94cb9cb9ef02d.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=beenext.runs-on.dev,4332c64cc662b4fb4755"
-      ]
-    }
-  }
+  "country": "IN"
 }
