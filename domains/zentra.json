@@ -5,5 +5,15 @@
   },
   "claimedAt": "2026-11-23T10:45:06.906Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=zentra.runs-on.dev,73fed4134372051c1202"
+      ]
+    },
+    "zentra": {
+      "CNAME": "66a70db0daabbf77.vercel-dns-017.com"
+    }
+  }
 }
