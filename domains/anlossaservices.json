@@ -4,6 +4,8 @@
     "github": "nirmalameena903072-boop"
   },
   "claimedAt": "2026-11-24T11:29:42.374Z",
-  "records": {},
+  "records": {
+    "CNAME": "b1fae8fc34cdd28d.vercel-dns-017.com"
+  },
   "country": "IN"
 }
