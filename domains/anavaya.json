@@ -4,6 +4,8 @@
     "github": "The-Yesh21"
   },
   "claimedAt": "2026-11-24T14:59:53.500Z",
-  "records": {},
+  "records": {
+    "CNAME": "e3240a7e8a47308a.vercel-dns-017.com"
+  },
   "country": "IN"
 }
