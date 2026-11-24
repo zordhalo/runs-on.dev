@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "eee046eea95be796.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=duxio.runs-on.dev,ab3f236afd7641ff96f4"
-      ]
-    }
-  }
+  "country": "IN"
 }

@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "09d3729b9a3cb785.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=leafmark.runs-on.dev,d6aedb2efd5b9a57ea82"
-      ]
-    }
-  }
+  "country": "IN"
 }

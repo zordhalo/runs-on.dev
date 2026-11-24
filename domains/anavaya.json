@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "e3240a7e8a47308a.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=anavaya.runs-on.dev,1ed2f247301ae978e706"
-      ]
-    }
-  }
+  "country": "IN"
 }
