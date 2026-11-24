@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "7c65dea1ff919d59.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=udhaardesk.runs-on.dev,4582d0702468a27d342f"
+      ]
+    }
+  }
 }
