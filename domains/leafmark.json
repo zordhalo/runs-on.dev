@@ -4,6 +4,8 @@
     "github": "BelovedEnvy"
   },
   "claimedAt": "2026-11-23T21:41:16.187Z",
-  "records": {},
+  "records": {
+    "CNAME": "09d3729b9a3cb785.vercel-dns-017.com"
+  },
   "country": "IN"
 }
