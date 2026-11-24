@@ -4,7 +4,9 @@
     "github": "oviraraptosarus"
   },
   "claimedAt": "2026-11-24T10:38:03.568Z",
-  "records": {},
+  "records": {
+    "CNAME": "eee046eea95be796.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
