@@ -4,6 +4,8 @@
     "github": "Tanish1910"
   },
   "claimedAt": "2026-11-24T14:11:50.809Z",
-  "records": {},
+  "records": {
+    "CNAME": "earthriseorganics.netlify.app"
+  },
   "country": "IN"
 }
