@@ -4,7 +4,9 @@
     "github": "adityasutar-dev"
   },
   "claimedAt": "2026-11-24T17:51:16.465Z",
-  "records": {},
+  "records": {
+    "CNAME": "adityasutar-dev-portfolio.netlify.app"
+  },
   "country": "IN",
   "subdomains": {
     "subdomain-owner-verification": {
