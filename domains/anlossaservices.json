@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "b1fae8fc34cdd28d.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=anlossaservices.runs-on.dev,c2d07dccee6cac3b6265"
+      ]
+    }
+  }
 }
