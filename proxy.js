@@ -4,8 +4,9 @@ import { validateName } from './lib/name.js';
 const ROOT = 'runs-on.dev';
 
 // AI bot-hit collector (aeo-platform docs/AI-BOT-COLLECTOR.md). Fire-and-forget; no-ops without AEO_COLLECTOR_KEY.
+// Training crawlers (GPTBot, ClaudeBot, Meta-ExternalAgent, Bytespider, CCBot) are deliberately not forwarded (2026-11-24, Redis/collector volume); the list mirrors the user+search kinds in aeo-platform classify.ts.
 const AI_BOTS =
-  /(?:^|[^A-Za-z0-9-])(ChatGPT-User|OAI-SearchBot|GPTBot|Claude-User|Claude-SearchBot|ClaudeBot|Perplexity-User|PerplexityBot|MistralAI-User|DuckAssistBot|Meta-ExternalFetcher|Meta-ExternalAgent|Amazonbot|Bytespider|CCBot)(?![A-Za-z0-9-])/i;
+  /(?:^|[^A-Za-z0-9-])(ChatGPT-User|OAI-SearchBot|Claude-User|Claude-SearchBot|Perplexity-User|PerplexityBot|MistralAI-User|DuckAssistBot|Meta-ExternalFetcher|Amazonbot)(?![A-Za-z0-9-])/i;
 
 function prefersMarkdown(request) {
   const accept = request.headers.get('accept') ?? '';
