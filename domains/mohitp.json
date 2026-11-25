@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "mohit-panaliya.github.io"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_github-pages-challenge-mohit-panaliya": {
+      "TXT": [
+        "f40d90039e1d927e4a40a27ca966a0"
+      ]
+    }
+  }
 }
