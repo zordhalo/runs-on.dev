@@ -4,7 +4,9 @@
     "github": "DeveshGhadi"
   },
   "claimedAt": "2026-11-25T12:52:49.725Z",
-  "records": {},
+  "records": {
+    "CNAME": "7a685b5166aea8e9.vercel-dns-017.com"
+  },
   "country": "IN",
   "subdomains": {
     "_vercel": {
