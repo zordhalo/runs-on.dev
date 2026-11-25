@@ -4,6 +4,8 @@
     "github": "abdielrumble-cloud"
   },
   "claimedAt": "2026-11-25T06:17:16.740Z",
-  "records": {},
+  "records": {
+    "CNAME": "abdielrumble-cloud.github.io"
+  },
   "country": "US"
 }
