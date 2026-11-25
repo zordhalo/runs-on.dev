@@ -4,6 +4,8 @@
     "github": "byson94"
   },
   "claimedAt": "2026-11-25T15:27:23.285Z",
-  "records": {},
+  "records": {
+    "CNAME": "byson94.github.io"
+  },
   "country": "IN"
 }
