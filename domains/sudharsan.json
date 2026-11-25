@@ -5,7 +5,12 @@
   },
   "claimedAt": "2026-11-25T03:34:14.882Z",
   "records": {
-    "CNAME": "f955fb6792a7d8e7.vercel-dns-017.com"
+    "A": [
+      "76.76.21.21"
+    ],
+    "TXT": [
+      "vc-domain-verify=sudharsan.runs-on.dev,aff3c48b154329427c20"
+    ]
   },
   "country": "IN"
 }
