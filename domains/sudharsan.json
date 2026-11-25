@@ -5,12 +5,7 @@
   },
   "claimedAt": "2026-11-25T03:34:14.882Z",
   "records": {
-    "A": [
-      "76.76.21.21"
-    ],
-    "TXT": [
-      "vc-domain-verify=sudharsan.runs-on.dev,aff3c48b154329427c20"
-    ]
+    "URL": "https://sudharsan28.vercel.app/"
   },
   "country": "IN"
 }
