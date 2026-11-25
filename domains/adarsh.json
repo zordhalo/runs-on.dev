@@ -4,6 +4,8 @@
     "github": "Adarshcode-012"
   },
   "claimedAt": "2026-09-17T14:37:59.454Z",
-  "records": {},
+  "records": {
+    "CNAME": "custom-domains.chatgpt.site"
+  },
   "country": "IN"
 }
