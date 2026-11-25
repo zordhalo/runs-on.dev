@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "byson94.github.io"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "ink": {
+      "CNAME": "byson94.github.io"
+    }
+  }
 }
