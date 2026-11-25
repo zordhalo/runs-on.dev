@@ -9,14 +9,9 @@
   },
   "country": "IN",
   "subdomains": {
-    "_openai-site-verification": {
+    "_github-pages-challenge-adarshcode-012": {
       "TXT": [
-        "openai-site-verification=6ZtqJt-2U51cm3qH5CdWIMpJbqDMvd-69Ra2rYyF880"
-      ]
-    },
-    "_cf-custom-hostname": {
-      "TXT": [
-        "459a647c-8f27-4792-96c0-b0fa5708e35b"
+        "23bcaaa2b03cf963d450abb8133e11"
       ]
     }
   }
