@@ -14,5 +14,8 @@
         "vc-domain-verify=sudharsan.runs-on.dev,b0e1b0fbf2f97e5b07fc"
       ]
     }
+  },
+  "profile": {
+    "name": "Biu"
   }
 }
