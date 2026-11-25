@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "7a685b5166aea8e9.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=devesh.runs-on.dev,2358a67cb18b07be9527"
-      ]
-    }
-  }
+  "country": "IN"
 }
