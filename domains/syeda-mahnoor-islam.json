@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "d580391a132ebd70.vercel-dns-017.com"
   },
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=syeda-mahnoor-islam.runs-on.dev,2971894e8fdfcf54f493"
+      ]
+    }
+  }
 }
