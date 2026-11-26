@@ -8,19 +8,5 @@
     "A": [
       "82.202.142.112"
     ]
-  },
-  "subdomains": {
-    "upload": {
-      "CNAME": "xmpp.runs-on.dev"
-    },
-    "pubsub": {
-      "CNAME": "xmpp.runs-on.dev"
-    },
-    "irc": {
-      "CNAME": "xmpp.runs-on.dev"
-    },
-    "max": {
-      "CNAME": "xmpp.runs-on.dev"
-    }
   }
 }
