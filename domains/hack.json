@@ -4,6 +4,8 @@
     "github": "moroccanalien"
   },
   "claimedAt": "2026-11-26T19:17:19.516Z",
-  "records": {},
+  "records": {
+    "CNAME": "blogger.com"
+  },
   "country": "MA"
 }
