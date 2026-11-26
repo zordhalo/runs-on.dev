@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "23027b36d8e3fbe4.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=anushkaburade.runs-on.dev,a639f159a0a792b1090d"
-      ]
-    }
-  }
+  "country": "IN"
 }
