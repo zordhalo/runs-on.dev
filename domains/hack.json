@@ -5,7 +5,9 @@
   },
   "claimedAt": "2026-11-26T19:17:19.516Z",
   "records": {
-    "CNAME": "blogger.com"
+    "TXT": [
+      "_github-pages-challenge-moroccanalien.hack aca9db8445917ee15d44fe7e31f18b"
+    ]
   },
   "country": "MA"
 }
