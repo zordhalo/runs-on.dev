@@ -4,6 +4,8 @@
     "github": "iajdaksh"
   },
   "claimedAt": "2026-11-26T06:39:04.119Z",
-  "records": {},
+  "records": {
+    "CNAME": "59c1b6d94db48be7.vercel-dns-017.com"
+  },
   "country": "IN"
 }
