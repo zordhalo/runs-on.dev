@@ -4,7 +4,9 @@
     "github": "izumilex445"
   },
   "claimedAt": "2026-11-27T17:54:42.843Z",
-  "records": {},
+  "records": {
+    "CNAME": "vercel-dns-017.com"
+  },
   "country": "ID",
   "subdomains": {
     "_vercel": {
