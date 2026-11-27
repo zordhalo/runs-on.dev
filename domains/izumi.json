@@ -7,13 +7,13 @@
   "records": {},
   "country": "ID",
   "subdomains": {
-    "izumi": {
-      "CNAME": "b9692f0057d96bb7.vercel-dns-017.com"
-    },
     "_vercel": {
       "TXT": [
-        "b9692f0057d96bb7.vercel-dns-017.com."
+        "vc-domain-verify=izumi.runs-on.dev,fca499959ddb75250d36"
       ]
+    },
+    "izumi": {
+      "CNAME": "b9692f0057d96bb7.vercel-dns-017.com"
     }
   }
 }
