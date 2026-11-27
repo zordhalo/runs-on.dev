@@ -4,6 +4,10 @@
     "github": "gogrik"
   },
   "claimedAt": "2026-11-27T14:33:24.243Z",
-  "records": {},
+  "records": {
+    "A": [
+      "31.57.20.158"
+    ]
+  },
   "country": "NL"
 }
