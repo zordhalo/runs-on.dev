@@ -5,5 +5,15 @@
   },
   "claimedAt": "2026-11-27T17:54:42.843Z",
   "records": {},
-  "country": "ID"
+  "country": "ID",
+  "subdomains": {
+    "izumi": {
+      "CNAME": "b9692f0057d96bb7.vercel-dns-017.com"
+    },
+    "_vercel": {
+      "TXT": [
+        "b9692f0057d96bb7.vercel-dns-017.com."
+      ]
+    }
+  }
 }
