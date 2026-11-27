@@ -11,13 +11,11 @@
   "subdomains": {
     "_vercel": {
       "TXT": [
-        "vc-domain-verify=izumi.runs-on.dev,f3a524e0687752098b04"
+        "vc-domain-verify=izumi.runs-on.dev,7b54df6b85db3e5a61f1"
       ]
     },
     "izumi": {
-      "TXT": [
-        "b9692f0057d96bb7.vercel-dns-017.com."
-      ]
+      "CNAME": "b9692f0057d96bb7.vercel-dns-017.com"
     }
   }
 }
