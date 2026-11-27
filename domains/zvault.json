@@ -4,6 +4,8 @@
     "github": "aruotes"
   },
   "claimedAt": "2026-11-27T08:27:03.518Z",
-  "records": {},
+  "records": {
+    "CNAME": "1a4674303480b774.vercel-dns-017.com"
+  },
   "country": "IN"
 }
