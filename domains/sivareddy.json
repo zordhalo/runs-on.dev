@@ -4,6 +4,8 @@
     "github": "srA12-png"
   },
   "claimedAt": "2026-11-27T16:10:03.309Z",
-  "records": {},
+  "records": {
+    "CNAME": "6aa8ded206747b56.vercel-dns-017.com"
+  },
   "country": "IN"
 }
