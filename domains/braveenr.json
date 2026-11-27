@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "fabf36dc07793692.vercel-dns-017.com"
   },
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=braveenr.runs-on.dev,9077d386094cf37b6b22"
+      ]
+    }
+  }
 }
