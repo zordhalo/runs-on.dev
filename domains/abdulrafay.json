@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "e600d69d795ab83e.vercel-dns-017.com"
   },
-  "country": "PK",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "google-site-verification=m1QAJXjitz7ohEsIx2t-01sgrTlD_wW8fJwu1xe8j1E"
-      ]
-    }
-  }
+  "country": "PK"
 }
