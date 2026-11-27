@@ -4,6 +4,8 @@
     "github": "braveen-r"
   },
   "claimedAt": "2026-11-27T14:27:40.516Z",
-  "records": {},
+  "records": {
+    "CNAME": "fabf36dc07793692.vercel-dns-017.com"
+  },
   "country": "IN"
 }
