@@ -13,6 +13,9 @@
   "subdomains": {
     "trilium": {
       "CNAME": "chrisfrc.runs-on.dev"
+    },
+    "logseq": {
+      "CNAME": "chrisfrc.runs-on.dev"
     }
   }
 }
