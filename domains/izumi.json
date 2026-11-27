@@ -9,13 +9,13 @@
   },
   "country": "ID",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=izumi.runs-on.dev,fca499959ddb75250d36"
-      ]
-    },
     "izumi": {
       "CNAME": "b9692f0057d96bb7.vercel-dns-017.com"
+    },
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=izumi.runs-on.dev,ebd318f040e8e118fdc2"
+      ]
     }
   }
 }
