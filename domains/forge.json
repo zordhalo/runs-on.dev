@@ -4,6 +4,8 @@
     "github": "physihan"
   },
   "claimedAt": "2026-11-27T01:29:09.631Z",
-  "records": {},
+  "records": {
+    "CNAME": "creature-studio.github.io"
+  },
   "country": "FR"
 }
