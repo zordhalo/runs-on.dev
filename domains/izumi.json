@@ -13,6 +13,11 @@
       "TXT": [
         "vc-domain-verify=izumi.runs-on.dev,f3a524e0687752098b04"
       ]
+    },
+    "izumi": {
+      "TXT": [
+        "b9692f0057d96bb7.vercel-dns-017.com."
+      ]
     }
   }
 }
