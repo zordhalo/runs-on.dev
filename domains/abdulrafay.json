@@ -7,5 +7,10 @@
   "records": {
     "CNAME": "e600d69d795ab83e.vercel-dns-017.com"
   },
-  "country": "PK"
+  "country": "PK",
+  "subdomains": {
+    "fev632xsggtn": {
+      "CNAME": "gv-y72bnnibgwsnwn.dv.googlehosted.com"
+    }
+  }
 }
