@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "bd6c18717f88c06f.vercel-dns-017.com"
   },
-  "country": "CL",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=sgaob.runs-on.dev,e4b078cbb12ecc297ac0"
-      ]
-    }
-  }
+  "country": "CL"
 }

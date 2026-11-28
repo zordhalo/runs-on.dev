@@ -7,12 +7,5 @@
   "records": {
     "CNAME": "6aa8ded206747b56.vercel-dns-017.com"
   },
-  "country": "IN",
-  "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=sivareddy.runs-on.dev,78a73bd520f74f3622e9"
-      ]
-    }
-  }
+  "country": "IN"
 }

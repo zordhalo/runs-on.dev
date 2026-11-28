@@ -9,11 +9,6 @@
   },
   "country": "IN",
   "subdomains": {
-    "_vercel": {
-      "TXT": [
-        "vc-domain-verify=print.pliv.runs-on.dev,2a9461189a94e7d0ec2a"
-      ]
-    },
     "print": {
       "CNAME": "75cc7905b7d60eba.vercel-dns-017.com"
     },
