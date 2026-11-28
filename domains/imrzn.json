@@ -8,9 +8,7 @@
   "country": "IN",
   "subdomains": {
     "_vercel": {
-      "TXT": [
-        "vc-domain-verify=imrzn.runs-on.dev,9e3462cc2f4cbb1a2ba4"
-      ]
+      "CNAME": "b0a6fd02a026a78b.vercel-dns-017.com"
     }
   }
 }
