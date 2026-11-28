@@ -4,6 +4,8 @@
     "github": "Saayjon"
   },
   "claimedAt": "2026-11-28T15:42:58.868Z",
-  "records": {},
+  "records": {
+    "CNAME": "7aadd24440b1c4d5.vercel-dns-017.com"
+  },
   "country": "CA"
 }
