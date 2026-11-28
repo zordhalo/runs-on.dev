@@ -1,0 +1,76 @@
+{
+  "status": "suggested",
+  "createdAt": "2026-11-02T16:01:51.115Z",
+  "title": "Add subdomain records to and 3 more related changes",
+  "summary": "Covers 4 merged pull requests (#371, #388, #395, #337): Add subdomain records to dilshad.json; Add DNS records to rusdi.json; Add DNS records and subdomains to zuno.json; Add DNS records and subdomains for tilak.json.",
+  "why": "4 related pull requests landed as one effort; documenting them together gives readers the story instead of fragmenting it across release notes.",
+  "prs": [
+    {
+      "number": 371,
+      "title": "Add subdomain records to dilshad.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/371"
+    },
+    {
+      "number": 388,
+      "title": "Add DNS records to rusdi.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/388"
+    },
+    {
+      "number": 395,
+      "title": "Add DNS records and subdomains to zuno.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/395"
+    },
+    {
+      "number": 337,
+      "title": "Add DNS records and subdomains for tilak.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/337"
+    }
+  ],
+  "category": "feature",
+  "tags": [
+    "Feature",
+    "subdomain"
+  ],
+  "outline": [
+    "What changed (one paragraph, plain language)",
+    "Why it matters for people with a name.runs-on.dev name",
+    "How it works (mention: domains/dilshad.json, domains/rusdi.json, domains/zuno.json, domains/tilak.json)",
+    "How to use it (link the relevant guide or the manage page)",
+    "What is next"
+  ],
+  "keyPoints": [
+    "Add subdomain records to dilshad.json",
+    "Add DNS records to rusdi.json",
+    "Add DNS records and subdomains to zuno.json",
+    "Add DNS records and subdomains for tilak.json"
+  ],
+  "links": [
+    {
+      "label": "PR #371: Add subdomain records to dilshad.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/371"
+    },
+    {
+      "label": "PR #388: Add DNS records to rusdi.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/388"
+    },
+    {
+      "label": "PR #395: Add DNS records and subdomains to zuno.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/395"
+    },
+    {
+      "label": "PR #337: Add DNS records and subdomains for tilak.json",
+      "url": "https://github.com/zordhalo/runs-on.dev/pull/337"
+    }
+  ],
+  "seo": {
+    "title": "Add subdomain records to and 3 more related changes · runs-o",
+    "metaDescription": "Covers 4 merged pull requests (#371, #388, #395, #337): Add subdomain records to dilshad.json; Add DNS records to rusdi.json; Add DNS records and subdomain"
+  },
+  "coveredPrs": [
+    371,
+    388,
+    395,
+    337
+  ],
+  "suggestedSlugBase": "subdomain-records-more-related"
+}
