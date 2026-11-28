@@ -7,5 +7,12 @@
   "records": {
     "CNAME": "7aadd24440b1c4d5.vercel-dns-017.com"
   },
-  "country": "CA"
+  "country": "CA",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=curalink.runs-on.dev,ab3d3a45e80f66026943"
+      ]
+    }
+  }
 }
