@@ -5,5 +5,12 @@
   },
   "claimedAt": "2026-11-28T11:14:54.896Z",
   "records": {},
-  "country": "IN"
+  "country": "IN",
+  "subdomains": {
+    "_vercel": {
+      "TXT": [
+        "vc-domain-verify=imrzn.runs-on.dev,9e3462cc2f4cbb1a2ba4"
+      ]
+    }
+  }
 }
