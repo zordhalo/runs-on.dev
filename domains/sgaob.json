@@ -4,6 +4,8 @@
     "github": "MartinTCorrea"
   },
   "claimedAt": "2026-11-28T03:40:25.823Z",
-  "records": {},
+  "records": {
+    "CNAME": "bd6c18717f88c06f.vercel-dns-017.com"
+  },
   "country": "CL"
 }
