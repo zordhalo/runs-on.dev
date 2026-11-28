@@ -10,5 +10,15 @@
   "country": "IN",
   "profile": {
     "name": "Henil-shah-25"
+  },
+  "subdomains": {
+    "crm": {
+      "CNAME": "a4b4b582e2d653dc.vercel-dns-017.com"
+    },
+    "_vercel.crm": {
+      "TXT": [
+        "vc-domain-verify=crm.developsterhub.runs-on.dev,2b51565b7ddaffa62a73"
+      ]
+    }
   }
 }
